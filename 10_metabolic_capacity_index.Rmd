@@ -1,0 +1,100 @@
+# Chapter 10 - Bacterial community composition
+
+## 10.1 - Load MG data
+
+```{r load_data_mag, message = FALSE, warning = FALSE, echo = FALSE}
+load("data/data_mg.Rdata")
+```
+
+
+## 10.2 - GIFTs per MAG
+
+### Plot GIFTs of all bacteria by element (not included in Supplementary)
+
+```{r density_curves, message = FALSE, warning = FALSE}
+gifts_elements %>%
+  as.data.frame() %>% 
+  rownames_to_column(var = 'genome') %>% 
+  pivot_longer(!genome, names_to = 'Code_element', values_to = 'mci') %>%
+  inner_join(GIFT_db1, by = 'Code_element') %>%
+  ggplot(aes(x = genome,
+             y = Code_element,
+             fill = mci)) +
+  geom_tile(color = '#ffffff') +
+  scale_y_discrete(guide = guide_axis(check.overlap = TRUE)) +
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
+  facet_grid(Code_function ~ ., scales = 'free', space = 'free') +
+  scale_fill_gradientn(colours = rev(terrain.colors(10))) +
+  theme_void(base_size = 18) +
+  theme(axis.text.y = element_text(),
+        legend.position = 'top')
+```
+
+
+## 10.3 - GIFTs per community 
+
+### Calculate community GIFTs
+
+```{r community_gifts, message = FALSE, warning = FALSE}
+elements_com <- to.community(gifts_elements, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2) #¿? Hau ondo dago? Ez litzake nahikoa izango abundantzia taula bere horretan gehitzearekin?
+
+funcs_com <- to.community(gifts_functions, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2)
+
+domains_com <- to.community(gifts_domains, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2)
+```
+
+### Save data
+
+```{r save_gifts, message = FALSE, warning = FALSE}
+save(elements_com,
+     funcs_com,
+     domains_com,
+     file = "data/mci_com.Rdata")
+```
+
+### Plot community MCI (Fig. 2g)
+
+```{r density_curves, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
+funcs_com %>%
+  as.data.frame() %>% 
+  rownames_to_column('animal_code') %>%
+  rowwise() %>%
+  mutate(overall = mean(c_across(B01:D09))) %>%
+  select(animal_code, overall) %>%
+  left_join(chicken_metadata %>%
+            select(animal_code, sampling_time),
+            by = 'animal_code') %>%
+  ggplot(aes(x = sampling_time,
+             y = overall,
+             group = sampling_time,
+             colour = sampling_time)) +
+  geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
+               width = 0.3,
+               lwd = 3,
+               outlier.color = NA,
+               position = position_nudge(x = -.4)) +
+  # ylim(0.26,0.38) +
+  geom_jitter(width = 0.15, alpha = 0.6) +
+  stat_summary(geom = 'crossbar',
+               width = 0.3,
+               fatten = 0,
+               color = 'white',
+               position = position_nudge(x = -.4),
+               fun.data = function(x){ return(c(y = median(x),
+                                                ymin = median(x),
+                                                ymax = median(x)))
+               }) +
+  scale_fill_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
+  scale_color_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        legend.position = 'none')
+
+```
+
+### Clean environment
+
+```{r clean_environment, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
+```

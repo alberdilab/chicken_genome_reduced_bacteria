@@ -1,0 +1,221 @@
+# Chapter 8 - Temporal HMSC setup
+
+HMSC models are computationally intensive. It is advisable to run this script on a server. The code is made to be reproduced on any supercomputer.
+
+## 8.1 - Load MG data
+
+### Define directories
+
+```{r directories, message = FALSE, warning = FALSE, echo = FALSE}
+localDir = "."
+ModelDir = file.path(localDir, "temporal_hmsc/models")
+PanelDir = file.path(localDir, "temporal_hmsc/panels")
+```
+
+### Generate input objects
+
+```{r load_mg_data, message = FALSE, warning = FALSE, echo = FALSE}
+# Load data
+load("data/data_mg.Rdata")
+
+# Metadata summary
+design <- 
+  chicken_metadata[, c('animal_code', 'trial', 'pen', 'age','breed',
+                       'sex', 'treatment', 'chicken_body_weight')] %>% 
+  column_to_rownames("animal_code")
+
+design$log_seq_depth <- log(colSums(read_counts %>% column_to_rownames("genome")))
+design$animal_code <- rownames(design)
+
+for (i in 1:ncol(design)) {
+  if (is.character(design[,i])) {
+    design[,i] <- factor(design[,i])
+  }
+}
+```
+
+
+## 8.2- Prepate data for HMSC
+
+### Define tables
+
+```{r hmsc_tables, message = FALSE, warning = FALSE, echo = FALSE}
+# Genome count table (quantitative community data)
+YData <- log1p(mag_weighted %>% 
+                 t() %>% 
+                 as.data.frame())
+
+# Fixed effects data (explanatory variables)
+XData <- design
+mean(rownames(YData) == rownames(XData))  # Ydata and XData in the same order
+
+# Genome phylogeny
+PData <- genome_tree
+
+YData <- YData[,colnames(YData) %in% genome_tree$tip.label]  # Filter missing MAGs in tree
+```
+
+## Define formula
+
+```{r hmsc_formumla, message = FALSE, warning = FALSE, echo = FALSE}
+# Define XFormula
+XFormula_Time <- ~log_seq_depth + trial + sex + breed + treatment + age
+
+# Study Design
+StudyDesign <- design[,c(2,9)]
+rL.Pen <- HmscRandomLevel(units = levels(StudyDesign$pen))
+```
+
+### Define HMSC model
+
+```{r hmsc_model, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+m <- Hmsc(Y = YData,
+                XData = XData,
+                XFormula = XFormula_Time,
+                studyDesign = StudyDesign,
+                ranLevels = list("pen" = rL.Pen),
+                phyloTree = genome_tree,
+                distr = "normal",
+                YScale = TRUE)
+
+save(m, file = file.path(ModelDir,"unfitted_model.Rdata"))
+```
+
+### Define MCMC characteristics
+
+```{r mcmc_features, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+## How often to sample the MCM
+samples_list = c(5, 250, 250)
+
+# The number of MCMC steps between each recording sample
+thin_list = c(1,1,10)
+nst = length(thin_list)
+
+# The number of MCMC chains ot use
+nChains = 4
+
+# Load only the unfitted models
+load(file.path(ModelDir, "unfitted_model.Rdata"))
+unf_model <- m
+```
+
+
+## 8.3 - Fit model
+
+```{r fit_model, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+set.seed(1)
+
+for (Lst in 1:length(samples_list)) {
+  thin = thin_list[Lst]
+  samples = samples_list[Lst]
+  # Fit the model
+  m = sampleMcmc(unf_model,
+                 samples = samples,
+                 thin = thin,
+                 adaptNf = rep(ceiling(0.4*samples*thin), unf_model$nr),
+                 transient = ceiling(0.5*samples*thin),
+                 nChains = nChains,
+                 nParallel = nChains)
+  # Create file name
+  filename = paste("model",
+                   "_thin_", as.character(thin),
+                   "_samples_", as.character(samples),
+                   "_chains_", as.character(nChains),
+                   ".Rdata", sep = "")
+  # Save file
+  save(m, file = file.path(ModelDir, filename)) 
+}
+```
+
+
+## 8.4 - Evaluate convergence (Figure not added to Supplementary but could be included)
+
+```{r convergence, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+set.seed(1)
+
+for (i in 1) {
+  ma = NULL
+  na = NULL
+  ma_rho = NULL
+  na_rho = NULL
+  for (Lst in 1:nst) {
+    thin = thin_list[Lst]
+    samples = samples_list[Lst]
+    filename = paste("model","_thin_", as.character(thin),
+                     "_samples_", as.character(samples),
+                     "_chains_", as.character(nChains),
+                     ".Rdata", sep = "")
+    load(file = file.path(ModelDir, filename))
+    mpost = convertToCodaObject(m,
+                                spNamesNumbers = c(T,F),
+                                covNamesNumbers = c(T,F))
+    
+    ## Beta - Species niches - response of MAGs to the fixed effects
+    psrf.beta = gelman.diag(mpost$Beta,multivariate = FALSE)$psrf
+    
+    ## Rho - Influence of phylogeny on species niches - phylogenetic signal
+    psrf.rho = gelman.diag(mpost$Rho,multivariate = FALSE)$psrf
+    
+    ## Beta
+    if (is.null(ma)) {
+      ma = psrf.beta[,1]
+      na = paste0("model_", as.character(thin),
+                  ",", as.character(samples))
+    } else {
+      ma = cbind(ma,psrf.beta[,1])
+      na = c(na,paste0("model_", as.character(thin),
+                       ",", as.character(samples)))
+    }
+    ## Rho
+    if (is.null(ma_rho)) {
+      ma_rho = psrf.rho[,1]
+      na_rho = paste0("model_", as.character(thin),
+                      ",", as.character(samples))
+    } else {
+      ma_rho = cbind(ma_rho,psrf.rho[,1])
+      na_rho = c(na_rho,paste0("model_", as.character(thin),
+                               ",", as.character(samples)))
+    }
+  }
+  
+  # Create file name
+  panel.name = paste("MCMC_convergence",
+                     "_model_", as.character(i),
+                     ".pdf", sep = "")
+  # Plot
+  pdf(file = file.path(PanelDir, panel.name))
+  
+  ## Beta
+  par(mfrow = c(2,1))
+  vioplot(ma,
+          col = rainbow_hcl(1),
+          names = na,
+          ylim = c(0, max(ma)),
+          main = "psrf(beta)")
+  vioplot(ma,
+          col = rainbow_hcl(1),
+          names = na,
+          ylim = c(0.9,1.1),
+          main = "psrf(beta)")
+
+  ## Rho
+  par(mfrow = c(2,1))
+  vioplot(ma_rho,
+          col = rainbow_hcl(1),
+          names = na_rho,
+          ylim = c(0, max(ma_rho)),
+          main = "psrf(rho)")
+  vioplot(ma_rho,
+          col = rainbow_hcl(1),
+          names = na_rho,
+          ylim = c(0.9,1.1),
+          main = "psrf(rho)")
+  dev.off()
+}
+```
+
+### Clean environment
+
+```{r clean, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
+```

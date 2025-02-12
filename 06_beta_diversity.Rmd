@@ -1,0 +1,322 @@
+# Chapter 6 - Bacterial community composition
+
+## 6.1 - Load MG data
+
+```{r load_mg_data, echo = FALSE}
+load("data/data_mg.Rdata")
+```
+
+## 6.2 - Hill numbers 
+
+### Calculate beta diversity
+
+```{r beta_div, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
+# Neutral
+beta_q1n <- 
+  hel %>% # ¿? or shall we use mag_weighted?
+  filter(rowSums(. != 0, na.rm = TRUE) > 0) %>%
+  dplyr::select_if(~!all(. == 0)) %>%
+  hillpair(., q = 1, metric = "S", out = "pair")
+
+# Phylogenetic
+beta_q1p <- 
+  hel %>% 
+  filter(rowSums(. != 0, na.rm = TRUE) > 0) %>%
+  dplyr::select_if(~!all(. == 0)) %>%
+  hillpair(., q = 1, tree = genome_tree, metric = "S", out = "pair")
+
+# Functional KEGG
+dist_kegg <-
+  genome_kegg_paths %>%
+  column_to_rownames(var = "genome") %>%
+  traits2dist(., method = "gower")
+
+beta_q1f_kegg <-
+  hel %>%
+  filter(rowSums(. != 0, na.rm = TRUE) > 0) %>%
+  dplyr::select_if(~!all(. == 0)) %>%
+  hillpair(., q = 1, dist = dist_kegg, metric = "S", out = "pair")
+
+# # Functional GIFTs
+# dist <- 
+#   gifts_elements %>%
+#   traits2dist(., method = "gower")
+# 
+# beta_q1f_gifts <- 
+#   hel %>% 
+#   t() %>% 
+#   as.data.frame() %>%
+#   filter(rowSums(. != 0, na.rm = TRUE) > 0) %>%
+#   dplyr::select_if(~!all(. == 0)) %>%
+#   hillpair(., q = 1, dist = dist, metric = "S", out = "pair")
+```
+
+### Save data
+
+```{r save_beta, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+save(beta_q1n, 
+     beta_q1p, 
+     # beta_q1f_kegg,
+     beta_q1f_gifts,
+     file = "data/beta_div.Rdata")
+```
+
+# Compare individuals from same trial and pen between days 7-21 and 21-35 (Supplementary Fig. S3)
+
+```{r compare_ind, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+metadata_2 <-
+  chicken_metadata %>%
+  dplyr::rename(second = 'animal_code',
+                sampling_time_2 = 'sampling_time',
+                pen_2 = 'pen',
+                trial_2 = 'trial')
+
+# Neutral 
+betadiv_n_dis <-
+  beta_q1n %>% 
+  rename(animal_code = 'first') %>%
+  left_join(chicken_metadata, by = 'animal_code') %>%
+  left_join(metadata_2, by = 'second') %>%
+  mutate(diff = case_when(sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
+                          sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
+                          sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
+  mutate(diff_trial = case_when(trial == 'CA' & trial_2 == 'CA' ~ 'CA',
+                                trial == 'CB' & trial_2 == 'CB' ~ 'CB')) %>%
+  mutate(diff_pen = case_when(pen == pen_2  ~ 'same')) %>%
+  drop_na(diff, diff_trial, diff_pen)
+
+# Phylogenetic
+betadiv_p_dis <-
+  beta_q1p %>% 
+  rename(animal_code = 'first') %>%
+  left_join(chicken_metadata, by = 'animal_code') %>%
+  left_join(metadata_2, by = 'second') %>%
+  mutate(diff = case_when(sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
+                          sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
+                          sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
+  mutate(diff_trial = case_when(trial == 'CA' & trial_2 == 'CA' ~ 'CA',
+                                trial == 'CB' & trial_2 == 'CB' ~ 'CB')) %>%
+  mutate(diff_pen = case_when(pen == pen_2  ~ 'same')) %>%
+  drop_na(diff, diff_trial, diff_pen)
+
+# # Functional KEGG
+# betadiv_f_dis_kegg <-
+#   beta_q1f_kegg %>% 
+#   rename(animal_code = 'first') %>%
+#   left_join(chicken_metadata, by = 'animal_code') %>%
+#   left_join(metadata_2, by = 'second') %>%
+#   mutate(diff = case_when(sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
+#                           sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
+#                           sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
+#   mutate(diff_trial = case_when(trial == 'CA' & trial_2 == 'CA' ~ 'CA',
+#                                 trial == 'CB' & trial_2 == 'CB' ~ 'CB')) %>%
+#   mutate(diff_pen = case_when(pen == pen_2  ~ 'same')) %>%
+#   drop_na(diff, diff_trial, diff_pen)
+
+# Functional GIFTs
+betadiv_f_dis_gifts <-
+  beta_q1f_gifts %>% 
+  rename(animal_code = 'first') %>%
+  left_join(chicken_metadata, by = 'animal_code') %>%
+  left_join(metadata_2, by = 'second') %>%
+  mutate(diff = case_when(sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
+                          sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
+                          sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
+  mutate(diff_trial = case_when(trial == 'CA' & trial_2 == 'CA' ~ 'CA',
+                                trial == 'CB' & trial_2 == 'CB' ~ 'CB')) %>%
+  mutate(diff_pen = case_when(pen == pen_2  ~ 'same')) %>%
+  drop_na(diff, diff_trial, diff_pen)
+
+# Stats
+betadiv_n_dis %>%
+  group_by(diff) %>%
+  summarise(mean = mean(S), sd = sd(S))
+
+betadiv_p_dis %>%
+  group_by(diff) %>%
+  summarise(mean = mean(S), sd = sd(S))
+
+betadiv_f_dis_kegg %>%
+  group_by(diff) %>%
+  summarise(mean = mean(S), sd = sd(S))
+
+# betadiv_f_dis_gifts %>%
+#   group_by(diff) %>%
+#   summarise(mean = mean(S), sd = sd(S))
+```
+
+### Plot difference between sampling points for beta diversity 
+
+```{r plot_beta_diff, comment="", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
+# Neutral
+p_n <- 
+  betadiv_n_dis %>%
+  filter(!diff == '7_35') %>%
+  mutate(diff = factor(diff, levels = c('7_21', '21_35'))) %>%
+  ggplot(aes(x = diff, y = S, fill = diff)) +
+  geom_boxplot() +
+  ylim(0,0.5) +
+  theme_minimal() +
+  theme(legend.position = 'none') +
+  ggtitle('Neutral beta div')
+
+# Phylogenetic
+p_p <- 
+  betadiv_p_dis %>%
+  filter(!diff == '7_35') %>%
+  mutate(diff = factor(diff, levels = c('7_21', '21_35'))) %>%
+  ggplot(aes(x = diff, y = S, fill = diff)) +
+  geom_boxplot() +
+  ylim(0,0.5) +
+  theme_minimal() +
+  theme(legend.position = 'none') +
+  ggtitle('Phylogenetic beta div')
+
+# # Functional KEGG
+# p_f_kegg <- 
+#   betadiv_f_dis_kegg %>%
+#   filter(!diff == '7_35') %>%
+#   mutate(diff = factor(diff, levels = c('7_21', '21_35'))) %>%
+#   ggplot(aes(x = diff, y = S, fill = diff)) +
+#   geom_boxplot() +
+#   ylim(0,0.5) +
+#   theme_minimal() +
+#   theme(legend.position = 'none') +
+#   ggtitle('Functional KEGG beta div')
+
+# Functional GIFTs
+p_f_gifts <- 
+  betadiv_f_dis_gifts %>%
+  filter(!diff == '7_35') %>%
+  mutate(diff = factor(diff, levels = c('7_21', '21_35'))) %>%
+  ggplot(aes(x = diff, y = S, fill = diff)) +
+  geom_boxplot() +
+  ylim(0,0.5) +
+  theme_minimal() +
+  theme(legend.position = 'none') +
+  ggtitle('Functional GIFTs beta div')
+
+grid.arrange(p_n, p_p, p_f_kegg, p_f_gifts, ncol = 4)
+```
+
+
+## 6.3 - Effect of design in microbiome composition
+
+### Permanova values for different metrics of beta diversity (Supplementary Table S3)
+
+```{r permanova_betadiv, comment = "", message = FALSE, warning = FALSE}
+# Dissimilarity tables
+perm <- how(nperm = 999)
+setBlocks(perm) <- with(chicken_metadata, pen)
+
+# Neutral
+b1n_dis_table <- 
+  beta_q1n %>%
+  bind_rows(beta_q1n %>% rename(first = second, second = first)) %>% 
+  pivot_wider(names_from = second, values_from = S) %>%
+  column_to_rownames('first') %>%
+  mutate(across(everything(), ~replace(., is.na(.), 0))) %>% 
+  as.dist()
+
+adonis2(b1n_dis_table ~ trial + sex + breed + treatment * age,
+        permutations = perm,
+        data = chicken_metadata)
+
+# Phylogenetic
+b1p_dis_table <- 
+  beta_q1p %>%
+  bind_rows(beta_q1n %>% rename(first = second, second = first)) %>% 
+  pivot_wider(names_from = second, values_from = S) %>%
+  column_to_rownames('first') %>%
+  mutate(across(everything(), ~replace(., is.na(.), 0))) %>% 
+  as.dist()
+
+adonis2(b1p_dis_table ~ trial + sex + breed + treatment * age,
+        permutations = perm,
+        data = chicken_metadata)
+
+# # Functional KEGG
+# b1f_dis_table_kegg <- 
+#   beta_q1f_kegg %>%
+  # bind_rows(beta_q1n %>% rename(first = second, second = first)) %>% 
+  # pivot_wider(names_from = second, values_from = S) %>%
+  # column_to_rownames('first') %>%
+  # mutate(across(everything(), ~replace(., is.na(.), 0))) %>% 
+  # as.dist()
+# 
+# adonis2(b1f_dis_table_kegg ~ trial + sex + breed + treatment * age,
+#         permutations = perm,
+#         data = chicken_metadata)
+
+# Functional GIFTs
+b1f_dis_table_gifts <- 
+  beta_q1f_gifts %>%
+  bind_rows(beta_q1n %>% rename(first = second, second = first)) %>% 
+  pivot_wider(names_from = second, values_from = S) %>%
+  column_to_rownames('first') %>%
+  mutate(across(everything(), ~replace(., is.na(.), 0))) %>% 
+  as.dist()
+
+adonis2(b1f_dis_table_gifts ~ trial + sex + breed + treatment * age,
+        permutations = perm,
+        data = chicken_metadata)
+```
+
+### Community composition
+
+```{r composition, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+perm <- how(nperm = 999)
+setBlocks(perm) <- with(chicken_metadata, pen)
+
+adonis2(hel ~ trial * sampling_time + 
+              breed * sampling_time +
+              sex * sampling_time +
+              treatment * sampling_time,
+        permutations = perm,
+        data = chicken_metadata)
+
+adonis2(hel ~ trial * sampling_time + breed + sex + treatment,
+        permutations = perm,
+        data = chicken_metadata)
+```
+
+
+## 6.4 - Community composition development
+
+### Distance-based RDA (Fig. 1f)
+
+```{r distance_rda, echo = FALSE, fig.height = 4, fig.width = 7, fig.fullwidth = TRUE}
+set.seed(4)
+hel_bray <- vegdist(hel, method = 'bray')
+hel_bray_sqrt <- sqrt(hel_bray)
+
+pcoa <- cmdscale(hel_bray_sqrt, k = nrow(hel) - 1, eig = TRUE)
+pcoa_scores <- pcoa$points
+
+db_rda <- rda(pcoa_scores ~ sampling_time, data = chicken_metadata)
+
+# Stats
+anova(db_rda, by = 'term')
+summary(db_rda)
+RsquareAdj(db_rda)
+
+db_rda_scores <-
+  data.frame(
+    scores(db_rda, display = 'wa'),
+    pen = chicken_metadata$pen,
+    time = chicken_metadata$sampling_time
+    )
+
+db_rda_scores %>%
+  ggplot(aes(x = RDA1, y = RDA2, colour = time)) +
+  geom_point() +
+  scale_color_manual(values = c('#e6a024', '#cc6777', '#5bb4e5')) +
+  theme_bw() +
+  theme(legend.position = 'none')
+```
+
+### Clean environment
+
+```{r clean_environment, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
+```

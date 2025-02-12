@@ -1,0 +1,141 @@
+# Chapter 13 - Bacteria vs Chicken BW HMSC analysis
+
+## 13.1 - Load model
+
+### Define directories
+
+```{r directories, comment = "", echo = FALSE}
+# Directory
+localDir = "."
+ModelDir = file.path(localDir, "hmsc_bw/models")
+PanelDir = file.path(localDir, "hmsc_bw/panels")
+MFDir <- file.path(localDir, "hmsc_bw/model_fit")
+```
+
+### Load model
+```{r load_model, comment = "", echo = FALSE}
+load(file = file.path(ModelDir,"model_thin_10_samples_250_chains_4.Rdata"))
+```
+
+
+## 13.2 - Evaluate model
+
+```{r evalute_model, echo=FALSE}
+partition <- createPartition(m, nfolds = 4)
+preds <- computePredictedValues(m, partition = partition, nChains = 1) # nParallel = nChains
+MFCV <- evaluateModelFit(hM = m, predY = preds)
+
+save(MFCV,file = file.path(MFDir, "MF_thin_10_samples_250_chains_4.Rdata"))
+```
+
+
+## 13.3 - Examine species responses (Plot not included in Supplementary)
+
+```{r mag_response, echo = FALSE}
+beta_post <- getPostEstimate(m, parName = "Beta")
+
+plotBeta(m, beta_post,supportLevel = 0.9, plotTree = TRUE)
+```
+
+
+## 13.4 - Examine variance partition (Plot not included in Supplementary)
+
+```{r mag_response, echo = FALSE}
+varpartition <- computeVariancePartitioning(m)
+
+plotVariancePartitioning(m, VP = varpartition)
+
+bw_var <- varpartition$vals[3,]
+bw_param <- beta_post$mean[4,]
+bw_support <- beta_post$support[4,]
+```
+
+## Create a data table
+
+```{r mag_response, echo = FALSE}
+MFCV$R2
+
+rel_abu <- colMeans(vegan::decostand(exp(m$Y), method = "total")) * 100
+
+toplot <- data.frame(parameter = bw_param,
+                     bw_support = bw_support,
+                     var = bw_var,
+                     pred = MFCV$R2,
+                     var_pred = bw_var * MFCV$R2)
+
+toplot$MAG <- rownames(toplot)
+toplot$rel_abu <- rel_abu
+rownames(toplot) <- NULL
+
+write.table(toplot, file = "data/data.txt", row.names = F)
+```
+
+### Associate bacteria response with chicken BW (not included in Supplementary)
+
+```{r mag_response_chicken_bw, echo = FALSE}
+ggplot() +
+  geom_point(data = toplot, aes(x = parameter, y = Pred), alpha = 0.7, shape = 16) +
+  geom_point(data = toplot[toplot$bw_support > 0.975,],
+             mapping = aes(x = parameter, y = Pred),
+             color = "red", shape = 16) +
+  geom_point(data = toplot[toplot$bw_support < 0.025,],
+             mapping = aes(x = parameter, y = Pred),
+             color = "blue", shape = 16) +
+  geom_vline(xintercept = 0) +
+  geom_hline(yintercept = mean(toplot$Pred, na.rm = TRUE), linetype = "dashed") +
+  labs(x = "Parameter estimate", y = "Body weight's importance") +
+  theme_minimal()
+```
+
+
+## 13.5 - Create table with HMSC results
+
+```{r create_table, echo = FALSE}
+# Total relative abundance of species associated positively and negatively with body weight (~9%)
+sum(toplot$rel_abu[(toplot$bw_support > 0.975 | toplot$bw_support < 0.025) & (toplot$var_pred > mean(toplot$var_pred))])
+
+# Total relative abundance of species associated positively with body weight (<1%)
+sum(toplot$rel_abu[(toplot$bw_support > 0.975) & (toplot$var_pred > mean(toplot$var_pred))])
+
+# Total relative abundance of species associated negatively with body weight (>8%)
+sum(toplot$rel_abu[(toplot$bw_support < 0.025 | toplot$bw_support < 0.025) & (toplot$var_pred > mean(toplot$_pred))])
+
+# Phylogenetic signal
+mpost <- convertToCodaObject(m)
+quantile(unlist(mpost$Rho), probs = c(.05,.5,.95))
+
+bw_parameter <- beta_post$mean[4,]
+
+bw_parameter_phyloSorted <-
+  data.frame(bw_parameter = bw_parameter[
+    match(m$phyloTree$tip.label,
+          names(bw_parameter))])
+
+mean(rownames(bw_parameter_phyloSorted) == m$phyloTree$tip.label)
+
+new_tree <- m$phyloTree
+new_tree$node.label <- NULL
+
+obj <- phylo4d(new_tree, tip.data = bw_parameter_phyloSorted)
+barplot.phylo4d(obj)
+
+bw.cg <- phyloCorrelogram(obj, trait = "bw_parameter")
+saveRDS(bw.cg,file = file.path(PanelDir,"bw.cg.rds"))
+bw.cg <- readRDS(file = file.path(PanelDir,"bw.cg.rds"))
+
+plot(bw.cg)
+
+bw_parameter_df <- data.frame(genome = names(bw_parameter), bw_response = bw_parameter)
+bw_parameter_df$bw_trend <- NA
+bw_parameter_df$bw_trend[beta_post$support[4,] > 0.95] <- "positive"
+bw_parameter_df$bw_trend[beta_post$support[4,] < 0.05] <- "negative"
+bw_parameter_df$bw_trend[is.na(bw_parameter_df$bw_trend)] <- "neutral"
+
+write_tsv(bw_parameter_df,file = "data/hmsc_bw_trend.tsv")
+```
+
+### Clean environment
+
+```{r clean, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
+```

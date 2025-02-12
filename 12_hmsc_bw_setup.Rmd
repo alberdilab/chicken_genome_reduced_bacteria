@@ -1,0 +1,171 @@
+# Chapter 12 - Bacteria vs Chicken BW HMSC setup
+
+### HMSC models are computationally intensive. It is advisable to run this script on a server. The code is made to be reproduced on any supercomputer.
+
+## 12.1 - Load MG and MT data
+
+### Define directories
+
+```{r directories, echo = FALSE}
+localDir = "."
+ModelDir = file.path(localDir, "hmsc_bw/models")
+```
+
+### Generate input objects
+
+```{r load_mg_data, echo = FALSE}
+# Load data
+load("data/data_mg.Rdata")
+
+# Metadata summary
+design <- 
+  chicken_metadata[, c('animal_code', 'trial', 'pen', 'age','breed',
+               'sex', 'treatment', 'chicken_body_weight')] %>% 
+  column_to_rownames("animal_code")
+
+design$log_seq_depth <- log(colSums(read_counts %>% column_to_rownames("genome")))
+design$animal_code <- rownames(design)
+
+for (i in 1:ncol(design)) {
+  if (is.character(design[,i])) {
+    design[,i] <- factor(design[,i])
+  }
+}
+
+mean(rownames(design) == rownames(mag_weighted))
+
+# Filter day 35
+design_day35 <- 
+  design %>%
+  filter(age > 25)
+
+mag_weighted_day35 <- 
+  mag_weighted %>%
+  rownames_to_column(var = 'genome') %>% 
+  filter(genome %in% rownames(design_day35)) %>% 
+  column_to_rownames(var = 'genome') %>% 
+  t() %>% 
+  as.data.frame()
+
+dim(mag_weighted_day35)
+dim(design_day35)
+ 
+mean(rownames(design_day35) == rownames(mag_weighted_day35))
+```
+
+
+## 12.2 - Prepate data for HMSC
+
+### Define tables
+
+```{r hmsc_tables, echo = FALSE}
+# Genome count table (quantitative community data)
+YData <- log1p(mag_weighted_day35)
+
+# Fixed effects data (explanatory variables)
+XData <- design_day35
+mean(rownames(YData) == rownames(XData))  # Ydata and XData in the same order
+
+# Genome phylogeny
+PData <- genome_tree
+
+YData <- YData[,colnames(YData) %in% genome_tree$tip.label]  # Filter missing MAGs in tree
+
+# Traits 
+gifts_functions <- 
+  gifts_elements %>%
+  as.data.frame() %>% 
+  rownames_to_column(var = 'genome') %>% 
+  filter(genome %in% colnames(YData)) %>% 
+  column_to_rownames(var = 'genome')
+
+mean(gifts_functions$mag_id == colnames(YData))
+
+TrData <- data.frame(MCI = TrData)
+rownames(TrData) <- colnames(YData)
+```
+
+### Define formulas
+
+```{r define_model, echo = FALSE}
+# Define TrFormula
+TrFormula <- ~MCI
+
+# Define XFormula
+XFormula <- ~trial + age + chicken_body_weight + log_seq_depth
+
+# Study Design
+StudyDesign <- design[,c(2,9)]
+rL.Pen <- HmscRandomLevel(units = levels(StudyDesign$pen))
+```
+
+### Define HMSC model
+
+```{r hmsc_model, echo = FALSE}
+m <- Hmsc(Y = YData,
+                XData = XData,
+                XFormula = XFormula,
+                studyDesign = StudyDesign,
+                ranLevels = list("pen" = rL.Pen),
+                phyloTree = tree,
+                TrData = TrData,
+                TrFormula = TrFormula,
+                distr = "normal",
+                YScale = TRUE)
+
+save(m, file = file.path(ModelDir,"unfitted_model.Rdata"))
+rm(list = ls())
+```
+
+### Define MCMC
+
+```{r mcmc_features, echo = FALSE}
+# Chain characteristics
+## How often to sample the MCM
+samples_list = c(5, 250, 250)
+
+# The number of MCMC steps between each recording sample
+thin_list = c(1,1,10)
+
+# The number of MCMC chains ot use
+nChains = 4
+
+# Load only the unfitted models
+load(file.path(ModelDir,"unfitted_model.Rdata"))
+
+unf_model <- m
+```
+
+
+## 12.3 - Fit model
+
+```{r fit_model, echo = FALSE}
+set.seed(1)
+
+for (Lst in 1:length(samples_list)) {
+  thin = thin_list[Lst]
+  samples = samples_list[Lst]
+  # fit the model
+  m = sampleMcmc(unf_model,
+                 samples = samples,
+                 thin = thin,
+                 adaptNf = rep(ceiling(0.4*samples*thin), unf_model$nr),
+                 transient = ceiling(0.5*samples*thin),
+                 nChains = nChains,
+                 nParallel = nChains)
+  # create file name
+  filename = paste("model",
+                   "_thin_", as.character(thin),
+                   "_samples_", as.character(samples),
+                   "_chains_", as.character(nChains),
+                   ".Rdata", sep = "")
+  # save file
+  save(model, file = file.path(ModelDir,filename)) 
+}
+```
+
+### Clean environment
+
+```{r clean, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
+```

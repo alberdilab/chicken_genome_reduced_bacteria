@@ -1,0 +1,264 @@
+# Chapter 9 - HMSC analysis
+
+## 9.1 - Load model
+
+```{r load_model, message = FALSE, warning = FALSE, echo = FALSE}
+# Directory
+localDir = "."
+ModelDir = file.path(localDir, "temporal_hmsc/models")
+MFDir = file.path(localDir, "temporal_hmsc/model_fit")
+
+# Load model
+load(file = file.path(ModelDir, 'model_thin_10_samples_250_chains_4.Rdata'))
+
+# Create partitions
+set.seed(12)
+partition_1 <- createPartition(hM = m, nfolds = 2)
+partition_2 <- c(rep(1,sum(m$XData$trial == "CA")),
+                 rep(2,sum(m$XData$trial == "CB")))
+```
+
+
+## 9.2 - Cross-validation
+
+```{r cross_val, message = FALSE, warning = FALSE, echo = FALSE}
+set.seed(1)
+
+predY.MF <- computePredictedValues(m, expected = TRUE)
+MF <- evaluateModelFit(hM = m, predY = predY.MF)
+
+filename <- file.path(MFDir, paste("MF_chains_4_thin_10_samples_250.rds"))
+saveRDS(MF, file = filename)
+
+MF <- readRDS(file = filename)
+mean(MF$R2)
+```
+
+### Model fit using 2-fold CV: samples randomly assigned to folds
+
+```{r cross_val, message = FALSE, warning = FALSE, echo = FALSE}
+set.seed(1)
+predY.CV_1 <- computePredictedValues(m,
+                                     expected = TRUE,
+                                     partition = partition_1,
+                                     nChains = 1,
+                                     nParallel = 1)
+
+MF.CV_1 <- evaluateModelFit(hM = m, predY = predY.CV_1)
+
+# create file name and save
+filename <- file.path(MFDir, paste("MF_CV1_chains_4_thin_10_samples_250.rds"))
+saveRDS(MF.CV_1,file = filename)
+
+MF_CV_1 <- readRDS(file = filename)
+mean(MF_CV_1$R2)
+```
+
+### Model fit using 2-fold CV: each fold contains the samples from one trial
+
+```{r cross_val, message = FALSE, warning = FALSE, echo = FALSE}
+set.seed(1)
+predY.CV_2 <- computePredictedValues(m,
+                                     expected = TRUE,
+                                     partition = partition_2,
+                                     nChains = 1,
+                                     nParallel = 1)
+
+MF.CV_2 <- evaluateModelFit(hM = m, predY = predY.CV_2)
+
+# create file name and save
+filename <- file.path(MFDir, paste("MF_CV2_chains_4_thin_10_samples_250.rds"))
+saveRDS(MF.CV_2, file = filename)
+
+MF_CV_2 <- readRDS(file = filename)
+mean(MF_CV_2$R2)
+```
+
+
+## 9.3 - Functional structure
+
+```{r func_structure, message = FALSE, warning = FALSE, echo = FALSE}
+beta_post <- getPostEstimate(m, parName = "Beta")
+plotBeta(m, beta_post, supportLevel = 0.95, plotTree = TRUE)
+
+Gradient_age <- constructGradient(m,
+                                 focalVariable = "age",
+                                 non.focalVariables = 1)
+
+predY_age <- predict(m, Gradient = Gradient_age, expected = TRUE)
+
+# Example using cmag_376
+plotGradient(m,
+             Gradient_age,
+             pred = predY_age,
+             yshow = 0,
+             measure = "Y",
+             index = 376,
+             showData = TRUE)
+```
+
+
+## 9.4 - Bacterial temporal trends table
+
+```{r mag_trends, message = FALSE, warning = FALSE, echo = FALSE}
+# Increasing MAGs
+increasers <- colnames(beta_post$support)[beta_post$support[8,] > 0.95]
+increasers_df <- data.frame(mag_id = increasers,
+                            parameter = beta_post$mean[4,colnames(m$Y) %in% increasers])
+increasers_df$hmsc_trend <- "increaser"
+
+# Decreasing MAGs
+decreasers <- colnames(beta_post$support)[beta_post$support[8,] < 0.05]
+decreasers_df <- data.frame(mag_id = decreasers,
+                            parameter = beta_post$mean[4,colnames(m$Y) %in% decreasers])
+decreasers_df$hmsc_trend <- "decreaser"
+
+trends <- 
+  colnames(beta_post$support) %>%
+  as.data.frame() %>%
+  dplyr::rename(mag_id = '.') %>%
+  left_join(rbind(increasers_df, decreasers_df), by = 'genome') %>%
+  replace_na(list(hmsc_trend = 'stable')) %>%
+  write_tsv("data/hmsc_mag_trend.tsv")
+```
+
+
+## 9.5 - Correlate bacterial MCI and response to time (Fig. 2f)
+
+```{r load_data_mag, message = FALSE, warning = FALSE, echo = FALSE}
+load("data/data_mg.Rdata")
+trends <- read_tsv("data/hmsc_mag_trend.tsv")
+```
+
+```{r mci_response, message = FALSE, warning = FALSE, echo = FALSE}
+mci_df <-
+  gifts_elements %>%
+  as.data.frame() %>% 
+  mutate(avg_mci = rowMeans(.)) %>% 
+  select(avg_mci) %>% 
+  rownames_to_column(var = 'genome')
+
+trends %>% 
+  left_join(genome_taxonomy %>% select(genome, order), by = 'genome') %>% 
+  left_join(mci_df, by = 'genome') %>% 
+  ggplot() +
+  geom_point(aes(x = parameter, y = avg_mci, color = order)) +
+  scale_color_manual(values = order_colors) +
+  geom_smooth(aes(x = parameter, y = avg_mci),
+              method = 'lm') +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        legend.position = 'none')
+```
+
+
+## 9.6 - Variance partitioning (Supplementary Table S4)
+
+```{r variance_partitioning, echo = FALSE}
+VP <- computeVariancePartitioning(m)
+plotVariancePartitioning(hM = m, VP = VP)
+```
+
+
+## 9.7 - Phylogenetic correlogram (Fig. 1e)
+
+### Calcultate phylogenetic distance 
+
+```{r load_data_community, echo = FALSE}
+pw_phylo_dist <- cophenetic.phylo(genome_tree)
+xy <- t(combn(colnames(pw_phylo_dist), 2))
+pw_phylo_dist <- data.frame(xy, dist = pw_phylo_dist[xy])
+colnames(pw_phylo_dist) <- c('genome.x', 'genome.y', 'distance')
+
+pw_phylo_dist_taxa <-
+  pw_phylo_dist %>%
+  inner_join(genome_taxonomy, by = c('genome.x' = 'genome')) %>%
+  inner_join(genome_taxonomy, by = c('genome.y' = 'genome'))
+
+
+# Create distance table
+tax_table <- c()
+for (i in c(1:nrow(pw_phylo_dist_taxa))) {
+  pair <- pw_phylo_dist_taxa[i,]
+  #Phylum level
+  if (!is.na(pair$phylum.x != pair$phylum.y) & pair$phylum.x != pair$phylum.y) {
+    row <- c('Phylum', pair$distance)
+  } else {
+    #Class level
+    if (!is.na(pair$class.x != pair$class.y) & pair$class.x != pair$class.y) {
+      row <- c('Class', pair$distance)
+    } else {
+      #Order level
+      if (!is.na(pair$order.x != pair$order.y) & pair$order.x != pair$order.y) {
+        row <- c('Order', pair$distance)
+      } else {
+        #Family level
+        if (!is.na(pair$family.x != pair$family.y) & pair$family.x != pair$family.y) {
+          row <- c('Family', pair$distance)
+        } else {
+          # Genus
+          if (!is.na(pair$genus.x != pair$genus.y) & pair$genus.x != pair$genus.y) {
+            row <- c('Genus', pair$distance)
+          }
+        }
+      }
+    }
+  }
+  tax_table <- rbind(tax_table,row)
+}
+
+tax_table <-
+  tax_table %>%
+  data.frame() %>%
+  dplyr::rename(taxonomy = 'X1', distance = 'X2') %>%
+  mutate(distance = as.numeric(distance)) %>%
+  write_tsv("data/taxonomy_distance.tsv")
+```
+
+```{r load_data_community, echo = FALSE}
+tax_table %>%
+ggplot(aes(x = distance,
+           fill = taxonomy,
+           color = taxonomy,
+           alpha = 0.1
+           )) +
+  geom_density(adjust = 5) +
+  scale_fill_manual(values = c('#E69F00','#e28cff','#999999','#56B4E9','#99cc00')) +
+  scale_color_manual(values = c('#E69F00','#e28cff','#999999','#56B4E9','#99cc00')) +
+  theme_void()
+```
+
+### Phylogenetic signal
+
+```{r phylo_signal, echo = FALSE}
+mpost <- convertToCodaObject(m)
+quantile(unlist(mpost$Rho), probs = c(.05,.5,.95))
+
+age_parameter <- beta_post$mean[8,]
+age_parameter_phyloSorted <-
+  data.frame(age_parameter = age_parameter[
+    match(m$phyloTree$tip.label,
+          names(age_parameter))
+    ])
+mean(rownames(age_parameter_phyloSorted) == m$phyloTree$tip.label)
+
+new_tree <- m$phyloTree
+new_tree$node.label <- NULL
+
+obj <- phylo4d(new_tree, tip.data = age_parameter_phyloSorted)
+barplot.phylo4d(obj)
+
+age.cg <- phyloCorrelogram(obj, trait = "age_parameter")
+saveRDS(age.cg,file = "age.cg.rds")
+age.cg <- readRDS(file = "age.cg.rds")
+
+plot(age.cg)
+```
+
+### Clean environment
+
+```{r clean, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
+```
+

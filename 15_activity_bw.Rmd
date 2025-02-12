@@ -1,0 +1,402 @@
+# Chapter 15 - Comparing activity of positively and negatively associated bacteria
+
+## 15.1 - Load data
+
+```{r load_data, echo = FALSE}
+load("data/data_mt.Rdata")
+load("data/data_mg.Rdata")
+
+trends_bw <-
+  read_tsv("data/hmsc_bw_trend.tsv") %>% 
+  mutate(trend_07 = case_when(bw_support > 0.85 ~ 'positive',
+                           bw_support < 0.15 ~ 'negative',
+                           TRUE ~ 'non-significant')) %>% 
+  mutate(trend_09 = case_when(bw_support > 0.95 ~ 'positive',
+                           bw_support < 0.05 ~ 'negative',
+                           TRUE ~ 'non-significant'))
+```
+
+
+## 15.2 - Expression profiles of positively and negatively associated bacteria (Fig. 3c)
+
+### Element-based expression table of day 35 individuals
+
+```{r element_table, echo = FALSE}
+mag_elements <- lapply(expr_counts, function(x) to.elements(x, GIFT_db2))
+
+# Convert correct tibble for applying CLR conversion
+mag_elements_merged <- 
+  mag_elements %>%
+  lapply(function(x) t(x)) %>%
+  lapply(function(x) as.data.frame(x)) %>%
+  Map(cbind, ., MAG = names(.)) %>%
+  lapply(function(x) rownames_to_column(x, "Element")) %>% 
+  do.call(rbind, .) %>%
+  mutate(Function = substr(Element, start = 1, stop = 3))%>%
+  as.data.frame() %>% 
+  relocate(MAG, .before = Element) %>%
+  relocate(Function, .after = Element)
+
+# Select individuals from day 35
+metadata_day_35 <- 
+  chicken_metadata_mt %>% 
+  filter(sampling_time == "35")
+
+mag_elements_day_35 <- 
+  mag_elements_merged %>%
+  select(MAG, Element, Function, metadata_day_35$animal_code)
+
+metadata_mt <- 
+  metadata_day_35 %>%
+  arrange(match(metadata_day_35$animal_code, colnames(mag_elements_day_35[,-c(1,3)])))
+
+mean(metadata_mt$animal_code == colnames(mag_elements_day_35[,-c(1:3)]))
+```
+
+### Normalised expression table
+
+```{r normalise_data, echo = FALSE}
+normalisation_factor <- 
+  expr_counts %>% # Normalisation is performed with dist_expr because it contains the transcripts for all the functions, not only the functions considered important for the host in distillR.
+  lapply(function(x) rowSums(x)) %>%
+  reduce(cbind) %>%
+  rowSums()
+
+normalisation_factor <- normalisation_factor[match(metadata_mt$animal_code,names(normalisation_factor))]
+
+mean(names(normalisation_factor) == metadata_mt$animal_code)
+
+# Normalised relative expression
+norm_elements_day_35 <- sweep(mag_elements_day_35[,-c(1:3)], 2, normalisation_factor, FUN = "/")
+norm_elements_day_35 <- data.frame(mag_elements_day_35[,c(1:3)], norm_elements_day_35)
+```
+
+### Filter MAGs associated with chicken body weight 
+
+```{r filter_reduced_mags, echo = FALSE}
+positive_mags <- 
+  trends_bw %>%
+  filter(trend_09 == "positive") %>%
+  select(genome) %>%
+  unlist() %>%
+  as.character()
+
+n_neg_sp <- 50 # Filter 50 negative MAGs for the figure
+
+negative_mags <- 
+  trends_bw %>%
+  filter(trend_09 == "negative") %>%
+  arrange(parameter) %>%
+  slice(1:n_neg_sp) %>%
+  select(genome) %>%
+  unlist() %>%
+  as.character()
+
+mag_subset_elements <-
+  norm_elements_day_35 %>%
+  filter(MAG %in% c(positive_mags, negative_mags))
+```
+
+### Tidy data
+
+```{r plot_heatmap, echo = FALSE}
+# Filter relative abundance table
+mag_weighted_day35 <- 
+  mag_weighted %>%
+  t() %>% 
+  as.data.frame() %>% 
+  rownames_to_column(var = 'animal_code') %>% 
+  filter(animal_code %in% colnames(mag_subset_elements[, -c(1:3)])) %>%
+  column_to_rownames(var = "animal_code")
+  
+total_day35 <- 
+  t(decostand(mag_weighted_day35, "total")) %>%
+  as.data.frame() %>%
+  rownames_to_column(var = "genome") %>%
+  filter(genome %in% c(positive_mags, negative_mags)) %>%
+  column_to_rownames(var = "genome") %>%
+  mutate(mean_abundance = rowMeans(.)) %>%
+  rownames_to_column(var = "genome") %>%
+  select(genome, mean_abundance)
+
+mag_subset_elements_2 <-
+  mag_subset_elements %>%
+  rename(genome = 'MAG') %>% 
+  left_join(total_day35, by = "genome") %>%
+  mutate(across(CA01.15:CB24.14, ~ .x / mean_abundance)) %>%
+  select(-mean_abundance) %>%
+  mutate(bw_association = if_else(genome %in% positive_mags, "positive", "negative")) %>%
+  mutate(avg_expr_million = rowMeans(across(CA01.15:CB24.14)) * 1000000) %>%
+  filter(!grepl("S", Function)) %>%
+  group_by(Element) %>%
+  filter(sum(avg_expr_million) > 0) %>%
+  ungroup() %>%
+  group_by(genome) %>%
+  filter(sum(avg_expr_million) > 0) %>%
+  ungroup()
+```
+
+### Plot 
+
+```{r plot_heatmap, echo = FALSE}
+mag_subset_elements_2 %>%
+  ggplot(aes(x = Element,
+             y = genome,
+             fill = bw_association,
+             group = Function,
+             alpha = log(avg_expr_million, 2))) +
+  geom_tile(color = "#ffffff") +
+  scale_y_discrete(guide = guide_axis(check.overlap = TRUE)) +
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
+  scale_fill_manual(values = c("red3",
+                               "blue3"),
+                    na.value = "#f4f4f4") +
+  facet_grid(bw_association ~ Function, scales = "free", space = "free") +
+  theme_void(base_size = 8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+        strip.text.y = element_text(size = 12, angle = -90),
+        legend.position = "none")
+```
+
+
+## 15.3 - Taxonomy of reduced MAGs
+
+```{r taxonomy_red_mags, warning = FALSE, comments = "", message = FALSE}
+reduced_mags1 <-
+  mag_subset_elements_2 %>%
+  filter(Element == "B0101") %>%
+  filter(avg_expr_million == 0) %>%
+  select(genome) %>%
+  unlist() %>%
+  as.character()
+
+reduced_mags2 <- 
+  mag_subset_elements_2 %>%
+  filter(Element == "B0102") %>%
+  filter(avg_expr_million == 0) %>%
+  select(genome) %>%
+  unlist() %>%
+  as.character()
+
+reduced_mags3 <-
+  mag_subset_elements_2 %>%
+  filter(Element == "B0103") %>%
+  filter(avg_expr_million == 0) %>%
+  select(genome) %>%
+  unlist() %>%
+  as.character()
+
+reduced_mags <- intersect(intersect(reduced_mags1, reduced_mags2), reduced_mags3)
+
+reduced_mags_df <-
+  mag_subset_elements_2 %>%
+  filter(genome %in% reduced_mags) %>%
+  group_by(Element) %>%
+  filter(sum(avg_expr_million) > 0) %>%
+  ungroup() %>%
+  group_by(genome) %>%
+  filter(sum(avg_expr_million) > 0) %>%
+  ungroup()%>%
+  pivot_wider(id_cols = c(genome, bw_association), names_from = Element, values_from = avg_expr_million)
+```
+
+All reduced MAGs with positive association belong to RF39
+
+```{r positives_red_mags, warning = FALSE, comments = "", message = FALSE}
+positives <-
+  reduced_mags_df %>%
+  filter(bw_association == "positive") %>%
+  select(genome) %>%
+  unlist() %>%
+  as.character()
+
+genome_taxonomy[genome_taxonomy$genome %in% positives,] %>%
+  select(order) %>%
+  table()
+```
+
+Reduced MAGs with negative association belong to various orders, mainly to Christensenellales
+
+```{r negatives_red_mags, warning = FALSE, comments = "", message = FALSE}
+negatives <-
+  reduced_mags_df %>%
+  filter(bw_association == "negative") %>%
+  select(genome) %>%
+  unlist() %>%
+  as.character()
+
+genome_taxonomy[genome_taxonomy$genome %in% negatives,] %>%
+  select(family) %>%
+  table()
+```
+
+
+## 15.4 - Genomic characteristics of genome reduced MAGs (Fig. 4a)
+
+```{r calculating_bootstraps, warning = FALSE, comments = "", message = FALSE}
+gifts <-
+  gifts_elements %>%
+  as.data.frame() %>% 
+  select(where(~ sum(.) > 0))
+
+mci_df <-
+  gifts %>%
+  filter(rownames(.) %in% reduced_mags_df$genome) %>%
+  mutate(avg_mci = rowMeans(.)) %>%
+  rownames_to_column(var = "genome") %>%
+  left_join(reduced_mags_df, by = "genome") %>%
+  left_join(genome_taxonomy, by = "genome") %>%
+  filter(family == "UBA1242" | family == "UBA660") %>%
+  select(genome, avg_mci, bw_association)
+
+length_df <- 
+  genome_stats %>%
+  filter(genome %in% reduced_mags_df$genome) %>%
+  left_join(mci_df, by = "genome") %>%
+  left_join(genome_taxonomy, by = "genome") %>%
+  filter(family == "UBA1242" | family == "UBA660") %>%
+  select(genome, mag_length, bw_association)
+
+
+mean_func <- function(data, indices) {
+  return(mean(data[indices]))
+}
+
+boot_mci_df <- data.frame(matrix(nrow = 2, ncol = 4))
+
+colnames(boot_mci_df) <-c ("bw_association","mean","ci_025","ci_975")
+boot_mci_df$bw_association <- c("positive","negative")
+
+bw_pos_redMAG_mci_boot <- boot(mci_df$avg_mci[mci_df$bw_association == "positive"], statistic = mean_func, R = 10000)
+bw_pos_redMAG_mci_boot_ci <- boot.ci(bw_pos_redMAG_mci_boot, type = "bca")
+
+bw_neg_redMAG_mci_boot<-boot(mci_df$avg_mci[mci_df$bw_association == "negative"], statistic = mean_func, R = 10000)
+bw_neg_redMAG_mci_boot_ci<-boot.ci(bw_neg_redMAG_mci_boot, type = "bca")
+
+boot_mci_df[1,"mean"] <- bw_pos_redMAG_mci_boot$t0
+boot_mci_df[1,"ci_025"] <- bw_pos_redMAG_mci_boot_ci$bca[,4]
+boot_mci_df[1,"ci_975"] <- bw_pos_redMAG_mci_boot_ci$bca[,5]
+
+boot_mci_df[2,"mean"] <- bw_neg_redMAG_mci_boot$t0
+boot_mci_df[2,"ci_025"] <- bw_neg_redMAG_mci_boot_ci$bca[,4]
+boot_mci_df[2,"ci_975"] <- bw_neg_redMAG_mci_boot_ci$bca[,5]
+```
+
+```{r plot_avg_mci, warning = FALSE, comments = "", message = FALSE, eval = FALSE, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
+mci_df %>%
+  ggplot()+
+  geom_jitter(aes(x = bw_association, y = avg_mci, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(aes(x = bw_association, y = avg_mci, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_mci_df,
+                 aes(ymin = ci_025, ymax = ci_975, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","blue3")) +
+  scale_fill_manual(values = c("red3","blue3")) +
+  ylab("Avg. MCI")+
+  xlab("Body-weight association")+
+  theme_minimal()+
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14)) 
+```
+
+### Genome length of genome reduced MAGss (Fig. 4b)
+
+```{r calculating_bootstraps_length, echo = FALSE}
+boot_length_df <- data.frame(matrix(nrow = 2, ncol = 4))
+
+colnames(boot_length_df) <- c("bw_association", "mean", "ci_025", "ci_975")
+boot_length_df$bw_association <- c("positive", "negative")
+
+bw_pos_red_mag_length_boot <- boot(length_df$mag_length[length_df$bw_association == "positive"], statistic = mean_func, R = 10000)
+bw_pos_red_mag_length_boot_ci <- boot.ci(bw_pos_red_mag_length_boot, type = "bca")
+
+bw_neg_red_mag_length_boot <- boot(length_df$mag_length[length_df$bw_association == "negative"], statistic = mean_func, R = 10000)
+bw_neg_red_mag_length_boot_ci <- boot.ci(bw_neg_red_mag_length_boot, type = "bca")
+
+boot_length_df[1, "mean"] <- bw_pos_red_mag_length_boot$t0
+boot_length_df[1, "ci_025"] <- bw_pos_red_mag_length_boot_ci$bca[,4]
+boot_length_df[1, "ci_975"] <- bw_pos_red_mag_length_boot_ci$bca[,5]
+
+boot_length_df[2, "mean"] <- bw_neg_red_mag_length_boot$t0
+boot_length_df[2, "ci_025"] <- bw_neg_red_mag_length_boot_ci$bca[,4]
+boot_length_df[2, "ci_975"] <- bw_neg_red_mag_length_boot_ci$bca[,5]
+```
+
+```{r plot_length, echo = FALSE, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
+length_df %>%
+  ggplot() +
+  geom_jitter(aes(x = bw_association, y = mag_length, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(aes(x = bw_association, y = mag_length, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_length_df,
+                 aes(ymin = ci_025, ymax = ci_975, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1,position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","blue3")) +
+  scale_fill_manual(values = c("red3","blue3")) +
+  ylab("MAG length") +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14)) 
+```
+
+### Expression profiles of genome reduced MAGs (Fig. 4c)
+
+```{r pcoa_data, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+comp_reduced_mags <- 
+  reduced_mags_df %>% 
+  left_join(genome_taxonomy, by = 'genome') %>%
+  filter(family == "UBA1242" | family == "UBA660") %>%
+  select(-domain:-species)
+
+reduced_mags_dist <- vegdist(sqrt(comp_reduced_mags[, -c(1:3)]), method = "bray")
+pcoa_reduced_mags <- cmdscale(reduced_mags_dist, eig = TRUE, k = 3, add = TRUE)
+
+pcoa_reduced_mags_df <-
+  pcoa_reduced_mags$points %>%
+  as.data.frame() %>%
+  mutate(genome = comp_reduced_mags$genome) %>%
+  mutate(bw_association = comp_reduced_mags$bw_association) %>%
+  rename(PCOA1 = 'V1', PCOA2 = 'V2', PCOA3 = 'V3')
+
+envfit_gifts <- envfit(pcoa_reduced_mags_df[, 1:2], sqrt(comp_reduced_mags[, -c(1,2)]), permutations = 999)
+
+envfit_gifts_df <-
+  as.data.frame(scores(envfit_gifts, display = "vectors")) %>%
+  rownames_to_column(.,var = "gift_id") %>%
+  mutate(pval = envfit_gifts$vectors$pvals) %>%
+  filter(pval < 0.05) %>%
+  select(gift_id, PCOA1, PCOA2)
+```
+
+```{r pcoa, warning = FALSE, comments = "", message = FALSE, eval = FALSE, fig.height = 12, fig.width = 12, fig.fullwidth = TRUE}
+ggplot() +
+  geom_point(data = pcoa_reduced_mags_df, 
+             aes(x = PCOA1, y = PCOA2, color = bw_association), 
+             size = 2, 
+             shape = 16, 
+             alpha = 0.8) +
+  scale_color_manual(values = c("red3","blue3")) +
+  geom_segment(data = envfit_gifts_df, 
+               aes(x = 0, xend = PCOA1, y = 0 , yend = PCOA2),
+               arrow = arrow(length = unit(0.10, "cm")),
+               color="gray20") +
+  geom_label_repel(data = envfit_gifts_df, aes(x = PCOA1, y = PCOA2, label = gift_id), size = 3) +
+  theme_minimal() +
+  theme(legend.position = 'none')
+```
+
+### Clean environment
+
+```{r clean, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
+```
