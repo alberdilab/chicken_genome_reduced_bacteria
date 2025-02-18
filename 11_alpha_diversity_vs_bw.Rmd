@@ -37,15 +37,6 @@ ggplot(alpha_div, aes(x = functional_kegg, y = chicken_body_weight)) +
   facet_wrap(~ sampling_time * trial, scales = 'free')
 ```
 
-<!-- ## Functional GIFTs -->
-
-<!-- ```{r plot_regression, warning = FALSE, comments = "", message = FALSE, eval = FALSE} -->
-<!-- ggplot(alpha_div, aes(x = functional_gifts, y = chicken_body_weight)) + -->
-<!--   geom_point() + -->
-<!--   geom_smooth(method = "lm") + -->
-<!--   facet_wrap(~ sampling_time * trial, scales = 'free') -->
-<!-- ``` -->
-
 
 ## 11.3 - Linear regressions 
 
@@ -101,23 +92,6 @@ plot_q <-
              terms = 'q',
              show.data = TRUE)
 ```
-
-<!-- ### Functional GIFTs -->
-
-<!-- ```{r calculate_lms, warning = FALSE, comments = "", message = FALSE, eval = FALSE} -->
-<!-- Q_gifts <- lme(chicken_body_weight ~ age + trial + functional_gifts, -->
-<!--          random = ~1|pen, -->
-<!--          data = div_all_day_35) -->
-<!-- summary(Q_gifts) -->
-
-
-<!-- plot_qg <- -->
-<!--   plot_model(Q_gifts, -->
-<!--              type = 'eff', -->
-<!--              title = 'Functional diversity', -->
-<!--              terms = 'q', -->
-<!--              show.data = TRUE) -->
-<!-- ``` -->
 
 
 ## 11.4 - Associate community MCI with diversity

@@ -9,7 +9,7 @@ ModelDir = file.path(localDir, "temporal_hmsc/models")
 MFDir = file.path(localDir, "temporal_hmsc/model_fit")
 
 # Load model
-load(file = file.path(ModelDir, 'model_thin_10_samples_250_chains_4.Rdata'))
+load(file = file.path(ModelDir, 'temporal_model_thin_10_samples_250_chains_4.Rdata'))
 
 # Create partitions
 set.seed(12)

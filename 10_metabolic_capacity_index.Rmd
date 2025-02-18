@@ -36,7 +36,7 @@ gifts_elements %>%
 ### Calculate community GIFTs
 
 ```{r community_gifts, message = FALSE, warning = FALSE}
-elements_com <- to.community(gifts_elements, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2) #¿? Hau ondo dago? Ez litzake nahikoa izango abundantzia taula bere horretan gehitzearekin?
+elements_com <- to.community(gifts_elements, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2) 
 
 funcs_com <- to.community(gifts_functions, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2)
 
@@ -73,7 +73,6 @@ funcs_com %>%
                lwd = 3,
                outlier.color = NA,
                position = position_nudge(x = -.4)) +
-  # ylim(0.26,0.38) +
   geom_jitter(width = 0.15, alpha = 0.6) +
   stat_summary(geom = 'crossbar',
                width = 0.3,

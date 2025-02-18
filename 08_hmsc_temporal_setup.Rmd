@@ -7,6 +7,12 @@ HMSC models are computationally intensive. It is advisable to run this script on
 ### Define directories
 
 ```{r directories, message = FALSE, warning = FALSE, echo = FALSE}
+# Create directories
+dir.create("temporal_hmsc/model_fit")
+dir.create("temporal_hmsc/models")
+dir.create("temporal_hmsc/panels")
+
+# Define paths
 localDir = "."
 ModelDir = file.path(localDir, "temporal_hmsc/models")
 PanelDir = file.path(localDir, "temporal_hmsc/panels")
@@ -117,7 +123,7 @@ for (Lst in 1:length(samples_list)) {
                  nChains = nChains,
                  nParallel = nChains)
   # Create file name
-  filename = paste("model",
+  filename = paste("temporal_model",
                    "_thin_", as.character(thin),
                    "_samples_", as.character(samples),
                    "_chains_", as.character(nChains),
@@ -141,7 +147,7 @@ for (i in 1) {
   for (Lst in 1:nst) {
     thin = thin_list[Lst]
     samples = samples_list[Lst]
-    filename = paste("model","_thin_", as.character(thin),
+    filename = paste("temporal_model","_thin_", as.character(thin),
                      "_samples_", as.character(samples),
                      "_chains_", as.character(nChains),
                      ".Rdata", sep = "")
@@ -159,28 +165,28 @@ for (i in 1) {
     ## Beta
     if (is.null(ma)) {
       ma = psrf.beta[,1]
-      na = paste0("model_", as.character(thin),
+      na = paste0("temporal_model_", as.character(thin),
                   ",", as.character(samples))
     } else {
       ma = cbind(ma,psrf.beta[,1])
-      na = c(na,paste0("model_", as.character(thin),
+      na = c(na,paste0("temporal_model_", as.character(thin),
                        ",", as.character(samples)))
     }
     ## Rho
     if (is.null(ma_rho)) {
       ma_rho = psrf.rho[,1]
-      na_rho = paste0("model_", as.character(thin),
+      na_rho = paste0("temporal_model_", as.character(thin),
                       ",", as.character(samples))
     } else {
       ma_rho = cbind(ma_rho,psrf.rho[,1])
-      na_rho = c(na_rho,paste0("model_", as.character(thin),
+      na_rho = c(na_rho,paste0("temporal_model_", as.character(thin),
                                ",", as.character(samples)))
     }
   }
   
   # Create file name
   panel.name = paste("MCMC_convergence",
-                     "_model_", as.character(i),
+                     "temporal_model_", as.character(i),
                      ".pdf", sep = "")
   # Plot
   pdf(file = file.path(PanelDir, panel.name))

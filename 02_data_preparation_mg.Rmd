@@ -97,100 +97,13 @@ gifts_matrix <-
   filter(mag_id %in% genome_taxonomy$genome) %>% 
   column_to_rownames('mag_id') %>%
   as.matrix()
-
-genome_completeness <-
-  genome_stats %>%
-  select(genome, completeness_score) %>%
-  as.matrix()
-```
-
-### Define completeness correction command
-
-This correction is copied from https://github.com/anttonalberdi/DAMMA/blob/main/R/damma_correction.R, which is based on a previous publication https://www.nature.com/articles/s43705-023-00221-z.
-
-```{r define_corretion, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
-gifts_correction <- 
-  function(MCI_table, genome_completeness, stats = TRUE) {
-  # Sort Genomes and test matching
-  MCI_table <- MCI_table[order(rownames(MCI_table)),]
-  genome_completeness <- genome_completeness[order(genome_completeness[,1]),]
-  if (all(as.character(rownames(MCI_table)) !=
-          as.character(genome_completeness[,1])))
-    stop("Pathway table is missing")
-  
-  # Get completeness values
-  Genome_completeness <- as.numeric(genome_completeness[,2])
-  
-  # Create corrected fullness matrix
-  MCI_table_corrected <- matrix(0, nrow = nrow(MCI_table), ncol = ncol(MCI_table))
-  colnames(MCI_table_corrected) = colnames(MCI_table)
-  rownames(MCI_table_corrected) = rownames(MCI_table)
-  
-  # Iterate modelling and correction for each function
-  suppressWarnings(
-    for (i in 1:ncol(MCI_table)) {
-      Model <- glm(MCI_table[,i]~Genome_completeness,family = "binomial")
-      slope_coef <- coef(Model)[2]
-      if (slope_coef > 0) {
-        for (j in 1:nrow(MCI_table)) {
-          
-          # Model prediction of fullness if completeness was 100%
-          pred_100 <- round(predict(Model,
-                                    newdata = data.frame(
-                                      Genome_completeness = 100),
-                                    type = "response"),1)
-          
-          # Model prediction of fullness for actual completeness of the focal MAG
-          pred_focal <- round(predict(Model,
-                                      newdata = data.frame(
-                                        Genome_completeness = Genome_completeness[j]),
-                                      type = "response"), 1)
-          
-          # The expected change in function fullness if focal MAG was 100% complete
-          pred_diff <- pred_100 - pred_focal
-          MCI_table_corrected[j,i] = MCI_table[j,i] + pred_diff
-        }
-      } else if (slope_coef <= 0) {
-        MCI_table_corrected[,i] <- MCI_table[,i]
-      }
-    }
-  )
-  
-  # If corrected fullness >1, convert it to 1.
-  MCI_table_corrected[MCI_table_corrected > 1] <- 1
-  
-  # Outout overall correction statistics on screen
-  total <- nrow(MCI_table)*ncol(MCI_table)
-  changes <- c(MCI_table == MCI_table_corrected)
-  changes <- length(changes[!(changes)])
-  percentage <- round(changes / total * 100,1)
-  cat(paste0(changes," out of ",total," (",percentage,"%) fullness values were corrected\n"))
-  if (stats == TRUE) {
-    
-    # Outout overall correction statistics on screen
-    total <- ncol(MCI_table_corrected)
-    for (r in rownames(MCI_table_corrected)) {
-      completeness <- round(as.numeric(genome_completeness[genome_completeness[,1] == r,2]),1)
-      changes <- MCI_table[r,] == MCI_table_corrected[r,]
-      changes <- length(changes[!(changes)])
-      percentage <- round(changes / total * 100,1)
-      cat(paste0("\t",r," (",completeness,"%): ",changes,
-                 "/",total," (",percentage,"%) fullness values were corrected\n"))
-    }
-  }
-  
-  # Output corrected table
-  return(MCI_table_corrected)
-}
 ```
 
 ### Perform completeness correction for GIFTs
 
 ```{r perform_completeness_corretion, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
-gifts_corrected <- gifts_correction(gifts_matrix, genome_completeness)
-
 # Aggregate into compound level
-gifts_elements <- to.elements(gifts_corrected, GIFT_db2)
+gifts_elements <- to.elements(gifts_matrix, GIFT_db2)
 
 # Aggregate into function level
 gifts_functions <- to.functions(gifts_elements, GIFT_db2)
@@ -228,7 +141,7 @@ total <-
 hel <-
   decostand(mag_weighted, 'hellinger') %>%
   t() %>%
-  as.data.frame() #¿? I kept both hel and total tables, but shall we just use one of them for all the analyses?
+  as.data.frame() 
 
 # Transpose matrix
 mag_weighted <-
@@ -264,10 +177,10 @@ phylo_seq <- phyloseq(phylo_genome, phylo_taxonomy, phylo_samples, phylo_tree)
 ## 2.4 - Prepare color scheme
 
 ```{r get_mag_colors, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
-# as dataframe
+# As dataframe
 taxonomy_colors <- read_tsv("data/taxonomy_colours.tsv") 
 
-# as vector
+# As vector
 phylum_colors <- 
   c(Halobacteriota = "#f2f2f2",
     Methanobacteriota = "#bfbfbf",

@@ -14,7 +14,7 @@ MFDir <- file.path(localDir, "hmsc_bw/model_fit")
 
 ### Load model
 ```{r load_model, comment = "", echo = FALSE}
-load(file = file.path(ModelDir,"model_thin_10_samples_250_chains_4.Rdata"))
+load(file = file.path(ModelDir,"bw_model_thin_10_samples_250_chains_4.Rdata"))
 ```
 
 
@@ -98,7 +98,7 @@ sum(toplot$rel_abu[(toplot$bw_support > 0.975 | toplot$bw_support < 0.025) & (to
 sum(toplot$rel_abu[(toplot$bw_support > 0.975) & (toplot$var_pred > mean(toplot$var_pred))])
 
 # Total relative abundance of species associated negatively with body weight (>8%)
-sum(toplot$rel_abu[(toplot$bw_support < 0.025 | toplot$bw_support < 0.025) & (toplot$var_pred > mean(toplot$_pred))])
+sum(toplot$rel_abu[(toplot$bw_support < 0.025 | toplot$bw_support < 0.025) & (toplot$var_pred > mean(toplot$var_pred))])
 
 # Phylogenetic signal
 mpost <- convertToCodaObject(m)

@@ -7,6 +7,12 @@
 ### Define directories
 
 ```{r directories, echo = FALSE}
+# Create directories
+dir.create("hmsc_bw/model_fit")
+dir.create("hmsc_bw/models")
+dir.create("hmsc_bw/panels")
+
+# Define paths
 localDir = "."
 ModelDir = file.path(localDir, "hmsc_bw/models")
 ```
@@ -154,7 +160,7 @@ for (Lst in 1:length(samples_list)) {
                  nChains = nChains,
                  nParallel = nChains)
   # create file name
-  filename = paste("model",
+  filename = paste("bw_model",
                    "_thin_", as.character(thin),
                    "_samples_", as.character(samples),
                    "_chains_", as.character(nChains),

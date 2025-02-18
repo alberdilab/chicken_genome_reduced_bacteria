@@ -14,7 +14,7 @@ load("data/data_mg.Rdata")
 ```{r alpha_div, comment = "", message = FALSE, warning = FALSE}
 # Neutral
 neutral <-
-  hel %>% # ¿? or shall we use mag_weighted?
+  mag_weighted %>% 
   dplyr::select(where(~ !all(. == 0))) %>% 
   hilldiv(., q = 1) %>%
   t() %>%
@@ -24,7 +24,7 @@ neutral <-
 
 # Phylogenetic
 phylogenetic <-
-  hel %>% 
+  mag_weighted %>% 
   dplyr::select(where(~ !all(. == 0))) %>%
   hilldiv(., q = 1, tree = genome_tree) %>%
   t() %>%
@@ -39,7 +39,7 @@ dist_kegg <-
   traits2dist(., method = "gower")
 
 functional_kegg <-
-  hel %>%
+  mag_weighted %>%
   dplyr::select(where(~ !all(. == 0))) %>%
   hilldiv(., q = 1 , dis = dist_kegg) %>%
   t() %>%
@@ -47,21 +47,6 @@ functional_kegg <-
   dplyr::rename(functional_kegg = 1) %>%
   rownames_to_column(var = "animal_code") %>%
   mutate(functional_kegg = if_else(is.nan(functional_kegg), 1, functional_kegg))
-
-# # Functional GIFTs
-# dist <- 
-#   gifts_elements %>%
-#   traits2dist(., method = "gower")
-# 
-# functional_gifts <-
-#   hel %>% 
-#   dplyr::select(where(~ !all(. == 0))) %>% 
-#   hilldiv(., q = 1 , dis = dist) %>%
-#   t() %>%
-#   as.data.frame() %>%
-#   dplyr::rename(functional_gifts = 1) %>%
-#   rownames_to_column(var = "animal_code") %>%
-#   mutate(functional_gifts = if_else(is.nan(functional_gifts), 1, functional_gifts))
 
 # Sequence depth
 log_seq_depth <-
@@ -75,7 +60,6 @@ log_seq_depth <-
 alpha_div <-
   neutral %>%
   full_join(phylogenetic, by = 'animal_code') %>%
-  # full_join(functional_gifts, by = 'animal_code') %>%
   full_join(functional_kegg, by = 'animal_code') %>%
   left_join(chicken_metadata, by = 'animal_code') %>%
   left_join(log_seq_depth, by = 'animal_code')
@@ -186,40 +170,7 @@ p_f_kegg <-
         panel.grid.minor.x = element_blank(),
         legend.position = "none")
 
-# # Functional GIFTS
-# p_f_gifts <- 
-#   ggplot(alpha_div,
-#          aes(x = sampling_time,
-#          y = functional_gifts,
-#          group = sampling_time,
-#          colour = sampling_time)) +
-#   geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-#                width = 0.3,
-#                lwd = 3,
-#                outlier.color = NA,
-#                position = position_nudge(x = -.4)
-#   ) +
-#   ylim(1.30,1.50) +
-#   geom_jitter(width = 0.15, alpha = 0.6) +
-#   stat_summary(geom = "crossbar",
-#                width = 0.3,
-#                fatten = 0,
-#                color = "white",
-#                position = position_nudge(x = -.4),
-#                fun.data = function(x){ return(c(y = median(x),
-#                                                 ymin = median(x),
-#                                                 ymax = median(x))
-#                ) }) +
-#   scale_fill_manual(values = c("#E69F00", "#CC6677", "#56B4E9")) +
-#   scale_color_manual(values = c("#E69F00", "#CC6677", "#56B4E9")) +
-#   theme_minimal() + ylab("Effective number of strains") +
-#   ggtitle("Functional diversity GIFTs") +
-#   theme(panel.grid.major.x = element_blank(),
-#         panel.grid.minor.x = element_blank(),
-#         legend.position = "none")
-
 grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
-# grid.arrange(p_n, p_p, p_f_kegg, p_f_gifts, ncol = 4)
 ```
 
 
@@ -255,16 +206,6 @@ m_div_f_kegg <-
 summary(m_div_f_kegg)
 ```
 
-<!-- ### Functional GIFTs -->
-
-<!-- ```{r} -->
-<!-- m_div_f_gifts <- -->
-<!--   lme(functional_gifts ~ seq_depth + sex + breed + treatment + trial * age, -->
-<!--       random = ~ 1|pen, -->
-<!--       data = alpha_div) -->
-
-<!-- summary(m_div_f_gifts) -->
-<!-- ``` -->
 
 ### Clean environment
 
