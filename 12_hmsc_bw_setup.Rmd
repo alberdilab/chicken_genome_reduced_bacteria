@@ -8,6 +8,7 @@
 
 ```{r directories, echo = FALSE}
 # Create directories
+dir.create("hmsc_bw")
 dir.create("hmsc_bw/model_fit")
 dir.create("hmsc_bw/models")
 dir.create("hmsc_bw/panels")

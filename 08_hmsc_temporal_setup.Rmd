@@ -8,6 +8,7 @@ HMSC models are computationally intensive. It is advisable to run this script on
 
 ```{r directories, message = FALSE, warning = FALSE, echo = FALSE}
 # Create directories
+dir.create("temporal_hmsc")
 dir.create("temporal_hmsc/model_fit")
 dir.create("temporal_hmsc/models")
 dir.create("temporal_hmsc/panels")

@@ -9,6 +9,11 @@ ModelDir = file.path(localDir, "temporal_hmsc/models")
 MFDir = file.path(localDir, "temporal_hmsc/model_fit")
 
 # Load model
+if(!file.exists("temporal_hmsc/models/temporal_model_thin_10_samples_250_chains_4.Rdata")){
+  download.file(url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/temporal_model_thin_10_samples_250_chains_4.Rdata',
+              destfile = 'temporal_hmsc/models/temporal_model_thin_10_samples_250_chains_4.Rdata', method = 'curl')
+}
+
 load(file = file.path(ModelDir, 'temporal_model_thin_10_samples_250_chains_4.Rdata'))
 
 # Create partitions

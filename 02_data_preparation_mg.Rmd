@@ -52,6 +52,11 @@ genome_tree <- read_tree("data/tree.nwk")
 ### Raw gene annotations
 
 ```{r load_annotations, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+if(!file.exists("data/gene_annotations.tsv.xz")){
+  download.file(url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/gene_annotations.tsv.xz',
+              destfile = 'data/gene_annotations.tsv.xz', method = 'curl')
+}
+
 genome_annotations <- read_tsv("data/gene_annotations.tsv.xz")
 ```
 
