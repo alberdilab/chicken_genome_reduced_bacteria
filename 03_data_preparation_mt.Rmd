@@ -5,18 +5,106 @@
 ### Metatranscriptomic gene expression counts
 
 ```{r load_expr_counts, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
-load("data/distilled_caecum_1.RData")
-load("data/distilled_caecum_2.RData")
-load("data/distilled_caecum_3.RData")
-load("data/distilled_caecum_4.RData")
-load("data/distilled_caecum_5.RData")
-load("data/distilled_caecum_6.RData")
-load("data/distilled_caecum_7.RData")
-load("data/distilled_caecum_8.RData")
+if(!file.exists("data/gene_expressions.tsv.xz")){
+  download.file(url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/gene_expressions.tsv.xz',
+              destfile = 'data/gene_expressions.tsv.xz', method = 'curl')
+}
 
-expr_counts_raw <- c(distilled_expression_caecum_1,distilled_expression_caecum_2,distilled_expression_caecum_3,distilled_expression_caecum_4,distilled_expression_caecum_5,distilled_expression_caecum_6,distilled_expression_caecum_7,distilled_expression_caecum_8)
+gene_expr <- 
+  read_tsv("data/gene_expressions.tsv.xz") %>% 
+  select(1:129) %>%
+  rename(mag_name = 'MAG') %>%
+  relocate(mag_name)
 
-rm(distilled_expression_caecum_1,distilled_expression_caecum_2,distilled_expression_caecum_3,distilled_expression_caecum_4,distilled_expression_caecum_5,distilled_expression_caecum_6,distilled_expression_caecum_7,distilled_expression_caecum_8)
+# Chunk analysis to sets of 100 MAGs
+mags <-  sort(unique(gene_expr$mag_name))
+
+gene_expr_1 <- gene_expr[gene_expr$mag_name %in% mags[c(1:100)],c(2:129)]
+gene_expr_2 <- gene_expr[gene_expr$mag_name %in% mags[c(101:200)],c(2:129)]
+gene_expr_3 <- gene_expr[gene_expr$mag_name %in% mags[c(201:300)],c(2:129)]
+gene_expr_4 <- gene_expr[gene_expr$mag_name %in% mags[c(301:400)],c(2:129)]
+gene_expr_5 <- gene_expr[gene_expr$mag_name %in% mags[c(401:500)],c(2:129)]
+gene_expr_6 <- gene_expr[gene_expr$mag_name %in% mags[c(501:600)],c(2:129)]
+gene_expr_7 <- gene_expr[gene_expr$mag_name %in% mags[c(601:700)],c(2:129)]
+gene_expr_8 <- gene_expr[gene_expr$mag_name %in% mags[c(701:825)],c(2:129)]
+
+
+save(gene_expr_1, file = "data/gene_expr_1.Rdata")
+save(gene_expr_2, file = "data/gene_expr_2.Rdata")
+save(gene_expr_3, file = "data/gene_expr_3.Rdata")
+save(gene_expr_4, file = "data/gene_expr_4.Rdata")
+save(gene_expr_5, file = "data/gene_expr_5.Rdata")
+save(gene_expr_6, file = "data/gene_expr_6.Rdata")
+save(gene_expr_7, file = "data/gene_expr_7.Rdata")
+save(gene_expr_8, file = "data/gene_expr_8.Rdata")
+
+rm(list = ls())
+```
+
+### Distillation
+
+```{r distill_counts, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+mag_ann <-
+  read_tsv("data/gene_annotations.tsv.xz") %>%
+  mutate(gene_length = end_position - start_position)
+
+# Chunk analysis
+load("data/gene_expr_1.Rdata")
+distq_1 <- distillq(gene_expr_1, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+save(distq_1, file = "data/distq_1.Rdata")
+rm(gene_expr_1, distq_1)
+
+load("data/gene_expr_2.Rdata")
+distq_2 <- distillq(gene_expr_2, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+save(distq_2, file = "data/distq_2.Rdata")
+rm(gene_expr_2, distq_2)
+
+load("data/gene_expr_3.Rdata")
+distq_3 <- distillq(gene_expr_3, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+save(distq_3, file = "results/tables/distq_3.Rdata")
+rm(gene_expr_3, distq_3)
+
+load("data/gene_expr_4.Rdata")
+distq_4 <- distillq(gene_expr_4, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+save(distq_4, file = "results/tables/distq_4.Rdata")
+rm(gene_expr_4, distq_4)
+
+load("data/gene_expr_5.Rdata")
+distq_5 <- distillq(gene_expr_5, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+save(distq_5, file = "results/tables/distq_5.Rdata")
+rm(gene_expr_5, distq_5)
+
+load("data/gene_expr_6.Rdata")
+distq_6 <- distillq(gene_expr_6, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+save(distq_6, file = "results/tables/distq_6.Rdata")
+rm(gene_expr_6, distq_6)
+
+load("data/gene_expr_7.Rdata")
+distq_7 <- distillq(gene_expr_7, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 12))
+save(distq_7, file = "results/tables/distq_7.Rdata")
+rm(gene_expr_7, distq_7)
+
+load("results/tables/gene_expr_8.Rdata")
+distq_8 <- distillq(gene_expr_8, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 12))
+save(distq_8, file = "results/tables/distq_8.Rdata")
+rm(gene_expr_8, distq_8)
+```
+
+### Combine metatranscriptomic GIFT expression counts
+
+```{r load_gift_counts, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+load("data/distq_1.Rdata")
+load("data/distq_2.Rdata")
+load("data/distq_3.Rdata")
+load("data/distq_4.Rdata")
+load("data/distq_5.Rdata")
+load("data/distq_6.Rdata")
+load("data/distq_7.Rdata")
+load("data/distq_8.Rdata")
+
+expr_counts_raw <- c(distq_1, distq_2, distq_3, distq_4, distq_5, distq_6, distq_7, distq_8)
+
+rm(distq_1, distq_2, distq_3, distq_4, distq_5, distq_6, distq_7, distq_8)
 
 # Change MAG IDs for a standardised code 
 ena_to_mag_id <- read_tsv("data/ena_to_mag_id.tsv")
