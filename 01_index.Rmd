@@ -1,0 +1,91 @@
+---
+title: "AlberdiLab | Marcos et al. 2025"
+subtitle: "Title to be added"
+author:
+  - Sofia Marcos, Iñaki Odriozola, Ostaizka Aizpurua, Raphael Eisenhofer, Sarah Siu Tze Mak, Garazi Martin, Varsha Kale, Germana Baldi, Robert D Finn, Joan Tarradas, Andone Estonba, M Thomas P Gilbert, Antton Alberdi^[University of Copenhagen, antton.alberdi@sund.ku.dk]
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+url: https://alberdilab.github.io/chicken_genome_reduced_bacteria
+description: |
+  Data analysis code developed to study early-life caecal microbiome development and its association with chicken body weight 
+link-citations: yes
+github-repo: alberdilab/chicken_genome_reduced_bacteria
+---
+
+```{r knitr_opts, echo=FALSE}
+knitr::opts_chunk$set(
+    class.source = "script-source",
+    class.output = "script-output",
+    comment = NA)
+```
+
+# Chapter 1 - Introduction
+
+This WebBook contains the code written to analyse data from the study of the functional profile of metagenome-assembled genomes and temporal trends of derived microbial communities from intensively reared broiler chickens.
+
+## 1.1 - Prepare the R environment
+
+### Environment
+
+To reproduce all the analyses locally, clone this repository in your computer using:
+
+```
+RStudio > New Project > Version Control > Git
+```
+
+And indicating the following git repository:
+
+> https://github.com/alberdilab/chicken_genome_reduced_bacteria.git
+
+Once the R project has been created, follow the instructions and code chunks shown in this webbook.
+
+### Libraries
+
+The following R packages are required for the data analysis.
+
+```{r load_libraries, warning = FALSE, comments = "", message = FALSE}
+# Base
+library(R.utils)
+library(knitr)
+library(tidyverse)
+library(devtools)
+library(rmarkdown)
+library(janitor)
+
+# For tree handling
+library(ape)
+library(phyloseq)
+library(phytools)
+library(tidytree)
+
+# For plotting
+library(ggplot2)
+library(ggrepel)
+library(ggpubr)
+library(ggnewscale)
+library(gridExtra)
+library(ggtreeExtra)
+library(ggtree)
+library(ggh4x)
+library(sjPlot)
+library(colorspace)
+library(vioplot)
+
+# For statistics
+library(spaa)
+library(vegan)
+library(Rtsne)
+library(microbiome)
+library(geiger)
+library(hilldiv2)
+library(distillR)
+library(broom.mixed)
+library(Hmsc)
+library(MuMIn)
+library(corrplot)
+library(lme4)
+library(nlme)
+library(boot)
+```

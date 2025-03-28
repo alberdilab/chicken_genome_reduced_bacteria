@@ -1,0 +1,170 @@
+# Chapter 11 - Associate microbial community metrics with chicken body weight
+
+## 11.1 - Load MG and MT data
+
+```{r load_data_mag_div_bw, message = FALSE, warning = FALSE, echo = FALSE}
+load("data/data_mg.Rdata")
+load("data/alpha_div.Rdata")
+load("data/mci_com.Rdata")
+```
+
+
+## 11.2 - Associate alpha diversity metrics with chicken BW
+
+### Neutral 
+
+```{r plot_regression_n, warning =FALSE, comments = "", message = FALSE}
+ggplot(alpha_div, aes(x = neutral, y = chicken_body_weight)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ sampling_time*trial, scales = 'free')
+```
+
+## Phylogenetic
+
+```{r plot_regression_p, warning = FALSE, comments = "", message = FALSE}
+ggplot(alpha_div, aes(x = phylogenetic, y = chicken_body_weight)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ sampling_time * trial, scales = 'free')
+```
+
+## Functional KEGG
+
+```{r plot_regression_f, warning = FALSE, comments = "", message = FALSE}
+ggplot(alpha_div, aes(x = functional_kegg, y = chicken_body_weight)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ sampling_time * trial, scales = 'free')
+```
+
+
+## 11.3 - Linear regressions 
+
+### Neutral (Fig. 3a)
+
+```{r calculate_lms_neutral, warning = FALSE, comments = "", message = FALSE}
+div_all_day_35 <-
+  alpha_div %>%
+  filter(sampling_time == '35') %>%
+  filter(trial != 'CC') %>% 
+  filter(!animal_code %in% c("CB12.17", "CA04.16", "CA03.17")) # ¿? double check if we are OK filtering some samples, they show out of place diversity
+
+N <- lme(chicken_body_weight ~ age + trial + neutral,
+         random = ~1|pen,
+         data = div_all_day_35)
+summary(N)
+
+plot_model(N,
+           type = 'eff',
+           title = 'Neutral diversity',
+           terms = 'neutral',
+           show.data = TRUE)
+```
+
+### Phylogenetic
+
+```{r calculate_lms_p, warning = FALSE, comments = "", message = FALSE}
+P <- lme(chicken_body_weight ~ age + trial + phylogenetic,
+         random = ~1|pen,
+         data = div_all_day_35)
+summary(P)
+
+plot_p <-
+  plot_model(P,
+             type = 'eff',
+             title = 'Phylogenetic diversity',
+             terms = 'phylogenetic',
+             show.data = TRUE)
+```
+
+### Functional KEGG
+
+```{r calculate_lms_f, warning = FALSE, comments = "", message = FALSE}
+Q_kegg <- lme(chicken_body_weight ~ age + trial + functional_kegg,
+         random = ~1|pen,
+         data = div_all_day_35)
+summary(Q_kegg)
+
+plot_q <-
+  plot_model(Q_kegg,
+             type = 'eff',
+             title = 'Functional diversity',
+             terms = 'functional_kegg',
+             show.data = TRUE)
+```
+
+
+## 11.4 - Associate community MCI with diversity
+
+```{r mci_bw, warning = FALSE, comments = "", message = FALSE}
+domains_com_2 <-
+  funcs_com %>%
+  as.data.frame(optional = TRUE) %>% 
+  rownames_to_column(var = "animal_code") %>% 
+  rowwise() %>%
+  mutate(overall_com_mci = mean(c_across(B01:D09))) %>%
+  select(animal_code, overall_com_mci) %>%
+  left_join(alpha_div) %>%
+  filter(sampling_time == '35')
+
+# Neutral
+N <- lme(neutral ~ age + trial + overall_com_mci, 
+         random = ~1|pen,
+         data = domains_com_2)
+summary(N)
+
+# Phylogenetic
+P <- lme(phylogenetic ~ age + trial + overall_com_mci,
+         random = ~1|pen,
+         data = domains_com_2)
+summary(P)
+
+# Functional
+Q <- lme(functional_kegg ~ age + trial + overall_com_mci,
+         random = ~1|pen,
+         data = domains_com_2)
+summary(Q)
+```
+
+
+## 11.5 - Associate community MCI with chicken BW
+
+```{r com_mci_vs_bw, warning = FALSE, comments = "", message = FALSE}
+MCI <- lme(chicken_body_weight ~ age + trial + overall_com_mci,
+         random = ~1|pen,
+         data = domains_com_2)
+summary(MCI)
+```
+
+
+# 11.6 - Associate community weighted genome size with chicken BW
+
+```{r com_genome_size_vs_bw, warning = FALSE, comments = "", message = FALSE}
+metadata_day_35 <-
+  chicken_metadata %>%
+  filter(sampling_time == "35")
+
+mag_lengthed <- 
+  round(sweep(total, MARGIN = 1, genome_stats$mag_length, `*`), 0) %>% 
+  t() %>% 
+  as.data.frame() %>%
+  rownames_to_column(var = "animal_code") %>%
+  rowwise() %>% 
+  mutate(comm_length = mean(c_across(2:389))) %>% 
+  select(animal_code, comm_length) %>% 
+  filter(animal_code %in% metadata_day_35$animal_code) %>% 
+  left_join(metadata_day_35, by = 'animal_code')
+
+L <- lme(chicken_body_weight ~ scale(age) + trial + scale(log(comm_length)),
+         random = ~ 1|pen,
+         data = mag_lengthed)
+summary(L)
+plot(L)
+```
+
+### Clean environment
+
+```{r clean_11, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
+```

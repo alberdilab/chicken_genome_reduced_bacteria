@@ -1,0 +1,639 @@
+# Chapter 14 - Comparing metabolic capacity of positively and negatively associated bacteria
+
+## 14.1 - Load MG data
+
+```{r load_data_func, echo = FALSE}
+load("data/data_mg.Rdata")
+
+trends_bw <-
+  read_tsv("data/hmsc_bw_trend.tsv") %>% 
+  mutate(trend_07 = case_when(bw_support > 0.85 ~ 'positive',
+                           bw_support < 0.15 ~ 'negative',
+                           TRUE ~ 'non-significant')) %>% 
+  mutate(trend_09 = case_when(bw_support > 0.95 ~ 'positive',
+                           bw_support < 0.05 ~ 'negative',
+                           TRUE ~ 'non-significant'))
+
+gifts <-
+  gifts_elements %>%
+  as.data.frame() %>% 
+  select(where(~ sum(.) > 0))
+
+gifts_funct <-
+  gifts_functions %>%
+  as.data.frame() %>% 
+  select(where(~ sum(.) > 0))
+
+avg_mci <- rowMeans(gifts)
+
+gifts_funct$avg_mci <- avg_mci
+
+avg_mci_bio <- rowMeans(gifts[,grepl("B",names(gifts))])
+gifts_funct$avg_mci_bio <- avg_mci_bio
+
+avg_mci_deg <- rowMeans(gifts[,grepl("D",names(gifts))])
+gifts_funct$avg_mci_deg <- avg_mci_deg
+```
+
+## 14.2 - Taxonomy of positively and negatively associated MAGs
+
+### Positive group
+
+All MAGs with positive association belong to RF39
+
+```{r Taxonomy_pos, echo = FALSE}
+trends_bw %>%
+  filter(trend_09 == "positive") %>%
+  select(genome) %>% 
+  left_join(genome_taxonomy, by = 'genome') %>% 
+  select(order) %>% 
+  table()
+```
+
+### Negative group
+
+MAGs with negative association belong to various orders, mainly to Lachnospirales and Oscillospirales
+
+```{r Taxonomy_neg, echo = FALSE}
+trends_bw %>%
+  filter(trend_09 == "negative") %>%
+  select(genome) %>%
+  left_join(genome_taxonomy, by = 'genome') %>% 
+  select(order) %>% 
+  table() %>% 
+  sort()
+```
+
+
+## 14.3 - Compute MCIs of BW positive and negative associated communities
+
+```{r bw_groups, echo = FALSE}
+gifts_funct_bw_pos <-
+  gifts_funct %>%
+  mutate(avg_mci_bio = gifts_funct$avg_mci_bio,
+         avg_mci_deg = gifts_funct$avg_mci_deg,
+         bw_effect = trends_bw$trend_09) %>%
+  filter(bw_effect == "positive") %>%
+  select(-bw_effect)
+
+gifts_funct_bw_neu <- 
+  gifts_funct %>%
+  mutate(avg_mci_bio = gifts_funct$avg_mci_bio,
+         avg_mci_deg = gifts_funct$avg_mci_deg, 
+         bw_effect = trends_bw$trend_09) %>%
+  filter(bw_effect == "non-significant") %>%
+  select(-bw_effect)
+
+gifts_funct_bw_neg <- 
+  gifts_funct %>%
+  mutate(avg_mci_bio = gifts_funct$avg_mci_bio,
+         avg_mci_deg = gifts_funct$avg_mci_deg, 
+         bw_effect = trends_bw$trend_09) %>%
+  filter(bw_effect == "negative") %>%
+  select(-bw_effect)
+```
+
+```{r boots_mci, echo = FALSE}
+mean_func <- function(data, indices) {
+  return(mean(data[indices]))
+}
+
+boot_pos_df <- data.frame(matrix(nrow = ncol(gifts_funct_bw_pos), ncol = 4))
+colnames(boot_pos_df) <- c("function_id", "mean", "ci_05", "ci_95")
+
+boot_neu_df <- data.frame(matrix(nrow = ncol(gifts_funct_bw_neu), ncol = 4))
+colnames(boot_neu_df) <- c("function_id", "mean", "ci_05", "ci_95")
+
+boot_neg_df <- data.frame(matrix(nrow = ncol(gifts_funct_bw_neg), ncol = 4))
+colnames(boot_neg_df) <- c("function_id", "mean", "ci_05", "ci_95")
+
+for(i in 1:ncol(gifts_funct_bw_pos)){
+    boot_pos_df[i, "function_id"] <- colnames(gifts_funct_bw_pos)[i]
+    
+    if(sum(gifts_funct_bw_pos[, i]) == 0){
+      boot_pos_df[i, "mean"] <- 0
+      boot_pos_df[i, "ci_05"] <- 0
+      boot_pos_df[i, "ci_95"] <- 0
+      }
+    else{
+      boot_temp_pos <- boot(gifts_funct_bw_pos[, i], statistic = mean_func, R = 10000)
+      boot_temp_pos_ci <- boot.ci(boot_temp_pos, type = "bca")
+      boot_pos_df[i, "mean"] <- boot_temp_pos_ci$t0
+      boot_pos_df[i, "ci_05"] <- boot_temp_pos_ci$bca[4]
+      boot_pos_df[i, "ci_95"] <- boot_temp_pos_ci$bca[5]
+      }
+    boot_neu_df[i, "function_id"] <- colnames(gifts_funct_bw_neu)[i]
+    boot_temp_neu <- boot(gifts_funct_bw_neu[, i], statistic = mean_func, R = 10000)
+    boot_temp_neu_ci <- boot.ci(boot_temp_neu, type = "bca")
+    boot_neu_df[i, "mean"] <- boot_temp_neu_ci$t0
+    boot_neu_df[i, "ci_05"] <- boot_temp_neu_ci$bca[4]
+    boot_neu_df[i, "ci_95"] <- boot_temp_neu_ci$bca[5]
+    
+    boot_neg_df[i, "function_id"] <- colnames(gifts_funct_bw_neg)[i]
+    boot_temp_neg <- boot(gifts_funct_bw_neg[, i], statistic = mean_func, R = 10000)
+    boot_temp_neg_ci <- boot.ci(boot_temp_neg, type = "bca")
+    boot_neg_df[i, "mean"] <- boot_temp_neg_ci$t0
+    boot_neg_df[i, "ci_05"] <- boot_temp_neg_ci$bca[4]
+    boot_neg_df[i, "ci_95"] <- boot_temp_neg_ci$bca[5]
+    }
+
+boot_df <- data.frame(rbind(boot_pos_df %>% mutate(bw_association = "postive"),
+                            boot_neu_df %>% mutate(bw_association = "non-significant"),
+                            boot_neg_df %>% mutate(bw_association = "negative")))  
+
+gifts_funct_df <- data.frame(rbind(gifts_funct_bw_pos %>% mutate(bw_association = "postive"),
+                                   gifts_funct_bw_neu %>% mutate(bw_association = "non-significant"),
+                                   gifts_funct_bw_neg %>% mutate(bw_association = "negative")))
+```
+
+### MCI comparisons of biosynthesis pathways
+
+```{r mci_groups, echo = FALSE}
+## B01
+p_B01_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = B01, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = B01, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "B01"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+
+## B02
+p_B02_mg <- 
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = B02, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = B02, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "B02"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14)) 
+
+## B03
+p_B03_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = B03, color = bw_association),
+              alpha = 0.5, width = 0.25) + 
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = B03, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data=boot_df %>% filter(function_id=="B03"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association,color=bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35))+
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal()+
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))  
+
+## B04
+p_B04_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = B04, color = bw_association),
+              alpha = 0.5, width = 0.25)+
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = B04, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "B04"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))  
+
+## B06
+p_B06_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = B06, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = B06, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "B06"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+
+## B07
+p_B07_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = B07, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = B07, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "B07"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+
+## B08
+p_B08_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = B08, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = B08, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "B08"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+
+## B09
+p_B09_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = B09, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = B09, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "B09"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+
+## B10
+p_B10_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = B10, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = B10, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "B10"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+
+## Avg. MCI Biosynthesis
+p_Mci_bio_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = avg_mci_bio, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = avg_mci_bio, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "avg_mci_bio"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") + 
+  ylab("Avg. bio. MCI") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+
+## Avg. MCI
+p_Mci_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = avg_mci, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = avg_mci, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "avg_mci"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  ylab("Avg. MCI") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+```
+
+### The significant ones
+
+```{r selected_plots_bio, echo = FALSE, fig.height = 4, fig.width = 10, fig.fullwidth = TRUE}
+grid.arrange(p_Mci_mg, p_B04_mg, p_B08_mg, ncol = 3)
+```
+
+### All
+
+```{r combined_plots_bio, echo = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
+grid.arrange(p_Mci_bio_mg, p_B01_mg, p_B02_mg,
+             p_B03_mg, p_B04_mg, p_B06_mg, 
+             p_B07_mg, p_B08_mg, p_B09_mg,
+             p_B10_mg, ncol = 3)
+```
+
+#### MCI comparisons of degradation pathways
+
+```{r mci_groups_deg, echo = FALSE}
+## D01
+p_D01_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = D01, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = D01, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "D01"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) + 
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+
+## D02
+p_D02_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = D02, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = D02, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "D02"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14)) 
+
+## D03
+p_D03_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = D03, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = D03, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "D03"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size =14))  
+
+## D05
+p_D05_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = D05, color = bw_association),
+              alpha = 0.5,width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = D05, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "D05"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+
+## D06
+p_D06_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = D06, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = D06, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id  == "D06"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+
+## D07
+p_D07_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = D07, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = D07, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "D07"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+
+## D08
+p_D08_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = D08, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = D08, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "D08"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+
+## D09
+p_D09_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = D09, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = D09, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "D09"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+
+## Avg. MCI Degradation
+p_Mci_deg_mg <-
+  ggplot() +
+  geom_jitter(data = gifts_funct_df, aes(x = bw_association, y = avg_mci_deg, color = bw_association),
+              alpha = 0.5, width = 0.25) +
+  geom_boxplot(data = gifts_funct_df, aes(x = bw_association, y = avg_mci_deg, fill = bw_association),
+               alpha = 0.1, outlier.shape = NA, width = 0.5) +
+  geom_linerange(data = boot_df %>% filter(function_id == "avg_mci_deg"),
+                 aes(ymin = ci_05, ymax = ci_95, x = bw_association, color = bw_association),
+                 linewidth = 4, size = 1, position = position_nudge(x = 0.35)) +
+  scale_color_manual(values = c("red3","grey50","blue3")) +
+  scale_fill_manual(values = c("red3","grey50","blue3")) +
+  xlab("Body-weight association") +
+  ylab("Avg. deg. MCI") +
+  theme_minimal() +
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 14),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14))
+```
+
+### All 
+
+```{r combined_plots_deg, echo = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
+grid.arrange(p_Mci_deg_mg, p_D01_mg, p_D02_mg,
+             p_D03_mg, p_D05_mg,
+             p_D06_mg, p_D07_mg, p_D08_mg,
+             p_D09_mg, ncol = 3)
+```
+
+
+## 14.4 - Heatmap of MCI at element level (Not included in the Supplementary)
+
+```{r mci_element_plot, echo = FALSE}
+gifts_bw_pos <-
+  gifts %>%
+  mutate(bw_effect = trends_bw$trend_09) %>%
+  filter(bw_effect == "positive") %>%
+  select(-bw_effect)
+
+gifts_bw_neu <-
+  gifts %>%
+  mutate(bw_effect = trends_bw$trend_09) %>%
+  filter(bw_effect == "non-significant") %>%
+  select(-bw_effect)
+
+n_neg_sp <- 50
+
+gifts_bw_neg <-
+  gifts %>%
+  mutate(bw_effect = trends_bw$trend_09, bw_param = trends_bw$parameter) %>%
+  filter(bw_effect == "negative") %>%
+  arrange(bw_param) %>%
+  slice(1:n_neg_sp) %>%
+  select(-c(bw_effect, bw_param))
+
+gifts_bw_df_long <- 
+  data.frame(rbind(gifts_bw_pos, gifts_bw_neg)) %>%
+  mutate(bw_association = c(rep("positive", nrow(gifts_bw_pos)), rep("negative", nrow(gifts_bw_neg)))) %>%
+  select(-matches("S0")) %>%
+  rownames_to_column(var = "genome") %>%
+  pivot_longer(!c(genome, bw_association), names_to = "Element", values_to = "mci") %>%
+  mutate(Function = substr(Element, start = 1, stop = 3)) %>%
+  relocate(Function, .after = Element)
+
+gifts_bw_df_long %>%
+  group_by(Element) %>%
+  filter(sum(mci) > 0) %>%
+  ungroup() %>%
+  ggplot(., aes(x = Element, y = genome, fill = bw_association, group = Function, alpha = mci)) +
+  geom_tile(color = "#ffffff") +
+  scale_y_discrete(guide = guide_axis(check.overlap = TRUE)) +
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
+  scale_fill_manual(values = c("red3",
+                               "blue3"),
+                    na.value = "#f4f4f4") +
+  facet_grid(bw_association ~ Function, scales = "free", space = "free") +
+  theme_void(base_size = 8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.position = "none")
+```
+
+### Clean environment
+
+```{r clean_14, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
+```

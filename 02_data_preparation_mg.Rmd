@@ -1,0 +1,299 @@
+# Chapter 2  - Metagenomic data preparation
+
+## 2.1 - Load data
+
+Load the original data files outputted by the bioinformatic pipeline.
+
+### Chicken sample metadata
+
+```{r load_metadata, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+chicken_metadata <- 
+  read_tsv("data/metadata.tsv") %>%
+  mutate(sampling_time = factor(sampling_time, levels = c('7',
+                                                          '21',
+                                                          '35')))
+```
+
+### Taxonomy of metagenome-assembled genomes 
+
+```{r load_taxonomy, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+genome_taxonomy <- 
+  read_tsv("data/taxonomy.tsv") %>%
+  rename(genome = 1) %>%
+  mutate(phylum = case_when(
+        phylum == "Actinobacteriota" ~ "Actinomycetota",
+        phylum == "Firmicutes" ~ "Bacillota",
+        phylum == "Firmicutes_A" ~ "Bacillota_A",
+        phylum == "Firmicutes_B" ~ "Bacillota_B",
+        phylum == "Firmicutes_C" ~ "Bacillota_C",
+        phylum == "Cyanobacteria" ~ "Cyanobacteriota",
+        phylum == "Proteobacteria" ~ "Pseudomonadota",
+        TRUE ~ phylum)) %>% 
+  filter(!domain == "Archaea")
+```
+
+### Genome statistics
+
+```{r load_stats, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+genome_stats <- 
+  read_tsv("data/stats.tsv") %>%
+  rename(genome = 1) %>%
+  mutate(correction_factor = median(mag_length) / mag_length) %>% 
+  filter(genome %in% genome_taxonomy$genome) %>% 
+  arrange(match(genome, genome_taxonomy$genome))
+```
+
+### Phylogenetic tree
+
+```{r load_tree, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+genome_tree <- read_tree("data/tree.nwk")
+```
+
+### Raw gene annotations
+
+```{r load_annotations, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+if(!file.exists("data/gene_annotations.tsv.xz")){
+  download.file(url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/gene_annotations.tsv.xz',
+              destfile = 'data/gene_annotations.tsv.xz', method = 'curl')
+}
+
+genome_annotations <- read_tsv("data/gene_annotations.tsv.xz")
+```
+
+### DRAM functional annotations
+
+```{r load_dram_table, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+genome_kegg_paths <-
+  read_tsv("data/dram.tsv") %>%
+  rename(genome = 1) %>% 
+  filter(genome %in% genome_taxonomy$genome) %>% 
+  select(1:400)
+```
+
+### Metagenomic read counts
+
+```{r load_read_counts, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+read_counts <- 
+  read_tsv("data/mag_counts.tsv") %>% 
+  rename(genome = 1) %>% 
+  filter(genome %in% genome_taxonomy$genome) 
+```
+
+
+## 2.2 - Distilling Genome Inferred Functional Traits (GIFTs)
+
+### Distilling DRAM annotations
+
+```{r calculate_traits, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+gifts_raw <- distill(genome_annotations, GIFT_db2, genomecol = 2, annotcol = c(9,10,19), verbosity = F)
+
+# Load ENA to genome_id table
+ena_to_mag_id <- read_tsv("data/ena_to_mag_id.tsv")
+
+gifts_matrix <-
+  gifts_raw %>%
+  data.frame() %>%
+  rownames_to_column(var = 'mag_name') %>%
+  left_join(ena_to_mag_id %>%
+              select(mag_name, mag_id),
+            by = 'mag_name') %>%
+  select(-mag_name) %>%
+  relocate(mag_id) %>%
+  filter(mag_id %in% genome_taxonomy$genome) %>% 
+  column_to_rownames('mag_id') %>%
+  as.matrix()
+```
+
+### Perform completeness correction for GIFTs
+
+```{r perform_completeness_corretion, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+# Aggregate into compound level
+gifts_elements <- to.elements(gifts_matrix, GIFT_db2)
+
+# Aggregate into function level
+gifts_functions <- to.functions(gifts_elements, GIFT_db2)
+
+# Aggregate into overall domain level
+gifts_domains <- to.domains(gifts_functions, GIFT_db2)
+```
+
+
+## 2.3 - Create working objects
+
+Transform the original data files into working objects for downstream analyses.
+
+### Transform reads into genome counts
+
+```{r weighted_counts, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+mag_weighted <-
+  read_counts %>% 
+  column_to_rownames(var = 'genome') %>% 
+  mutate(across(where(is.numeric), ~ ./ genome_stats$correction_factor)) %>% 
+  t() %>% 
+  as.data.frame()
+```
+
+### Calculate relative abundances
+
+```{r relative_abundance_tables, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+# Relative abundances
+total <-
+  decostand(mag_weighted, 'total') %>%
+  t() %>%
+  as.data.frame()  
+
+# Square root of relative abundances
+hel <-
+  decostand(mag_weighted, 'hellinger') %>%
+  t() %>%
+  as.data.frame() 
+
+# Transpose matrix
+mag_weighted <-
+  mag_weighted %>% 
+  t() %>% 
+  as.data.frame()
+```
+
+### Prepare a phyloseq object
+
+```{r phyloseq_objects, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+phylo_samples <- 
+  chicken_metadata %>% 
+  mutate(sampling_time = as.factor(sampling_time),
+         trial_age = paste(trial, sampling_time, sep = "_"),
+         trial_age = as.factor(trial_age)) %>% 
+  column_to_rownames("animal_code") %>% 
+  sample_data() # Convert to phyloseq sample_data object
+
+phylo_genome <- otu_table(mag_weighted, taxa_are_rows = TRUE) 
+
+phylo_taxonomy <- 
+  genome_taxonomy %>%
+  column_to_rownames("genome") %>% 
+  as.matrix() %>% 
+  tax_table() # Convert to phyloseq tax_table object
+
+phylo_tree <- phy_tree(genome_tree) 
+
+phylo_seq <- phyloseq(phylo_genome, phylo_taxonomy, phylo_samples, phylo_tree)
+```
+
+## 2.4 - Prepare color scheme
+
+```{r get_mag_colors, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+# As dataframe
+taxonomy_colors <- read_tsv("data/taxonomy_colours.tsv") 
+
+# As vector
+phylum_colors <- 
+  c(Halobacteriota = "#f2f2f2",
+    Methanobacteriota = "#bfbfbf",
+    Patescibacteria = "#dacce3",
+    Campylobacterota = "#cdadca",
+    Synergistota = "#c08eb3",
+    Thermoplasmatota = "#777dae",
+    Verrucomicrobiota = "#0066ae",
+    Desulfobacterota = "#68b0dc",
+    Pseudomonadota = "#60cfde",
+    Bacteroidota = "#4dc87c",
+    Cyanobacteriota = "#92e09f",
+    Actinomycetota = "#c9e0af",
+    Deferribacterota = "#dff77e",
+    Bacillota = "#ffd366",
+    Bacillota_A = "#fd8854",
+    Bacillota_B = "#8b1222",
+    Bacillota_C = "#5a0c37")
+
+order_colors <- 
+  c(Methanomicrobiales = "#f2f2f2",
+    Methanobacteriales = "#bfbfbf",
+    Saccharimonadales = "#dacce3",
+    Campylobacterales = "#cdadca",
+    Synergistales = "#c08eb3",
+    Methanomassiliicoccales = "#777dae",
+    Victivallales = "#0066ae",
+    Opitutales = "#1c7ebc",
+    Verrucomicrobiales = "#4a96cc",
+    Desulfovibrionales = "#68b0dc",
+    Enterobacterales = "#60cfde",
+    RF32 = "#60dfd2",
+    Burkholderiales = "#5cdfb5",
+    'Rs-D84' = "#40df91",
+    Bacteroidales = "#4dc87c",
+    Flavobacteriales = "#88c88b",
+    Gastranaerophilales = "#92e09f",
+    Coriobacteriales = "#c9e0af",
+    Actinomycetales = "#d8e093",
+    Deferribacterales = "#dff77e",
+    RF39 = "#ecf76d",
+    Lactobacillales = "#feef68",
+    'ML615J-28' = "#fde671",
+    Erysipelotrichales = "#ffd366",
+    Acholeplasmatales = "#fdc151",
+    Bacillales = "#fc953d",
+    RFN20 = "#fd8035",
+    Oscillospirales = "#fd8854",
+    TANB77 = "#f4814d",
+    Christensenellales = "#c26340",
+    Lachnospirales = "#c28c5c",
+    Clostridiales = "#ce9360",
+    Monoglobales_A = "#ce734f",
+    Peptostreptococcales = "#c65631",
+    Monoglobales = "#b93725",
+    UBA1212 = "#b10f19",
+    UBA4068 = "#8b1222",
+    Selenomonadales = "#7a1a12",
+    Acidaminococcales = "#64121f",
+    Veillonellales = "#5a0c37")
+```
+
+```{r get_sampling_colors, warning = FALSE, comments = "", message = FALSE}
+sampling_day_colors <- c('#E69F00', '#CC6677', '#56B4E9')
+```
+
+
+## 2.5 - Wrap working objects
+
+All working objects are wrapped into a single Rdata object to facilitate downstream usage.
+
+```{r wrap_mg_objects, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+save(
+  # Chicken data
+  chicken_metadata,
+  
+  # Bacterial genome data
+  genome_taxonomy, 
+  genome_stats, 
+  genome_tree, 
+  genome_kegg_paths,
+  read_counts,
+  
+  # Transformed data
+  mag_weighted,
+  total,
+  hel, 
+  
+  # Phyloseq objects
+  phylo_seq,
+
+  # Functions
+  gifts_elements,
+  gifts_functions,
+  gifts_domains,
+  
+  # Colors
+  taxonomy_colors,
+  phylum_colors,
+  order_colors,
+  sampling_day_colors,
+  
+  # Define file path
+  file = "data/data_mg.Rdata")
+```
+
+### Clean environment
+
+```{r clean_2, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
+```

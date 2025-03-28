@@ -1,0 +1,153 @@
+# Chapter 3 -  Metatranscriptomic data preparation
+
+## 3.1 - Load data
+
+### Metatranscriptomic gene expression counts
+
+```{r load_expr_counts, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+if(!file.exists("data/gene_expressions.tsv.xz")){
+  download.file(url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/gene_expressions.tsv.xz',
+              destfile = 'data/gene_expressions.tsv.xz', method = 'curl')
+}
+
+gene_expr <- 
+  read_tsv("data/gene_expressions.tsv.xz") %>% 
+  select(1:129) %>%
+  rename(mag_name = 'MAG') %>%
+  relocate(mag_name)
+
+# Chunk analysis to sets of 100 MAGs
+mags <-  sort(unique(gene_expr$mag_name))
+
+gene_expr_1 <- gene_expr[gene_expr$mag_name %in% mags[c(1:100)],c(2:129)]
+gene_expr_2 <- gene_expr[gene_expr$mag_name %in% mags[c(101:200)],c(2:129)]
+gene_expr_3 <- gene_expr[gene_expr$mag_name %in% mags[c(201:300)],c(2:129)]
+gene_expr_4 <- gene_expr[gene_expr$mag_name %in% mags[c(301:400)],c(2:129)]
+gene_expr_5 <- gene_expr[gene_expr$mag_name %in% mags[c(401:500)],c(2:129)]
+gene_expr_6 <- gene_expr[gene_expr$mag_name %in% mags[c(501:600)],c(2:129)]
+gene_expr_7 <- gene_expr[gene_expr$mag_name %in% mags[c(601:700)],c(2:129)]
+gene_expr_8 <- gene_expr[gene_expr$mag_name %in% mags[c(701:825)],c(2:129)]
+
+
+save(gene_expr_1, file = "data/gene_expr_1.Rdata")
+save(gene_expr_2, file = "data/gene_expr_2.Rdata")
+save(gene_expr_3, file = "data/gene_expr_3.Rdata")
+save(gene_expr_4, file = "data/gene_expr_4.Rdata")
+save(gene_expr_5, file = "data/gene_expr_5.Rdata")
+save(gene_expr_6, file = "data/gene_expr_6.Rdata")
+save(gene_expr_7, file = "data/gene_expr_7.Rdata")
+save(gene_expr_8, file = "data/gene_expr_8.Rdata")
+
+rm(list = ls())
+```
+
+### Distillation
+
+```{r distill_counts, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+mag_ann <-
+  read_tsv("data/gene_annotations.tsv.xz") %>%
+  mutate(gene_length = end_position - start_position)
+
+# Chunk analysis
+load("data/gene_expr_1.Rdata")
+distq_1 <- distillq(gene_expr_1, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+save(distilled_caecum_1, file = "data/distilled_caecum_1.Rdata")
+rm(gene_expr_1, distilled_caecum_1)
+
+load("data/gene_expr_2.Rdata")
+distq_2 <- distillq(gene_expr_2, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+save(distilled_caecum_2, file = "data/distilled_caecum_2.Rdata")
+rm(gene_expr_2, distilled_caecum_2)
+
+load("data/gene_expr_3.Rdata")
+distq_3 <- distillq(gene_expr_3, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+save(distilled_caecum_3, file = "results/tables/distilled_caecum_3.Rdata")
+rm(gene_expr_3, distilled_caecum_3)
+
+load("data/gene_expr_4.Rdata")
+distq_4 <- distillq(gene_expr_4, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+save(distilled_caecum_4, file = "results/tables/distilled_caecum_4.Rdata")
+rm(gene_expr_4, distilled_caecum_4)
+
+load("data/gene_expr_5.Rdata")
+distq_5 <- distillq(gene_expr_5, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+save(distilled_caecum_5, file = "results/tables/distilled_caecum_5.Rdata")
+rm(gene_expr_5, distilled_caecum_5)
+
+load("data/gene_expr_6.Rdata")
+distq_6 <- distillq(gene_expr_6, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+save(distilled_caecum_6, file = "results/tables/distilled_caecum_6.Rdata")
+rm(gene_expr_6, distilled_caecum_6)
+
+load("data/gene_expr_7.Rdata")
+distq_7 <- distillq(gene_expr_7, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 12))
+save(distilled_caecum_7, file = "results/tables/distilled_caecum_7.Rdata")
+rm(gene_expr_7, distilled_caecum_7)
+
+load("results/tables/gene_expr_8.Rdata")
+distq_8 <- distillq(gene_expr_8, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 12))
+save(distilled_caecum_8, file = "results/tables/distilled_caecum_8.Rdata")
+rm(gene_expr_8, distilled_caecum_8)
+```
+
+### Combine metatranscriptomic GIFT expression counts
+
+```{r load_gift_counts, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+load("data/distilled_caecum_1.Rdata")
+load("data/distilled_caecum_2.RData")
+load("data/distilled_caecum_3.RData")
+load("data/distilled_caecum_4.RData")
+load("data/distilled_caecum_5.RData")
+load("data/distilled_caecum_6.RData")
+load("data/distilled_caecum_7.RData")
+load("data/distilled_caecum_8.RData")
+
+expr_counts_raw <- c(distilled_expression_caecum_1, distilled_expression_caecum_2,
+                     distilled_expression_caecum_3, distilled_expression_caecum_4,
+                     distilled_expression_caecum_5, distilled_expression_caecum_6,
+                     distilled_expression_caecum_7, distilled_expression_caecum_8)
+
+rm(distilled_expression_caecum_1, distilled_expression_caecum_2,
+    distilled_expression_caecum_3, distilled_expression_caecum_4,
+    distilled_expression_caecum_5, distilled_expression_caecum_6,
+    distilled_expression_caecum_7, distilled_expression_caecum_8)
+
+# Change MAG IDs for a standardised code 
+ena_to_mag_id <- read_tsv("data/ena_to_mag_id.tsv")
+
+mag_name <- names(expr_counts_raw)
+
+names(expr_counts_raw) <- ena_to_mag_id$mag_id[match(mag_name, ena_to_mag_id$mag_name)]
+
+# Correct animal codes
+expr_counts <- lapply(expr_counts_raw, function(x) {
+  rownames(x) <- gsub("F1a", "", rownames(x))
+  x
+})
+```
+
+### Metadata of chickens sequenced for MT
+
+```{r load_metadata_mt, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+animal_codes_mt <- rownames(expr_counts$cmag_001) %>% 
+  gsub("F1a", "", .)
+
+chicken_metadata_mt <- 
+  read_tsv("data/metadata.tsv") %>%
+  mutate(sampling_time = factor(sampling_time, levels = c('7',
+                                                          '21',
+                                                          '35'))) %>% 
+  filter(animal_code %in% animal_codes_mt)
+```
+
+## 3.2 - Save working objects
+
+```{r save_mt_objects, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+save(expr_counts, chicken_metadata_mt, file = "data/data_mt.Rdata")
+```
+
+### Clean environment
+
+```{r clean_3, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
+```

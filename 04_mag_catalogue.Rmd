@@ -1,0 +1,329 @@
+# Chapter 4 - MAG catalogue richness
+
+## 4.1 - Load MG data
+
+```{r load_data_mag_catalogue, message = FALSE, warning = FALSE, echo = FALSE}
+load("data/data_mg.Rdata")
+```
+
+ 
+## 4.2 - Densities of overall relative abundances by phylum (Fig. 1a)
+
+### Calculate densities
+
+```{r calculate_density, message = FALSE, warning = FALSE, echo = FALSE}
+sum_ind <-
+  total %>%
+  rownames_to_column(var = 'genome') %>%
+  left_join(genome_taxonomy %>% select(genome, phylum), by = 'genome') %>%
+  mutate(phylum = factor(phylum, levels = unique(names(phylum_colors)))) %>%
+  pivot_longer(-c(genome, phylum), values_to = 'value', names_to = 'animal_code') %>%
+  group_by(phylum, animal_code) %>%
+  summarise(total_ind = sum(value), mean_ind = mean(value))
+
+sum_phylum <-
+  sum_ind %>%
+  group_by(phylum) %>%
+  summarise(total_phylum = sum(total_ind), mean_phylum = mean(mean_ind))
+```
+
+### Filter rare phylums 
+
+```{r filter_phylums, warning = FALSE, comments = "", message = FALSE}
+count_taxa <-
+  sum_ind %>%
+  filter(phylum %in% c('Bacillota_A',
+                       'Bacillota',
+                       'Bacteroidota',
+                       'Cyanobacteriota',
+                       'Pseudomonadota',
+                       'Actinomycetota',
+                       'Verrucomicrobiota',
+                       'Campylobacterota'))
+```
+
+### Plot curves 
+
+```{r density_histogram, comment = "", message = FALSE, warning = FALSE, fig.height = 8, fig.width = 7, fig.fullwidth = TRUE}
+ggplot(count_taxa, aes(x = total_ind, colour = phylum, fill = phylum)) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(values = phylum_colors) +
+  scale_color_manual(values = phylum_colors) +
+  scale_x_log10() +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_blank(),
+        axis.text.y = element_blank(),
+        legend.position = 'none')
+```
+
+
+## 4.3 - Functional landscape of the catalogue
+
+### Caltulate t-SNE based on GIFTs
+
+```{r tsne, warning = FALSE, comments = "", message = FALSE}
+set.seed(100)
+tsne_func <- Rtsne(X = gifts_elements, dims = 2, check_duplicates = FALSE)
+
+genome_taxonomy <- 
+  genome_taxonomy %>% 
+  mutate(avg_mci = rowMeans(gifts_elements)) %>% 
+  mutate(length = genome_stats$mag_length)
+
+tsne_df <-
+  tsne_func$Y %>%
+  as.data.frame() %>%
+  mutate(genome = rownames(gifts_elements)) %>%
+  left_join(genome_taxonomy, by = 'genome') %>%
+  mutate_at(vars(phylum, class, order, family), factor) %>%
+  mutate(order = factor(order, levels = names(order_colors))) %>%
+  mutate(phylum = factor(phylum, levels = names(phylum_colors))) %>%
+  rename(tsne1 = 'V1', tsne2 = 'V2')
+
+```
+
+### Paint t-SNE by order and Overall Metabolic Capacity Index (MCI) (Figs. 1b and 1c)
+
+```{r tsne_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 12, fig.fullwidth = TRUE}
+tsne_taxonomy <- 
+  tsne_df %>%
+  ggplot(aes(x = tsne1, y = tsne2, color = order)) +
+  geom_point(size = 2, shape = 16, alpha = 0.8) +
+  scale_color_manual(values = order_colors) +
+  theme_minimal() +
+  theme(legend.position = 'none')
+
+tsne_mci <- 
+  tsne_df %>%
+  ggplot(aes(x = tsne1, y = tsne2, color = avg_mci)) +
+  geom_point(size = 2, shape = 16, alpha = 0.8) +
+  scale_colour_gradientn(colours = rev(terrain.colors(10))) +
+  theme_minimal() +
+  theme(legend.position = 'none')
+
+grid.arrange(tsne_taxonomy, tsne_mci, nrow = 1)
+```
+
+### Interactive plot to go deeper into each MAG (not included in the paper)
+
+```{r interactive_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
+library(plotly)
+
+p <-
+  tsne_df %>%
+  mutate(tooltip = paste(family, "//", genome)) %>% 
+  ggplot(aes(x = tsne1, y = tsne2, colour = order, text = tooltip)) +
+  geom_point(size = 4, stroke = 1, alpha = 0.8, shape = 16) + 
+  scale_colour_manual(values = order_colors) +
+  theme_minimal()
+
+ggplotly(p, tooltip = "text")
+```
+
+### t-SNE coloring 4 most important phylums (Supplementary Fig. S1)
+
+```{r tsne_by_phylum, comment = "", message = FALSE, warning = FALSE, fig.height = 8, fig.width = 12, fig.fullwidth = TRUE}
+# Bacillota_A
+tsne_a <- 
+  tsne_df %>%
+  ggplot(aes(x = tsne1, y = tsne2, colour = ifelse(phylum == 'Bacillota_A', as.character(order), 'other'))) +
+  geom_point(size = 4, stroke = 1, alpha = 0.8, shape = 16) + 
+  scale_colour_manual(values = c(
+    Oscillospirales = "#fd8854",
+    TANB77 = "#f4814d",
+    Christensenellales = "#c26340",
+    Lachnospirales = "#c28c5c",
+    Clostridiales = "#ce9360",
+    Monoglobales_A = "#ce734f",
+    Peptostreptococcales = "#c65631",
+    Monoglobales = "#b93725",
+    UBA1212 = "#b10f19",
+    other = "grey")) +
+  theme_minimal() +
+  labs(colour = "Bacillota_A") +
+  theme(legend.position = 'bottom')
+
+# Bacillota
+tsne_b <- 
+  tsne_df %>%
+  ggplot(aes(x = tsne1, y = tsne2, colour = ifelse(phylum == 'Bacillota', as.character(order), 'other'))) +
+  geom_point(size = 4, stroke = 1, alpha = 0.8, shape = 16) + 
+  scale_colour_manual(values = c(
+    RF39 = "#ecf76d",
+    Lactobacillales = "#feef68",
+    'ML615J-28' = "#fde671",
+    Erysipelotrichales = "#ffd366",
+    Acholeplasmatales = "#fdc151",
+    Bacillales = "#fc953d",
+    RFN20 = "#fd8035",
+    other = "grey")) +
+  theme_minimal() +
+  labs(colour = "Bacillota") +
+  theme(legend.position = 'bottom')
+
+# Bacteroidota
+tsne_c <- 
+  tsne_df %>%
+  ggplot(aes(x = tsne1, y = tsne2, colour = ifelse(phylum == 'Bacteroidota', as.character(order), 'other'))) +
+  geom_point(size = 4, stroke = 1, alpha = 0.8, shape = 16) + 
+  scale_colour_manual(values = c(
+    Bacteroidales = "#4dc87c",
+    Flavobacteriales = "#88c88b",
+    'other' = "grey")) +
+  theme_minimal() +
+  labs(colour = "Bacteroidota") +
+  theme(legend.position = 'bottom')
+
+# Pseudomonadota
+tsne_d <- 
+  tsne_df %>%
+  ggplot(aes(x = tsne1, y = tsne2, colour = ifelse(phylum == 'Pseudomonadota', as.character(order), 'other'))) +
+  geom_point(size = 4, stroke = 1, alpha = 0.8, shape = 16) + 
+  scale_colour_manual(values = c(
+    Enterobacterales = "#60cfde",
+    RF32 = "#60dfd2",
+    Burkholderiales = "#5cdfb5",
+    'Rs-D84' = "#40df91",
+    'other' = "grey")) +
+  theme_minimal() +
+  labs(colour = "Pseudomonadota") +
+  theme(legend.position = 'bottom')
+
+grid.arrange(tsne_a, tsne_b, tsne_c, tsne_d, nrow = 2)
+```
+
+
+## 4.4 - Compare MCI between taxonomic groups (Supplementary Figs. S2 and S3)
+
+```{r tidy_taxonomy_and_colors, comment = "", message = FALSE, warning = FALSE}
+main_phylums <- c("Bacillota_A", "Bacillota", "Bacteroidota", "Cyanobacteriota","Pseudomonadota", "Actinomycetota", "Verrucomicrobiota", "Campylobacterota")
+
+selected_taxonomy_colors <- 
+  taxonomy_colors %>% 
+  filter(phylum %in% main_phylums)
+
+selected_orders <- 
+  selected_taxonomy_colors %>% 
+  select(order, color_order) %>% 
+  filter(order != "Gastranaerophilales") %>% 
+  filter(order != "Actinomycetales") %>% 
+  filter(order != "Coriobacteriales")
+
+selected_groups <- 
+  selected_taxonomy_colors %>% 
+  select(phylum, color_phylum) %>% 
+  distinct(phylum, color_phylum) %>%
+  filter(color_phylum != '#c28c5c') %>% 
+  rename(order = 'phylum') %>% 
+  rename(color_order = 'color_phylum') %>% 
+  bind_rows(., selected_orders) %>% 
+  mutate(order = factor(order, levels = c("Campylobacterota", 
+                                          "Verrucomicrobiota",
+                                          "Actinomycetota",
+                                          "Enterobacterales",     
+                                          "RF32",                 
+                                          "Burkholderiales",      
+                                          "Rs-D84",              
+                                          "Pseudomonadota",  
+                                          "Gastranaerophilales",
+                                          "Cyanobacteriota", 
+                                          "Bacteroidales",        
+                                          "Flavobacteriales",
+                                          "Bacteroidota", #
+                                          "RF39",                 
+                                          "Lactobacillales",      
+                                          "ML615J-28",           
+                                          "Erysipelotrichales",   
+                                          "Acholeplasmatales",    
+                                          "Bacillales",           
+                                          "RFN20",
+                                          "Bacillota",            
+                                          "Oscillospirales",      
+                                          "TANB77",               
+                                          "Christensenellales",   
+                                          "Lachnospirales",      
+                                          "Clostridiales",        
+                                          "Monoglobales_A",       
+                                          "Peptostreptococcales", 
+                                          "Monoglobales",        
+                                          "UBA1212",
+                                          "Bacillota_A"))) %>% 
+  arrange(order)
+```  
+
+```{r tidy_data, comment = "", message = FALSE, warning = FALSE}
+genome_taxonomy <- 
+  genome_taxonomy %>% 
+  mutate(avg_mci = rowMeans(gifts_elements)) %>% 
+  mutate(length = genome_stats$mag_length)
+
+table_one <- 
+  genome_taxonomy %>% 
+  select(genome, order, avg_mci)
+  
+table_two <- 
+  genome_taxonomy %>% 
+  select(genome, phylum, avg_mci) %>%
+  rename(order = 'phylum') %>% 
+  bind_rows(., table_one) %>% 
+  rename(group = 'order')
+
+border_groups <- c("Bacillota_A", "Bacillota", "Bacteroidota", "Cyanobacteriota",
+                   "Pseudomonadota", "Actinomycetota", "Verrucomicrobiota", 
+                   "Campylobacterota")
+```
+ 
+ ### Overall MCI by taxonomic phylum and order 
+ 
+```{r mci_boxplot, comment = "", message = FALSE, warning = FALSE, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
+table_two %>% 
+  filter(group %in% selected_groups$order) %>% 
+  mutate(group = factor(group, levels = selected_groups$order)) %>% 
+  ggplot() +
+  geom_jitter(aes(x = group, y = avg_mci), color = 'grey', alpha = 0.5, width = 0.1) +
+  geom_violin(aes(x = group, y = avg_mci, fill = group), color = "black", size = 0.01) +
+  theme_minimal() +
+  xlab("Taxonomic group") +
+  ylab("Genome average metabolic capacity") +
+  scale_fill_manual(values = selected_taxonomy_colors$color_order) +
+  theme(legend.position = 'none',
+        ) +
+  coord_flip()
+```  
+
+### Genome length by taxonomic phylum and order 
+
+```{r length_boxplot, comment = "", message = FALSE, warning = FALSE, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
+table_three <- 
+  genome_taxonomy %>% 
+  select(genome, order, length)
+
+table_four <- 
+  genome_taxonomy %>% 
+  select(genome, phylum, length) %>%
+  rename(order = 'phylum') %>% 
+  bind_rows(., table_three) %>% 
+  rename(group = 'order')
+
+table_four %>% 
+  filter(group %in% selected_groups$order) %>% 
+  mutate(group = factor(group, levels = selected_groups$order)) %>% 
+  ggplot() +
+  geom_jitter(aes(x = group, y = length), color = 'grey', alpha = 0.5, width = 0.1) +
+  geom_violin(aes(x = group, y = length, fill = group), color = "black", size = 0.01) +
+  theme_minimal() +
+  xlab("Taxonomic group") +
+  ylab("Mag length") +
+  scale_fill_manual(values = selected_taxonomy_colors$color_order) +
+  theme(legend.position = 'none') +
+  coord_flip()
+```
+
+### Clean environment
+
+```{r clean_4, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
+```
