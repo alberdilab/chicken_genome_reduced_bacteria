@@ -2,7 +2,7 @@
 
 ## 9.1 - Load model
 
-```{r load_model, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_model_temp, message = FALSE, warning = FALSE, echo = FALSE}
 # Directory
 localDir = "."
 ModelDir = file.path(localDir, "temporal_hmsc/models")
@@ -15,18 +15,21 @@ if(!file.exists("temporal_hmsc/models/temporal_model_thin_10_samples_250_chains_
 }
 
 load(file = file.path(ModelDir, 'temporal_model_thin_10_samples_250_chains_4.Rdata'))
-
-# Create partitions
-set.seed(12)
-partition_1 <- createPartition(hM = m, nfolds = 2)
-partition_2 <- c(rep(1,sum(m$XData$trial == "CA")),
-                 rep(2,sum(m$XData$trial == "CB")))
 ```
 
 
 ## 9.2 - Cross-validation
 
-```{r cross_val, message = FALSE, warning = FALSE, echo = FALSE}
+The cross-validation part is also computationally intense. 
+Make sure you have the right capacity for it. 
+
+```{r cross_val_temp, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+# Create partitions
+set.seed(12)
+partition_1 <- createPartition(hM = m, nfolds = 2)
+partition_2 <- c(rep(1,sum(m$XData$trial == "CA")),
+                 rep(2,sum(m$XData$trial == "CB")))
+
 set.seed(1)
 
 predY.MF <- computePredictedValues(m, expected = TRUE)
@@ -41,7 +44,7 @@ mean(MF$R2)
 
 ### Model fit using 2-fold CV: samples randomly assigned to folds
 
-```{r cross_val, message = FALSE, warning = FALSE, echo = FALSE}
+```{r cross_val_first_part, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
 set.seed(1)
 predY.CV_1 <- computePredictedValues(m,
                                      expected = TRUE,
@@ -61,7 +64,7 @@ mean(MF_CV_1$R2)
 
 ### Model fit using 2-fold CV: each fold contains the samples from one trial
 
-```{r cross_val, message = FALSE, warning = FALSE, echo = FALSE}
+```{r cross_val_second_part, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
 set.seed(1)
 predY.CV_2 <- computePredictedValues(m,
                                      expected = TRUE,
@@ -122,7 +125,8 @@ trends <-
   colnames(beta_post$support) %>%
   as.data.frame() %>%
   dplyr::rename(mag_id = '.') %>%
-  left_join(rbind(increasers_df, decreasers_df), by = 'genome') %>%
+  left_join(rbind(increasers_df, decreasers_df), by = 'mag_id') %>%
+  rename(genome = 'mag_id') %>% 
   replace_na(list(hmsc_trend = 'stable')) %>%
   write_tsv("data/hmsc_mag_trend.tsv")
 ```
@@ -170,7 +174,7 @@ plotVariancePartitioning(hM = m, VP = VP)
 
 ### Calcultate phylogenetic distance 
 
-```{r load_data_community, echo = FALSE}
+```{r load_data_community, echo = FALSE, eval = FALSE}
 pw_phylo_dist <- cophenetic.phylo(genome_tree)
 xy <- t(combn(colnames(pw_phylo_dist), 2))
 pw_phylo_dist <- data.frame(xy, dist = pw_phylo_dist[xy])
@@ -221,7 +225,9 @@ tax_table <-
   write_tsv("data/taxonomy_distance.tsv")
 ```
 
-```{r load_data_community, echo = FALSE}
+```{r plot_data_community, echo = FALSE, eval = FALSE}
+tax_table <- read_tsv("data/taxonomy_distance.tsv")
+
 tax_table %>%
 ggplot(aes(x = distance,
            fill = taxonomy,
@@ -236,7 +242,7 @@ ggplot(aes(x = distance,
 
 ### Phylogenetic signal
 
-```{r phylo_signal, echo = FALSE}
+```{r phylo_signal, echo = FALSE, eval = FALSE}
 mpost <- convertToCodaObject(m)
 quantile(unlist(mpost$Rho), probs = c(.05,.5,.95))
 
@@ -263,7 +269,7 @@ plot(age.cg)
 
 ### Clean environment
 
-```{r clean, comment = "", message = FALSE, warning = FALSE}
+```{r clean_9, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```
 

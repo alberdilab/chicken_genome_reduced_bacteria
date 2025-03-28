@@ -6,7 +6,7 @@ HMSC models are computationally intensive. It is advisable to run this script on
 
 ### Define directories
 
-```{r directories, message = FALSE, warning = FALSE, echo = FALSE}
+```{r create_directories_hmsc_temp, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
 # Create directories
 dir.create("temporal_hmsc")
 dir.create("temporal_hmsc/model_fit")
@@ -21,7 +21,7 @@ PanelDir = file.path(localDir, "temporal_hmsc/panels")
 
 ### Generate input objects
 
-```{r load_mg_data, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_mg_data_hmsc_temp, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
 # Load data
 load("data/data_mg.Rdata")
 
@@ -46,7 +46,7 @@ for (i in 1:ncol(design)) {
 
 ### Define tables
 
-```{r hmsc_tables, message = FALSE, warning = FALSE, echo = FALSE}
+```{r hmsc_tables_temp, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
 # Genome count table (quantitative community data)
 YData <- log1p(mag_weighted %>% 
                  t() %>% 
@@ -64,7 +64,7 @@ YData <- YData[,colnames(YData) %in% genome_tree$tip.label]  # Filter missing MA
 
 ## Define formula
 
-```{r hmsc_formumla, message = FALSE, warning = FALSE, echo = FALSE}
+```{r hmsc_formumla, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
 # Define XFormula
 XFormula_Time <- ~log_seq_depth + trial + sex + breed + treatment + age
 
@@ -219,10 +219,4 @@ for (i in 1) {
           main = "psrf(rho)")
   dev.off()
 }
-```
-
-### Clean environment
-
-```{r clean, comment = "", message = FALSE, warning = FALSE}
-rm(list = ls())
 ```

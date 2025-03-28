@@ -2,7 +2,7 @@
 
 ## 15.1 - Load data
 
-```{r load_data, echo = FALSE}
+```{r load_data_act, echo = FALSE}
 load("data/data_mt.Rdata")
 load("data/data_mg.Rdata")
 
@@ -99,7 +99,7 @@ mag_subset_elements <-
 
 ### Tidy data
 
-```{r plot_heatmap, echo = FALSE}
+```{r tidy_for_heatmap, echo = FALSE}
 # Filter relative abundance table
 mag_weighted_day35 <- 
   mag_weighted %>%
@@ -397,6 +397,6 @@ ggplot() +
 
 ### Clean environment
 
-```{r clean, comment = "", message = FALSE, warning = FALSE}
+```{r clean_15, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```

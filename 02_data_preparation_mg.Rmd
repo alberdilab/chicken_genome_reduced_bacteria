@@ -248,7 +248,7 @@ order_colors <-
     Veillonellales = "#5a0c37")
 ```
 
-```{r get_sampling_colors, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+```{r get_sampling_colors, warning = FALSE, comments = "", message = FALSE}
 sampling_day_colors <- c('#E69F00', '#CC6677', '#56B4E9')
 ```
 
@@ -294,6 +294,6 @@ save(
 
 ### Clean environment
 
-```{r clean, comment = "", message = FALSE, warning = FALSE}
+```{r clean_2, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```

@@ -2,7 +2,7 @@
 
 ## 6.1 - Load MG data
 
-```{r load_mg_data, echo = FALSE}
+```{r load_mg_data_beta_div, echo = FALSE}
 load("data/data_mg.Rdata")
 ```
 
@@ -115,7 +115,7 @@ betadiv_f_dis_kegg %>%
 
 ### Plot difference between sampling points for beta diversity 
 
-```{r plot_beta_diff, comment="", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
+```{r plot_beta_diff, comment="", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE, eval = FALSE}
 # Neutral
 p_n <- 
   betadiv_n_dis %>%
@@ -161,7 +161,7 @@ grid.arrange(p_n, p_p, p_f_kegg, ncol = 4)
 
 ### Permanova values for different metrics of beta diversity (Supplementary Table S3)
 
-```{r permanova_betadiv, comment = "", message = FALSE, warning = FALSE}
+```{r permanova_betadiv, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Dissimilarity tables
 perm <- how(nperm = 999)
 setBlocks(perm) <- with(chicken_metadata, pen)
@@ -229,7 +229,7 @@ adonis2(hel ~ trial * sampling_time + breed + sex + treatment,
 
 ### Distance-based RDA (Fig. 1f)
 
-```{r distance_rda, echo = FALSE, fig.height = 4, fig.width = 7, fig.fullwidth = TRUE}
+```{r distance_rda, echo = FALSE, fig.height = 4, fig.width = 7, fig.fullwidth = TRUE, eval = FALSE}
 set.seed(4)
 hel_bray <- vegdist(hel, method = 'bray')
 hel_bray_sqrt <- sqrt(hel_bray)
@@ -261,6 +261,6 @@ db_rda_scores %>%
 
 ### Clean environment
 
-```{r clean_environment, comment = "", message = FALSE, warning = FALSE}
+```{r clean_6, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 rm(list = ls())
 ```

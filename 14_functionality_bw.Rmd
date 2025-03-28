@@ -2,7 +2,7 @@
 
 ## 14.1 - Load MG data
 
-```{r load_data, echo = FALSE}
+```{r load_data_func, echo = FALSE}
 load("data/data_mg.Rdata")
 
 trends_bw <-
@@ -630,4 +630,10 @@ gifts_bw_df_long %>%
   facet_grid(bw_association ~ Function, scales = "free", space = "free") +
   theme_void(base_size = 8) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.position = "none")
+```
+
+### Clean environment
+
+```{r clean_14, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
 ```

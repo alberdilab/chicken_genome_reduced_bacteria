@@ -2,7 +2,7 @@
 
 ## 5.1 - Load MG data
 
-```{r load_mg_data, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+```{r load_mg_data_alpha_div, warning = FALSE, comments = "", message = FALSE}
 load("data/data_mg.Rdata")
 ```
 
@@ -11,7 +11,7 @@ load("data/data_mg.Rdata")
 
 ### Calculate alpha diversity
 
-```{r alpha_div, comment = "", message = FALSE, warning = FALSE}
+```{r alpha_div, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Neutral
 neutral <-
   mag_weighted %>% 
@@ -74,6 +74,8 @@ save(alpha_div, file = "data/alpha_div.Rdata")
 ### Alpha diversity by sampling day (Fig. 1e)
 
 ```{r plot_div, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 12, fig.fullwidth = TRUE}
+load("data/alpha_div.Rdata")
+
 # Neutral
 p_n <- 
   ggplot(alpha_div,
@@ -209,6 +211,6 @@ summary(m_div_f_kegg)
 
 ### Clean environment
 
-```{r clean_environment, comment = "", message = FALSE, warning = FALSE}
+```{r clean_5, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```

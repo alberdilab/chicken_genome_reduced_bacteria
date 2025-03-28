@@ -2,7 +2,7 @@
 
 ## 7.1 - Load MG data
 
-```{r load_data_mag, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_data_mag_trends, message = FALSE, warning = FALSE, echo = FALSE}
 load("data/data_mg.Rdata")
 ```
 
@@ -10,7 +10,7 @@ load("data/data_mg.Rdata")
 
 ### Calculate t-SNE based on GIFTs
 
-```{r tsne, comment = "", message = FALSE, warning = FALSE}
+```{r tsne_temp, comment = "", message = FALSE, warning = FALSE}
 set.seed(100)
 tsne_func <- Rtsne(X = gifts_elements, dims = 2, check_duplicates = FALSE)
 
@@ -126,7 +126,7 @@ grid.arrange(tsne_d7, tsne_d21, tsne_d35, ncol = 3)
 ```{r composition_by_order, comment = "", message = FALSE, warning = FALSE}
 physeq_comp_rare_order <-
   aggregate_rare(
-    physeq_comp,
+    phylo_seq,
     level = "order",
     detection = 0.01 / 100,
     prevalence = 50 / 100,
@@ -135,10 +135,9 @@ physeq_comp_rare_order <-
   
 phy_order_df <- 
   psmelt(physeq_comp_rare_order) %>%
-  select(OTU, Sample, Abundance) %>%
+  select(OTU, Sample, trial_age, Abundance) %>%
   rename(order = 'OTU') %>%
-  mutate(sample = Sample) %>%
-  separate_wider_delim(sample, "_", names = c("trial", "sampling_time"))
+  separate_wider_delim(trial_age, "_", names = c("trial", "sampling_time"))
 ```
 
 ```{r oplot_order, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 9, fig.fullwidth = TRUE}
@@ -239,6 +238,6 @@ phy_order_df %>%
 
 ### Clean environment
 
-```{r clean_environment, comment = "", message = FALSE, warning = FALSE}
+```{r clean_7, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```

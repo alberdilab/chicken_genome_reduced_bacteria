@@ -6,7 +6,7 @@
 
 ### Define directories
 
-```{r directories, echo = FALSE}
+```{r create_directories_hmsc_bw, echo = FALSE, eval = FALSE}
 # Create directories
 dir.create("hmsc_bw")
 dir.create("hmsc_bw/model_fit")
@@ -20,7 +20,7 @@ ModelDir = file.path(localDir, "hmsc_bw/models")
 
 ### Generate input objects
 
-```{r load_mg_data, echo = FALSE}
+```{r load_mg_data_hmsc_bw, echo = FALSE, eval = FALSE}
 # Load data
 load("data/data_mg.Rdata")
 
@@ -65,7 +65,7 @@ mean(rownames(design_day35) == rownames(mag_weighted_day35))
 
 ### Define tables
 
-```{r hmsc_tables, echo = FALSE}
+```{r hmsc_tables_bw, echo = FALSE, eval = FALSE}
 # Genome count table (quantitative community data)
 YData <- log1p(mag_weighted_day35)
 
@@ -94,7 +94,7 @@ rownames(TrData) <- colnames(YData)
 
 ### Define formulas
 
-```{r define_model, echo = FALSE}
+```{r define_model_bw, echo = FALSE, eval = FALSE}
 # Define TrFormula
 TrFormula <- ~MCI
 
@@ -108,7 +108,7 @@ rL.Pen <- HmscRandomLevel(units = levels(StudyDesign$pen))
 
 ### Define HMSC model
 
-```{r hmsc_model, echo = FALSE}
+```{r hmsc_model_bw, echo = FALSE, eval = FALSE}
 m <- Hmsc(Y = YData,
                 XData = XData,
                 XFormula = XFormula,
@@ -126,7 +126,7 @@ rm(list = ls())
 
 ### Define MCMC
 
-```{r mcmc_features, echo = FALSE}
+```{r mcmc_features_bw, echo = FALSE, eval = FALSE}
 # Chain characteristics
 ## How often to sample the MCM
 samples_list = c(5, 250, 250)
@@ -146,7 +146,7 @@ unf_model <- m
 
 ## 12.3 - Fit model
 
-```{r fit_model, echo = FALSE}
+```{r fit_model_bw, echo = FALSE, eval = FALSE}
 set.seed(1)
 
 for (Lst in 1:length(samples_list)) {
@@ -173,6 +173,6 @@ for (Lst in 1:length(samples_list)) {
 
 ### Clean environment
 
-```{r clean, comment = "", message = FALSE, warning = FALSE}
+```{r clean_12, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 rm(list = ls())
 ```

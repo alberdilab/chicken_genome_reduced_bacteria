@@ -2,7 +2,7 @@
 
 ## 10.1 - Load MG data
 
-```{r load_data_mag, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_data_mag_comp, message = FALSE, warning = FALSE, echo = FALSE}
 load("data/data_mg.Rdata")
 ```
 
@@ -54,7 +54,9 @@ save(elements_com,
 
 ### Plot community MCI (Fig. 2g)
 
-```{r density_curves, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
+```{r plot_com_mci, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
+load("data/mci_com.Rdata")
+
 funcs_com %>%
   as.data.frame() %>% 
   rownames_to_column('animal_code') %>%
@@ -94,6 +96,6 @@ funcs_com %>%
 
 ### Clean environment
 
-```{r clean_environment, comment = "", message = FALSE, warning = FALSE}
+```{r clean_10, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```
