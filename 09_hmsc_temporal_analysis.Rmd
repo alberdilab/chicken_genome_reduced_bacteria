@@ -1,8 +1,8 @@
-# Chapter 9 - HMSC analysis
+# HMSC analysis
 
-## 9.1 - Load model
+## Load model
 
-```{r load_model_temp, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_model_temp, comment = "", message = FALSE, warning = FALSE}
 # Directory
 localDir = "."
 ModelDir = file.path(localDir, "temporal_hmsc/models")
@@ -10,20 +10,21 @@ MFDir = file.path(localDir, "temporal_hmsc/model_fit")
 
 # Load model
 if(!file.exists("temporal_hmsc/models/temporal_model_thin_10_samples_250_chains_4.Rdata")){
-  download.file(url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/temporal_model_thin_10_samples_250_chains_4.Rdata',
-              destfile = 'temporal_hmsc/models/temporal_model_thin_10_samples_250_chains_4.Rdata', method = 'curl')
+  download.file(
+    url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/temporal_model_thin_10_samples_250_chains_4.Rdata',
+    destfile = 'temporal_hmsc/models/temporal_model_thin_10_samples_250_chains_4.Rdata', method = 'curl'
+    )
 }
 
 load(file = file.path(ModelDir, 'temporal_model_thin_10_samples_250_chains_4.Rdata'))
 ```
 
-
-## 9.2 - Cross-validation
+## Cross-validation
 
 The cross-validation part is also computationally intense. 
 Make sure you have the right capacity for it. 
 
-```{r cross_val_temp, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r cross_val_temp, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Create partitions
 set.seed(12)
 partition_1 <- createPartition(hM = m, nfolds = 2)
@@ -44,7 +45,7 @@ mean(MF$R2)
 
 ### Model fit using 2-fold CV: samples randomly assigned to folds
 
-```{r cross_val_first_part, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r cross_val_first_part, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 set.seed(1)
 predY.CV_1 <- computePredictedValues(m,
                                      expected = TRUE,
@@ -64,7 +65,7 @@ mean(MF_CV_1$R2)
 
 ### Model fit using 2-fold CV: each fold contains the samples from one trial
 
-```{r cross_val_second_part, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r cross_val_second_part, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 set.seed(1)
 predY.CV_2 <- computePredictedValues(m,
                                      expected = TRUE,
@@ -82,10 +83,9 @@ MF_CV_2 <- readRDS(file = filename)
 mean(MF_CV_2$R2)
 ```
 
+## Functional structure
 
-## 9.3 - Functional structure
-
-```{r func_structure, message = FALSE, warning = FALSE, echo = FALSE}
+```{r func_structure, comment = "", message = FALSE, warning = FALSE}
 beta_post <- getPostEstimate(m, parName = "Beta")
 plotBeta(m, beta_post, supportLevel = 0.95, plotTree = TRUE)
 
@@ -105,10 +105,9 @@ plotGradient(m,
              showData = TRUE)
 ```
 
+## Bacterial temporal trends table
 
-## 9.4 - Bacterial temporal trends table
-
-```{r mag_trends, message = FALSE, warning = FALSE, echo = FALSE}
+```{r mag_trends, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Increasing MAGs
 increasers <- colnames(beta_post$support)[beta_post$support[8,] > 0.95]
 increasers_df <- data.frame(mag_id = increasers,
@@ -131,15 +130,16 @@ trends <-
   write_tsv("data/hmsc_mag_trend.tsv")
 ```
 
+## Correlate bacterial MCI and response to time 
 
-## 9.5 - Correlate bacterial MCI and response to time (Fig. 2f)
+The resulting plot corresponds to Figure 2f in the manuscript.
 
-```{r load_data_mag, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_data_mag, comment = "", message = FALSE, warning = FALSE}
 load("data/data_mg.Rdata")
 trends <- read_tsv("data/hmsc_mag_trend.tsv")
 ```
 
-```{r mci_response, message = FALSE, warning = FALSE, echo = FALSE}
+```{r mci_response, comment = "", message = FALSE, warning = FALSE}
 mci_df <-
   gifts_elements %>%
   as.data.frame() %>% 
@@ -161,20 +161,22 @@ trends %>%
         legend.position = 'none')
 ```
 
+## Variance partitioning 
 
-## 9.6 - Variance partitioning (Supplementary Table S4)
+The resulting results correspond to Supplementary Table S4 in the manuscript.
 
-```{r variance_partitioning, echo = FALSE}
+```{r variance_partitioning, comment = "", message = FALSE, warning = FALSE}
 VP <- computeVariancePartitioning(m)
 plotVariancePartitioning(hM = m, VP = VP)
 ```
 
+## Phylogenetic correlogram 
 
-## 9.7 - Phylogenetic correlogram (Fig. 1e)
+The resulting plot corresponds to Figure 1e in the manuscript.
 
 ### Calcultate phylogenetic distance 
 
-```{r load_data_community, echo = FALSE, eval = FALSE}
+```{r load_data_community, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 pw_phylo_dist <- cophenetic.phylo(genome_tree)
 xy <- t(combn(colnames(pw_phylo_dist), 2))
 pw_phylo_dist <- data.frame(xy, dist = pw_phylo_dist[xy])
@@ -225,7 +227,7 @@ tax_table <-
   write_tsv("data/taxonomy_distance.tsv")
 ```
 
-```{r plot_data_community, echo = FALSE, eval = FALSE}
+```{r plot_data_community, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 tax_table <- read_tsv("data/taxonomy_distance.tsv")
 
 tax_table %>%
@@ -242,7 +244,7 @@ ggplot(aes(x = distance,
 
 ### Phylogenetic signal
 
-```{r phylo_signal, echo = FALSE, eval = FALSE}
+```{r phylo_signal, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 mpost <- convertToCodaObject(m)
 quantile(unlist(mpost$Rho), probs = c(.05,.5,.95))
 
@@ -266,8 +268,6 @@ age.cg <- readRDS(file = "age.cg.rds")
 
 plot(age.cg)
 ```
-
-### Clean environment
 
 ```{r clean_9, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())

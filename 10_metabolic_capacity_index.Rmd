@@ -1,17 +1,18 @@
-# Chapter 10 - Bacterial community composition
+# Bacterial community composition
 
-## 10.1 - Load MG data
+## Load MG data
 
-```{r load_data_mag_comp, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_data_mag_comp, comment = "", message = FALSE, warning = FALSE}
 load("data/data_mg.Rdata")
 ```
 
+## GIFTs per MAG
 
-## 10.2 - GIFTs per MAG
+### Plot GIFTs of all bacteria by element 
 
-### Plot GIFTs of all bacteria by element (not included in Supplementary)
+This plot is not included in Supplementary
 
-```{r density_curves, message = FALSE, warning = FALSE}
+```{r density_curves, comment = "", message = FALSE, warning = FALSE}
 gifts_elements %>%
   as.data.frame() %>% 
   rownames_to_column(var = 'genome') %>% 
@@ -30,12 +31,11 @@ gifts_elements %>%
         legend.position = 'top')
 ```
 
-
-## 10.3 - GIFTs per community 
+## GIFTs per community 
 
 ### Calculate community GIFTs
 
-```{r community_gifts, message = FALSE, warning = FALSE}
+```{r community_gifts, comment = "", message = FALSE, warning = FALSE}
 elements_com <- to.community(gifts_elements, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2) 
 
 funcs_com <- to.community(gifts_functions, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2)
@@ -43,16 +43,16 @@ funcs_com <- to.community(gifts_functions, sweep(hel, 2, colSums(hel), FUN = "/"
 domains_com <- to.community(gifts_domains, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2)
 ```
 
-### Save data
-
-```{r save_gifts, message = FALSE, warning = FALSE}
+```{r save_gifts, comment = "", message = FALSE, warning = FALSE}
 save(elements_com,
      funcs_com,
      domains_com,
      file = "data/mci_com.Rdata")
 ```
 
-### Plot community MCI (Fig. 2g)
+### Plot community MCI 
+
+The resulting plot corresponds to Figure 2g in the manuscript.
 
 ```{r plot_com_mci, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
 load("data/mci_com.Rdata")
@@ -93,8 +93,6 @@ funcs_com %>%
         legend.position = 'none')
 
 ```
-
-### Clean environment
 
 ```{r clean_10, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())

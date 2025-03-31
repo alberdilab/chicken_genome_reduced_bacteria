@@ -1,15 +1,12 @@
-# Chapter 5 - Alpha diversity
+# Alpha diversity
 
-## 5.1 - Load MG data
+## Load MG data
 
 ```{r load_mg_data_alpha_div, warning = FALSE, comments = "", message = FALSE}
 load("data/data_mg.Rdata")
 ```
 
-
-## 5.2 - Hill numbers
-
-### Calculate alpha diversity
+## Hill numbers - Alpha diversity
 
 ```{r alpha_div, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Neutral
@@ -65,13 +62,13 @@ alpha_div <-
   left_join(log_seq_depth, by = 'animal_code')
 ```
 
-### Save data
-
-```{r save_alpha, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r save_alpha, comment = "", message = FALSE, warning = FALSE,, eval = FALSE}
 save(alpha_div, file = "data/alpha_div.Rdata")
 ```
 
-### Alpha diversity by sampling day (Fig. 1e)
+### Alpha diversity by sampling day 
+
+The resulting plot corresponds to Figure 2a in the manuscript.
 
 ```{r plot_div, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 12, fig.fullwidth = TRUE}
 load("data/alpha_div.Rdata")
@@ -84,15 +81,14 @@ p_n <-
          group = sampling_time,
          colour = sampling_time)) +
   geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-               width = 0.3,
-               lwd = 3,
+               width = 0.2,
+               lwd = 2,
                outlier.color = NA,
                position = position_nudge(x = -.4)
                ) +
-  ylim(200,600) +
-  geom_jitter(width = 0.15, alpha = 0.6) +
+  geom_jitter(width = 0.1, alpha = 0.6) +
   stat_summary(geom = 'crossbar',
-               width = 0.3,
+               width = 0.2,
                fatten = 0,
                color = 'white',
                position = position_nudge(x = -.4),
@@ -102,7 +98,7 @@ p_n <-
                ) }) +
   scale_fill_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   scale_color_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
-  theme_minimal() +
+  theme_bw() +
   ggtitle("Neutral diversity") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -116,15 +112,14 @@ p_p <-
       group = sampling_time,
       colour = sampling_time)) +
   geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-               width = 0.3,
-               lwd = 3,
+               width = 0.2,
+               lwd = 2,
                outlier.color = NA,
                position = position_nudge(x = -.4)
                ) +
-  ylim(9,21) +
-  geom_jitter(width = 0.15, alpha = 0.6) +
+  geom_jitter(width = 0.1, alpha = 0.6) +
   stat_summary(geom = "crossbar",
-               width = 0.3,
+               width = 0.2,
                fatten = 0,
                color = "white",
                position = position_nudge(x = -.4),
@@ -134,7 +129,8 @@ p_p <-
                ) }) +
   scale_fill_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   scale_color_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
-  theme_minimal() + ylab("Effective number of strains") +
+  theme_bw() +
+  ylab("Effective number of strains") +
   ggtitle("Phylogenetic diversity") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -148,15 +144,14 @@ p_f_kegg <-
          group = sampling_time,
          colour = sampling_time)) +
   geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-               width = 0.3,
-               lwd = 3,
+               width = 0.2,
+               lwd = 2,
                outlier.color = NA,
                position = position_nudge(x = -.4)
   ) +
-  ylim(1.30,1.50) +
-  geom_jitter(width = 0.15, alpha = 0.6) +
+  geom_jitter(width = 0.1, alpha = 0.6) +
   stat_summary(geom = "crossbar",
-               width = 0.3,
+               width = 0.2,
                fatten = 0,
                color = "white",
                position = position_nudge(x = -.4),
@@ -166,8 +161,9 @@ p_f_kegg <-
                ) }) +
   scale_fill_manual(values = c("#E69F00", "#CC6677", "#56B4E9")) +
   scale_color_manual(values = c("#E69F00", "#CC6677", "#56B4E9")) +
-  theme_minimal() + ylab("Effective number of strains") +
-  ggtitle("Functional diversity KEGG") +
+  theme_bw() +
+  ylab("Effective number of strains") +
+  ggtitle("Functional diversity") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
         legend.position = "none")
@@ -175,8 +171,9 @@ p_f_kegg <-
 grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
 ```
 
+## Temporal development
 
-## 5.3 - Temporal development (Supplementary Table S2)
+The resulting tables correspond to Supplementary Table S2.
 
 ### Neutral
 
@@ -207,9 +204,6 @@ m_div_f_kegg <-
       data = alpha_div)
 summary(m_div_f_kegg)
 ```
-
-
-### Clean environment
 
 ```{r clean_5, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())

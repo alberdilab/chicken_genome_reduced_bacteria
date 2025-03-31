@@ -1,13 +1,15 @@
-# Chapter 3 -  Metatranscriptomic data preparation
+# Metatranscriptomic data preparation
 
-## 3.1 - Load data
+## Load data
 
 ### Metatranscriptomic gene expression counts
 
 ```{r load_expr_counts, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
 if(!file.exists("data/gene_expressions.tsv.xz")){
-  download.file(url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/gene_expressions.tsv.xz',
-              destfile = 'data/gene_expressions.tsv.xz', method = 'curl')
+  download.file(
+    url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/gene_expressions.tsv.xz',
+    destfile = 'data/gene_expressions.tsv.xz', method = 'curl'
+    )
 }
 
 gene_expr <- 
@@ -50,42 +52,50 @@ mag_ann <-
 
 # Chunk analysis
 load("data/gene_expr_1.Rdata")
-distq_1 <- distillq(gene_expr_1, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+distq_1 <- distillq(gene_expr_1, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
 save(distilled_caecum_1, file = "data/distilled_caecum_1.Rdata")
 rm(gene_expr_1, distilled_caecum_1)
 
 load("data/gene_expr_2.Rdata")
-distq_2 <- distillq(gene_expr_2, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+distq_2 <- distillq(gene_expr_2, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
 save(distilled_caecum_2, file = "data/distilled_caecum_2.Rdata")
 rm(gene_expr_2, distilled_caecum_2)
 
 load("data/gene_expr_3.Rdata")
-distq_3 <- distillq(gene_expr_3, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+distq_3 <- distillq(gene_expr_3, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
 save(distilled_caecum_3, file = "results/tables/distilled_caecum_3.Rdata")
 rm(gene_expr_3, distilled_caecum_3)
 
 load("data/gene_expr_4.Rdata")
-distq_4 <- distillq(gene_expr_4, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+distq_4 <- distillq(gene_expr_4, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
 save(distilled_caecum_4, file = "results/tables/distilled_caecum_4.Rdata")
 rm(gene_expr_4, distilled_caecum_4)
 
 load("data/gene_expr_5.Rdata")
-distq_5 <- distillq(gene_expr_5, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+distq_5 <- distillq(gene_expr_5, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
 save(distilled_caecum_5, file = "results/tables/distilled_caecum_5.Rdata")
 rm(gene_expr_5, distilled_caecum_5)
 
 load("data/gene_expr_6.Rdata")
-distq_6 <- distillq(gene_expr_6, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+distq_6 <- distillq(gene_expr_6, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
 save(distilled_caecum_6, file = "results/tables/distilled_caecum_6.Rdata")
 rm(gene_expr_6, distilled_caecum_6)
 
 load("data/gene_expr_7.Rdata")
-distq_7 <- distillq(gene_expr_7, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 12))
+distq_7 <- distillq(gene_expr_7, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 12))
 save(distilled_caecum_7, file = "results/tables/distilled_caecum_7.Rdata")
 rm(gene_expr_7, distilled_caecum_7)
 
 load("results/tables/gene_expr_8.Rdata")
-distq_8 <- distillq(gene_expr_8, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 12))
+distq_8 <- distillq(gene_expr_8, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 12))
 save(distilled_caecum_8, file = "results/tables/distilled_caecum_8.Rdata")
 rm(gene_expr_8, distilled_caecum_8)
 ```
@@ -140,13 +150,11 @@ chicken_metadata_mt <-
   filter(animal_code %in% animal_codes_mt)
 ```
 
-## 3.2 - Save working objects
+## Save working objects
 
 ```{r save_mt_objects, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
 save(expr_counts, chicken_metadata_mt, file = "data/data_mt.Rdata")
 ```
-
-### Clean environment
 
 ```{r clean_3, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())

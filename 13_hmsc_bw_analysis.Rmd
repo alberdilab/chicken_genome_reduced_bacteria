@@ -1,10 +1,10 @@
-# Chapter 13 - Bacteria vs Chicken BW HMSC analysis
+# Bacteria vs Chicken BW HMSC analysis
 
-## 13.1 - Load model
+## Load model
 
 ### Define directories
 
-```{r define_directories_hmsc_bw, comment = "", echo = FALSE}
+```{r define_directories_hmsc_bw, comment = "", message = FALSE, warning = FALSE}
 # Directory
 localDir = "."
 ModelDir = file.path(localDir, "hmsc_bw/models")
@@ -13,19 +13,19 @@ MFDir <- file.path(localDir, "hmsc_bw/model_fit")
 ```
 
 ### Load model
-```{r load_model_hmsc_bw, comment = "", echo = FALSE}
+```{r load_model_hmsc_bw, ccomment = "", message = FALSE, warning = FALSE}
 if(!file.exists("hmsc_bw/models/bw_model_thin_10_samples_250_chains_4.Rdata")){
-  download.file(url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/bw_model_thin_10_samples_250_chains_4.Rdata',
-              destfile = 'hmsc_bw/models/bw_model_thin_10_samples_250_chains_4.Rdata', method = 'curl')
+  download.file(
+    url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/bw_model_thin_10_samples_250_chains_4.Rdata',
+    destfile = 'hmsc_bw/models/bw_model_thin_10_samples_250_chains_4.Rdata', method = 'curl')
 }
 
 load(file = file.path(ModelDir,"bw_model_thin_10_samples_250_chains_4.Rdata"))
 ```
 
+## Evaluate model
 
-## 13.2 - Evaluate model
-
-```{r evalute_model, echo = FALSE, eval = FALSE}
+```{r evalute_model, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 partition <- createPartition(m, nfolds = 4)
 preds <- computePredictedValues(m, partition = partition, nChains = 1) # nParallel = nChains
 MFCV <- evaluateModelFit(hM = m, predY = preds)
@@ -33,19 +33,21 @@ MFCV <- evaluateModelFit(hM = m, predY = preds)
 save(MFCV,file = file.path(MFDir, "hmsc_bw/model_fit/MF_thin_10_samples_250_chains_4.Rdata"))
 ```
 
+## Examine species responses 
 
-## 13.3 - Examine species responses (Plot not included in Supplementary)
+Plot not included in Supplementary
 
-```{r mag_response, echo = FALSE, eval = FALSE}
+```{r mag_response, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 beta_post <- getPostEstimate(m, parName = "Beta")
 
 plotBeta(m, beta_post,supportLevel = 0.9, plotTree = TRUE)
 ```
 
+## Examine variance partition 
 
-## 13.4 - Examine variance partition (Plot not included in Supplementary)
+Plot not included in Supplementary
 
-```{r variance_part_bw, echo = FALSE, eval = FALSE}
+```{r variance_part_bw, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 varpartition <- computeVariancePartitioning(m)
 
 plotVariancePartitioning(m, VP = varpartition)
@@ -57,7 +59,7 @@ bw_support <- beta_post$support[4,]
 
 ## Create a data table
 
-```{r create_data_table, echo = FALSE, eval = FALSE}
+```{r create_data_table, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 load("hmsc_bw/model_fit/MF_thin_10_samples_250_chains_4.Rdata")
 
 rel_abu <- colMeans(vegan::decostand(exp(m$Y), method = "total")) * 100
@@ -75,9 +77,11 @@ rownames(toplot) <- NULL
 write.table(toplot, file = "data/data.txt", row.names = F)
 ```
 
-### Associate bacteria response with chicken BW (not included in Supplementary)
+### Associate bacteria response with chicken BW 
 
-```{r mag_response_chicken_bw, echo = FALSE, eval = FALSE}
+not included in Supplementary
+
+```{r mag_response_chicken_bw, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 toplot <- read.table("data/data.txt", , row.names = F)
 
 ggplot() +
@@ -94,10 +98,9 @@ ggplot() +
   theme_minimal()
 ```
 
+## Create table with HMSC results
 
-## 13.5 - Create table with HMSC results
-
-```{r create_table, echo = FALSE, eval = FALSE}
+```{r create_table, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Total relative abundance of species associated positively and negatively with body weight (~9%)
 sum(toplot$rel_abu[(toplot$bw_support > 0.975 | toplot$bw_support < 0.025) & (toplot$var_pred > mean(toplot$var_pred))])
 
@@ -140,8 +143,6 @@ bw_parameter_df$bw_trend[is.na(bw_parameter_df$bw_trend)] <- "neutral"
 
 write_tsv(bw_parameter_df,file = "data/hmsc_bw_trend.tsv")
 ```
-
-### Clean environment
 
 ```{r clean_13, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())

@@ -1,12 +1,14 @@
-# Chapter 7 - Bacterial temporal trends
+# Bacterial temporal trends
 
-## 7.1 - Load MG data
+## Load MG data
 
-```{r load_data_mag_trends, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_data_mag_trends, message = FALSE, warning = FALSE}
 load("data/data_mg.Rdata")
 ```
 
-## 7.2 - Temporal trends related to MCI (Fig. 2c)
+## Temporal trends related to MCI 
+
+The resulting plot corresponds to Figure 2c in the manuscript.
 
 ### Calculate t-SNE based on GIFTs
 
@@ -92,7 +94,7 @@ tsne_d7 <-
   ggplot(aes(x = tsne1, y = tsne2, color = order, size = abundance)) +
   geom_point(shape = 16, alpha = 0.8) +
   scale_color_manual(values = order_colors) +
-  theme_minimal() +
+  theme_bw() +
   theme(legend.position = 'none')
 
 # Day 21
@@ -102,7 +104,7 @@ tsne_d21 <-
   ggplot(aes(x = tsne1, y = tsne2, color = order, size = abundance)) +
   geom_point(shape = 16, alpha = 0.8) +
   scale_color_manual(values = order_colors) +
-  theme_minimal() +
+  theme_bw() +
   theme(legend.position = 'none')
 
 # Day 35
@@ -112,14 +114,15 @@ tsne_d35 <-
   ggplot(aes(x = tsne1, y = tsne2, color = order, size = abundance)) +
   geom_point(shape = 16, alpha = 0.8) +
   scale_color_manual(values = order_colors) +
-  theme_minimal() +
+  theme_bw() +
   theme(legend.position = 'none')
 
 grid.arrange(tsne_d7, tsne_d21, tsne_d35, ncol = 3)
 ```
 
+## Compositional barplots 
 
-## 7.3 - Compositional barplots (Fig. 2d)
+The resulting plot corresponds to Figure 2d in the manuscript.
 
 ### Compositional barplot at order level
 
@@ -165,7 +168,7 @@ phy_order_df %>%
                                            'Methanomicrobiales'))) %>%
     mutate(sampling_time = factor(sampling_time,
                                   levels = c("7", "21", "35"))) %>% 
-    ggplot() +
+  ggplot() +
   geom_bar(aes(x = Trial, y = Abundance, color = order, fill = order),
            stat = "identity", position = "stack") +
   facet_wrap(~sampling_time, scales = "free_x",
@@ -176,10 +179,13 @@ phy_order_df %>%
   scale_fill_manual('Order', values = order_colors) +
   ylab('Relative abundance') +
   xlab('Trial') +
+  theme_bw() +
   theme(panel.background = element_blank())
 ```
 
-### Horizontal barplot (not in the Supplementary, but for a more detailed exploration)
+### Horizontal barplot 
+
+The plot is not in the Supplementary, but for a more detailed exploration
 
 ```{r plot_horizontal, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
 phy_order_df %>%
@@ -223,6 +229,7 @@ phy_order_df %>%
   scale_color_manual('Order', values = order_colors) +
   scale_fill_manual('Order', values = order_colors) +
   xlab('Relative abundance') +
+  theme_bw() +
   theme(axis.text.y = element_blank(),
         axis.title.y = element_blank(),
         axis.ticks.y = element_blank(),
@@ -235,8 +242,6 @@ phy_order_df %>%
         legend.title = element_text(size = 10),
         strip.text = element_text(size = 8)) 
 ```
-
-### Clean environment
 
 ```{r clean_7, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
