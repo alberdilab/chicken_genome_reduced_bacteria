@@ -1,8 +1,8 @@
-# Chapter 14 - Comparing metabolic capacity of positively and negatively associated bacteria
+# Comparing metabolic capacity of positively and negatively associated bacteria
 
-## 14.1 - Load MG data
+## Load MG data
 
-```{r load_data_func, echo = FALSE}
+```{r load_data_func, comment = "", message = FALSE, warning = FALSE}
 load("data/data_mg.Rdata")
 
 trends_bw <-
@@ -35,13 +35,13 @@ avg_mci_deg <- rowMeans(gifts[,grepl("D",names(gifts))])
 gifts_funct$avg_mci_deg <- avg_mci_deg
 ```
 
-## 14.2 - Taxonomy of positively and negatively associated MAGs
+## Taxonomy of positively and negatively associated MAGs
 
 ### Positive group
 
 All MAGs with positive association belong to RF39
 
-```{r Taxonomy_pos, echo = FALSE}
+```{r Taxonomy_pos, comment = "", message = FALSE, warning = FALSE}
 trends_bw %>%
   filter(trend_09 == "positive") %>%
   select(genome) %>% 
@@ -54,7 +54,7 @@ trends_bw %>%
 
 MAGs with negative association belong to various orders, mainly to Lachnospirales and Oscillospirales
 
-```{r Taxonomy_neg, echo = FALSE}
+```{r Taxonomy_neg, comment = "", message = FALSE, warning = FALSE}
 trends_bw %>%
   filter(trend_09 == "negative") %>%
   select(genome) %>%
@@ -64,10 +64,9 @@ trends_bw %>%
   sort()
 ```
 
+## Compute MCIs of BW positive and negative associated communities
 
-## 14.3 - Compute MCIs of BW positive and negative associated communities
-
-```{r bw_groups, echo = FALSE}
+```{r bw_groups, comment = "", message = FALSE, warning = FALSE}
 gifts_funct_bw_pos <-
   gifts_funct %>%
   mutate(avg_mci_bio = gifts_funct$avg_mci_bio,
@@ -93,7 +92,7 @@ gifts_funct_bw_neg <-
   select(-bw_effect)
 ```
 
-```{r boots_mci, echo = FALSE}
+```{r boots_mci, comment = "", message = FALSE, warning = FALSE}
 mean_func <- function(data, indices) {
   return(mean(data[indices]))
 }
@@ -148,7 +147,7 @@ gifts_funct_df <- data.frame(rbind(gifts_funct_bw_pos %>% mutate(bw_association 
 
 ### MCI comparisons of biosynthesis pathways
 
-```{r mci_groups, echo = FALSE}
+```{r mci_groups, comment = "", message = FALSE, warning = FALSE}
 ## B01
 p_B01_mg <-
   ggplot() +
@@ -374,13 +373,13 @@ p_Mci_mg <-
 
 ### The significant ones
 
-```{r selected_plots_bio, echo = FALSE, fig.height = 4, fig.width = 10, fig.fullwidth = TRUE}
+```{r selected_plots_bio, fig.height = 4, fig.width = 10, fig.fullwidth = TRUE}
 grid.arrange(p_Mci_mg, p_B04_mg, p_B08_mg, ncol = 3)
 ```
 
 ### All
 
-```{r combined_plots_bio, echo = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
+```{r combined_plots_bio, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
 grid.arrange(p_Mci_bio_mg, p_B01_mg, p_B02_mg,
              p_B03_mg, p_B04_mg, p_B06_mg, 
              p_B07_mg, p_B08_mg, p_B09_mg,
@@ -389,7 +388,7 @@ grid.arrange(p_Mci_bio_mg, p_B01_mg, p_B02_mg,
 
 #### MCI comparisons of degradation pathways
 
-```{r mci_groups_deg, echo = FALSE}
+```{r mci_groups_deg, comment = "", message = FALSE, warning = FALSE}
 ## D01
 p_D01_mg <-
   ggplot() +
@@ -574,7 +573,7 @@ p_Mci_deg_mg <-
 
 ### All 
 
-```{r combined_plots_deg, echo = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
+```{r combined_plots_deg, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
 grid.arrange(p_Mci_deg_mg, p_D01_mg, p_D02_mg,
              p_D03_mg, p_D05_mg,
              p_D06_mg, p_D07_mg, p_D08_mg,
@@ -582,9 +581,11 @@ grid.arrange(p_Mci_deg_mg, p_D01_mg, p_D02_mg,
 ```
 
 
-## 14.4 - Heatmap of MCI at element level (Not included in the Supplementary)
+## Heatmap of MCI at element level
 
-```{r mci_element_plot, echo = FALSE}
+Not included in Supplementary
+
+```{r mci_element_plot, comment = "", message = FALSE, warning = FALSE}
 gifts_bw_pos <-
   gifts %>%
   mutate(bw_effect = trends_bw$trend_09) %>%
@@ -631,8 +632,6 @@ gifts_bw_df_long %>%
   theme_void(base_size = 8) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.position = "none")
 ```
-
-### Clean environment
 
 ```{r clean_14, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())

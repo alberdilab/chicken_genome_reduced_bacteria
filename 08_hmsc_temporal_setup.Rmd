@@ -1,12 +1,12 @@
-# Chapter 8 - Temporal HMSC setup
+# Temporal HMSC setup
 
 HMSC models are computationally intensive. It is advisable to run this script on a server. The code is made to be reproduced on any supercomputer.
 
-## 8.1 - Load MG data
+## Load MG data
 
 ### Define directories
 
-```{r create_directories_hmsc_temp, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r create_directories_hmsc_temp, message = FALSE, warning = FALSE, eval = FALSE}
 # Create directories
 dir.create("temporal_hmsc")
 dir.create("temporal_hmsc/model_fit")
@@ -21,7 +21,7 @@ PanelDir = file.path(localDir, "temporal_hmsc/panels")
 
 ### Generate input objects
 
-```{r load_mg_data_hmsc_temp, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r load_mg_data_hmsc_temp, message = FALSE, warning = FALSE, eval = FALSE}
 # Load data
 load("data/data_mg.Rdata")
 
@@ -42,11 +42,11 @@ for (i in 1:ncol(design)) {
 ```
 
 
-## 8.2- Prepate data for HMSC
+## Prepate data for HMSC
 
 ### Define tables
 
-```{r hmsc_tables_temp, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r hmsc_tables_temp, message = FALSE, warning = FALSE, eval = FALSE}
 # Genome count table (quantitative community data)
 YData <- log1p(mag_weighted %>% 
                  t() %>% 
@@ -64,7 +64,7 @@ YData <- YData[,colnames(YData) %in% genome_tree$tip.label]  # Filter missing MA
 
 ## Define formula
 
-```{r hmsc_formumla, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r hmsc_formumla, message = FALSE, warning = FALSE, eval = FALSE}
 # Define XFormula
 XFormula_Time <- ~log_seq_depth + trial + sex + breed + treatment + age
 
@@ -75,7 +75,7 @@ rL.Pen <- HmscRandomLevel(units = levels(StudyDesign$pen))
 
 ### Define HMSC model
 
-```{r hmsc_model, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r hmsc_model, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 m <- Hmsc(Y = YData,
                 XData = XData,
                 XFormula = XFormula_Time,
@@ -90,7 +90,7 @@ save(m, file = file.path(ModelDir,"unfitted_model.Rdata"))
 
 ### Define MCMC characteristics
 
-```{r mcmc_features, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r mcmc_features, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 ## How often to sample the MCM
 samples_list = c(5, 250, 250)
 
@@ -106,10 +106,9 @@ load(file.path(ModelDir, "unfitted_model.Rdata"))
 unf_model <- m
 ```
 
+## Fit model
 
-## 8.3 - Fit model
-
-```{r fit_model, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r fit_model, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 set.seed(1)
 
 for (Lst in 1:length(samples_list)) {
@@ -134,10 +133,11 @@ for (Lst in 1:length(samples_list)) {
 }
 ```
 
+## Evaluate convergence 
 
-## 8.4 - Evaluate convergence (Figure not added to Supplementary but could be included)
+Figure not added to Supplementary but could be included.
 
-```{r convergence, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r convergence, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 set.seed(1)
 
 for (i in 1) {
@@ -219,4 +219,8 @@ for (i in 1) {
           main = "psrf(rho)")
   dev.off()
 }
+```
+
+```{r clean_8, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
 ```

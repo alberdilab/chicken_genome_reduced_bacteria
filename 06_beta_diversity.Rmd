@@ -1,14 +1,12 @@
-# Chapter 6 - Bacterial community composition
+# Bacterial community composition
 
-## 6.1 - Load MG data
+## Load MG data
 
-```{r load_mg_data_beta_div, echo = FALSE}
+```{r load_mg_data_beta_div}
 load("data/data_mg.Rdata")
 ```
 
-## 6.2 - Hill numbers 
-
-### Calculate beta diversity
+## Hill numbers - beta diversity
 
 ```{r beta_div, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Neutral
@@ -38,18 +36,20 @@ beta_q1f_kegg <-
   hillpair(., q = 1, dist = dist_kegg, metric = "S", out = "pair")
 ```
 
-### Save data
-
-```{r save_beta, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r save_beta, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 save(beta_q1n, 
      beta_q1p, 
      beta_q1f_gifts,
      file = "data/beta_div.Rdata")
 ```
 
-# Compare individuals from same trial and pen between days 7-21 and 21-35 (Supplementary Fig. S3)
+### Compare individuals from same trial and pen between sampling days 
 
-```{r compare_ind, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+The resulting stats corresponds to Supplementary Table S3 in the manuscript.
+
+```{r compare_ind, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
+load("data/beta_div.Rdata")
+
 metadata_2 <-
   chicken_metadata %>%
   dplyr::rename(second = 'animal_code',
@@ -63,9 +63,10 @@ betadiv_n_dis <-
   rename(animal_code = 'first') %>%
   left_join(chicken_metadata, by = 'animal_code') %>%
   left_join(metadata_2, by = 'second') %>%
-  mutate(diff = case_when(sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
-                          sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
-                          sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
+  mutate(diff = case_when(
+    sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
+    sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
+    sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
   mutate(diff_trial = case_when(trial == 'CA' & trial_2 == 'CA' ~ 'CA',
                                 trial == 'CB' & trial_2 == 'CB' ~ 'CB')) %>%
   mutate(diff_pen = case_when(pen == pen_2  ~ 'same')) %>%
@@ -77,9 +78,10 @@ betadiv_p_dis <-
   rename(animal_code = 'first') %>%
   left_join(chicken_metadata, by = 'animal_code') %>%
   left_join(metadata_2, by = 'second') %>%
-  mutate(diff = case_when(sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
-                          sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
-                          sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
+  mutate(diff = case_when(
+    sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
+    sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
+    sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
   mutate(diff_trial = case_when(trial == 'CA' & trial_2 == 'CA' ~ 'CA',
                                 trial == 'CB' & trial_2 == 'CB' ~ 'CB')) %>%
   mutate(diff_pen = case_when(pen == pen_2  ~ 'same')) %>%
@@ -91,9 +93,10 @@ betadiv_f_dis_kegg <-
   rename(animal_code = 'first') %>%
   left_join(chicken_metadata, by = 'animal_code') %>%
   left_join(metadata_2, by = 'second') %>%
-  mutate(diff = case_when(sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
-                          sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
-                          sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
+  mutate(diff = case_when(
+    sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
+    sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
+    sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
   mutate(diff_trial = case_when(trial == 'CA' & trial_2 == 'CA' ~ 'CA',
                                 trial == 'CB' & trial_2 == 'CB' ~ 'CB')) %>%
   mutate(diff_pen = case_when(pen == pen_2  ~ 'same')) %>%
@@ -114,6 +117,8 @@ betadiv_f_dis_kegg %>%
 ```
 
 ### Plot difference between sampling points for beta diversity 
+
+Not included in the manuscript
 
 ```{r plot_beta_diff, comment="", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE, eval = FALSE}
 # Neutral
@@ -153,13 +158,14 @@ p_f_kegg <-
   ggtitle('Functional KEGG beta div')
 
 
-grid.arrange(p_n, p_p, p_f_kegg, ncol = 4)
+grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
 ```
 
+## Effect of design in microbiome composition
 
-## 6.3 - Effect of design in microbiome composition
+### Permanova values for different metrics of beta diversity 
 
-### Permanova values for different metrics of beta diversity (Supplementary Table S3)
+The resulting stats correspond to Supplementary Table S3 in the manuscript.
 
 ```{r permanova_betadiv, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Dissimilarity tables
@@ -208,7 +214,7 @@ adonis2(b1f_dis_table_kegg ~ trial + sex + breed + treatment * age,
 
 ### Community composition
 
-```{r composition, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r composition, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 perm <- how(nperm = 999)
 setBlocks(perm) <- with(chicken_metadata, pen)
 
@@ -224,12 +230,13 @@ adonis2(hel ~ trial * sampling_time + breed + sex + treatment,
         data = chicken_metadata)
 ```
 
+## Community composition development
 
-## 6.4 - Community composition development
+### Distance-based RDA 
 
-### Distance-based RDA (Fig. 1f)
+The resulting plot corresponds to Figure 1f in the manuscript.
 
-```{r distance_rda, echo = FALSE, fig.height = 4, fig.width = 7, fig.fullwidth = TRUE, eval = FALSE}
+```{r distance_rda, fig.height = 4, fig.width = 7, fig.fullwidth = TRUE, eval = FALSE}
 set.seed(4)
 hel_bray <- vegdist(hel, method = 'bray')
 hel_bray_sqrt <- sqrt(hel_bray)
@@ -258,8 +265,6 @@ db_rda_scores %>%
   theme_bw() +
   theme(legend.position = 'none')
 ```
-
-### Clean environment
 
 ```{r clean_6, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 rm(list = ls())

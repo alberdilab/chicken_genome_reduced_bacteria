@@ -1,9 +1,9 @@
 ---
 title: "AlberdiLab | Marcos et al. 2025"
-subtitle: "Title to be added"
+subtitle: "Bacteria with reduced genomes positively associate with chicken body weight"
 author:
   - Sofia Marcos, Iñaki Odriozola, Ostaizka Aizpurua, Raphael Eisenhofer, Sarah Siu Tze Mak, Garazi Martin, Varsha Kale, Germana Baldi, Robert D Finn, Joan Tarradas, Andone Estonba, M Thomas P Gilbert, Antton Alberdi^[University of Copenhagen, antton.alberdi@sund.ku.dk]
-date: "`r Sys.Date()`"
+date: "Last update: `r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -21,11 +21,11 @@ knitr::opts_chunk$set(
     comment = NA)
 ```
 
-# Chapter 1 - Introduction
+# Introduction
 
 This WebBook contains the code written to analyse data from the study of the functional profile of metagenome-assembled genomes and temporal trends of derived microbial communities from intensively reared broiler chickens.
 
-## 1.1 - Prepare the R environment
+## Prepare the R environment
 
 ### Environment
 
@@ -92,9 +92,9 @@ library(boot)
 
 <!--chapter:end:01_index.Rmd-->
 
-# Chapter 2  - Metagenomic data preparation
+# Metagenomic data preparation
 
-## 2.1 - Load data
+## Load data
 
 Load the original data files outputted by the bioinformatic pipeline.
 
@@ -147,8 +147,10 @@ genome_tree <- read_tree("data/tree.nwk")
 
 ```{r load_annotations, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
 if(!file.exists("data/gene_annotations.tsv.xz")){
-  download.file(url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/gene_annotations.tsv.xz',
-              destfile = 'data/gene_annotations.tsv.xz', method = 'curl')
+  download.file(
+    url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/gene_annotations.tsv.xz',
+    destfile = 'data/gene_annotations.tsv.xz', method = 'curl'
+    )
 }
 
 genome_annotations <- read_tsv("data/gene_annotations.tsv.xz")
@@ -174,12 +176,13 @@ read_counts <-
 ```
 
 
-## 2.2 - Distilling Genome Inferred Functional Traits (GIFTs)
+## Distilling Genome Inferred Functional Traits (GIFTs)
 
 ### Distilling DRAM annotations
 
 ```{r calculate_traits, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
-gifts_raw <- distill(genome_annotations, GIFT_db2, genomecol = 2, annotcol = c(9,10,19), verbosity = F)
+gifts_raw <- distill(genome_annotations, GIFT_db2,
+                     genomecol = 2, annotcol = c(9,10,19), verbosity = F)
 
 # Load ENA to genome_id table
 ena_to_mag_id <- read_tsv("data/ena_to_mag_id.tsv")
@@ -212,7 +215,7 @@ gifts_domains <- to.domains(gifts_functions, GIFT_db2)
 ```
 
 
-## 2.3 - Create working objects
+## Create working objects
 
 Transform the original data files into working objects for downstream analyses.
 
@@ -273,7 +276,7 @@ phylo_tree <- phy_tree(genome_tree)
 phylo_seq <- phyloseq(phylo_genome, phylo_taxonomy, phylo_samples, phylo_tree)
 ```
 
-## 2.4 - Prepare color scheme
+## Prepare color scheme
 
 ```{r get_mag_colors, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
 # As dataframe
@@ -347,7 +350,7 @@ sampling_day_colors <- c('#E69F00', '#CC6677', '#56B4E9')
 ```
 
 
-## 2.5 - Wrap working objects
+## Wrap working objects
 
 All working objects are wrapped into a single Rdata object to facilitate downstream usage.
 
@@ -386,24 +389,24 @@ save(
   file = "data/data_mg.Rdata")
 ```
 
-### Clean environment
-
 ```{r clean_2, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```
 
 <!--chapter:end:02_data_preparation_mg.Rmd-->
 
-# Chapter 3 -  Metatranscriptomic data preparation
+# Metatranscriptomic data preparation
 
-## 3.1 - Load data
+## Load data
 
 ### Metatranscriptomic gene expression counts
 
 ```{r load_expr_counts, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
 if(!file.exists("data/gene_expressions.tsv.xz")){
-  download.file(url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/gene_expressions.tsv.xz',
-              destfile = 'data/gene_expressions.tsv.xz', method = 'curl')
+  download.file(
+    url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/gene_expressions.tsv.xz',
+    destfile = 'data/gene_expressions.tsv.xz', method = 'curl'
+    )
 }
 
 gene_expr <- 
@@ -446,42 +449,50 @@ mag_ann <-
 
 # Chunk analysis
 load("data/gene_expr_1.Rdata")
-distq_1 <- distillq(gene_expr_1, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+distq_1 <- distillq(gene_expr_1, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
 save(distilled_caecum_1, file = "data/distilled_caecum_1.Rdata")
 rm(gene_expr_1, distilled_caecum_1)
 
 load("data/gene_expr_2.Rdata")
-distq_2 <- distillq(gene_expr_2, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+distq_2 <- distillq(gene_expr_2, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
 save(distilled_caecum_2, file = "data/distilled_caecum_2.Rdata")
 rm(gene_expr_2, distilled_caecum_2)
 
 load("data/gene_expr_3.Rdata")
-distq_3 <- distillq(gene_expr_3, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+distq_3 <- distillq(gene_expr_3, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
 save(distilled_caecum_3, file = "results/tables/distilled_caecum_3.Rdata")
 rm(gene_expr_3, distilled_caecum_3)
 
 load("data/gene_expr_4.Rdata")
-distq_4 <- distillq(gene_expr_4, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+distq_4 <- distillq(gene_expr_4, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
 save(distilled_caecum_4, file = "results/tables/distilled_caecum_4.Rdata")
 rm(gene_expr_4, distilled_caecum_4)
 
 load("data/gene_expr_5.Rdata")
-distq_5 <- distillq(gene_expr_5, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+distq_5 <- distillq(gene_expr_5, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
 save(distilled_caecum_5, file = "results/tables/distilled_caecum_5.Rdata")
 rm(gene_expr_5, distilled_caecum_5)
 
 load("data/gene_expr_6.Rdata")
-distq_6 <- distillq(gene_expr_6, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
+distq_6 <- distillq(gene_expr_6, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 19))
 save(distilled_caecum_6, file = "results/tables/distilled_caecum_6.Rdata")
 rm(gene_expr_6, distilled_caecum_6)
 
 load("data/gene_expr_7.Rdata")
-distq_7 <- distillq(gene_expr_7, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 12))
+distq_7 <- distillq(gene_expr_7, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 12))
 save(distilled_caecum_7, file = "results/tables/distilled_caecum_7.Rdata")
 rm(gene_expr_7, distilled_caecum_7)
 
 load("results/tables/gene_expr_8.Rdata")
-distq_8 <- distillq(gene_expr_8, mag_ann, GIFT_db2, genecol = 1, genomecol = 2, annotcol = c(9, 10, 12))
+distq_8 <- distillq(gene_expr_8, mag_ann, GIFT_db2,
+                    genecol = 1, genomecol = 2, annotcol = c(9, 10, 12))
 save(distilled_caecum_8, file = "results/tables/distilled_caecum_8.Rdata")
 rm(gene_expr_8, distilled_caecum_8)
 ```
@@ -536,13 +547,11 @@ chicken_metadata_mt <-
   filter(animal_code %in% animal_codes_mt)
 ```
 
-## 3.2 - Save working objects
+## Save working objects
 
 ```{r save_mt_objects, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
 save(expr_counts, chicken_metadata_mt, file = "data/data_mt.Rdata")
 ```
-
-### Clean environment
 
 ```{r clean_3, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
@@ -550,20 +559,22 @@ rm(list = ls())
 
 <!--chapter:end:03_data_preparation_mt.Rmd-->
 
-# Chapter 4 - MAG catalogue richness
+# MAG catalogue richness
 
-## 4.1 - Load MG data
+## Load MG data
 
-```{r load_data_mag_catalogue, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_data_mag_catalogue, message = FALSE, warning = FALSE}
 load("data/data_mg.Rdata")
 ```
 
  
-## 4.2 - Densities of overall relative abundances by phylum (Fig. 1a)
+## Densities of overall relative abundances by phylum 
+
+The resulting plot corresponds to Fig. 1a in the manuscript.
 
 ### Calculate densities
 
-```{r calculate_density, message = FALSE, warning = FALSE, echo = FALSE}
+```{r calculate_density, message = FALSE, warning = FALSE}
 sum_ind <-
   total %>%
   rownames_to_column(var = 'genome') %>%
@@ -596,23 +607,24 @@ count_taxa <-
 
 ### Plot curves 
 
-```{r density_histogram, comment = "", message = FALSE, warning = FALSE, fig.height = 8, fig.width = 7, fig.fullwidth = TRUE}
+```{r density_histogram, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
 ggplot(count_taxa, aes(x = total_ind, colour = phylum, fill = phylum)) +
   geom_density(alpha = 0.5) +
   scale_fill_manual(values = phylum_colors) +
   scale_color_manual(values = phylum_colors) +
   scale_x_log10() +
-  theme_minimal() +
+  theme_bw() +
+  xlab("Log transformed relative abundance") +
+  ylab("Density") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.minor.y = element_blank(),
         panel.grid.major.y = element_blank(),
-        axis.text.y = element_blank(),
-        legend.position = 'none')
+        axis.text.y = element_blank())
 ```
 
 
-## 4.3 - Functional landscape of the catalogue
+## Functional landscape of the catalogue
 
 ### Caltulate t-SNE based on GIFTs
 
@@ -637,15 +649,17 @@ tsne_df <-
 
 ```
 
-### Paint t-SNE by order and Overall Metabolic Capacity Index (MCI) (Figs. 1b and 1c)
+### Paint t-SNE by order and Overall Metabolic Capacity Index
 
-```{r tsne_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 12, fig.fullwidth = TRUE}
+The resulting plots correspond to Figures 1b and 1c in the manuscript. 
+
+```{r tsne_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 6, fig.fullwidth = TRUE}
 tsne_taxonomy <- 
   tsne_df %>%
   ggplot(aes(x = tsne1, y = tsne2, color = order)) +
   geom_point(size = 2, shape = 16, alpha = 0.8) +
   scale_color_manual(values = order_colors) +
-  theme_minimal() +
+  theme_bw() +
   theme(legend.position = 'none')
 
 tsne_mci <- 
@@ -653,13 +667,15 @@ tsne_mci <-
   ggplot(aes(x = tsne1, y = tsne2, color = avg_mci)) +
   geom_point(size = 2, shape = 16, alpha = 0.8) +
   scale_colour_gradientn(colours = rev(terrain.colors(10))) +
-  theme_minimal() +
-  theme(legend.position = 'none')
+  theme_bw()+
+  theme(legend.position = 'bottom')
 
-grid.arrange(tsne_taxonomy, tsne_mci, nrow = 1)
+grid.arrange(tsne_taxonomy, tsne_mci, nrow = 2)
 ```
 
-### Interactive plot to go deeper into each MAG (not included in the paper)
+### Interactive plot  
+
+The plot is not included in the paper but enables to explore each MAG in detail.
 
 ```{r interactive_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
 library(plotly)
@@ -668,21 +684,23 @@ p <-
   tsne_df %>%
   mutate(tooltip = paste(family, "//", genome)) %>% 
   ggplot(aes(x = tsne1, y = tsne2, colour = order, text = tooltip)) +
-  geom_point(size = 4, stroke = 1, alpha = 0.8, shape = 16) + 
+  geom_point(size = 2, stroke = 1, alpha = 0.8, shape = 16) + 
   scale_colour_manual(values = order_colors) +
-  theme_minimal()
+  theme_bw()
 
 ggplotly(p, tooltip = "text")
 ```
 
-### t-SNE coloring 4 most important phylums (Supplementary Fig. S1)
+### t-SNE coloring 4 most important phylums
+
+The resulting plot corresponds to Supplementary Figure S1 in the manuscript.
 
 ```{r tsne_by_phylum, comment = "", message = FALSE, warning = FALSE, fig.height = 8, fig.width = 12, fig.fullwidth = TRUE}
 # Bacillota_A
 tsne_a <- 
   tsne_df %>%
   ggplot(aes(x = tsne1, y = tsne2, colour = ifelse(phylum == 'Bacillota_A', as.character(order), 'other'))) +
-  geom_point(size = 4, stroke = 1, alpha = 0.8, shape = 16) + 
+  geom_point(size = 2, stroke = 1, alpha = 0.8, shape = 16) + 
   scale_colour_manual(values = c(
     Oscillospirales = "#fd8854",
     TANB77 = "#f4814d",
@@ -694,7 +712,7 @@ tsne_a <-
     Monoglobales = "#b93725",
     UBA1212 = "#b10f19",
     other = "grey")) +
-  theme_minimal() +
+  theme_bw() +
   labs(colour = "Bacillota_A") +
   theme(legend.position = 'bottom')
 
@@ -702,7 +720,7 @@ tsne_a <-
 tsne_b <- 
   tsne_df %>%
   ggplot(aes(x = tsne1, y = tsne2, colour = ifelse(phylum == 'Bacillota', as.character(order), 'other'))) +
-  geom_point(size = 4, stroke = 1, alpha = 0.8, shape = 16) + 
+  geom_point(size = 2, stroke = 1, alpha = 0.8, shape = 16) + 
   scale_colour_manual(values = c(
     RF39 = "#ecf76d",
     Lactobacillales = "#feef68",
@@ -712,7 +730,7 @@ tsne_b <-
     Bacillales = "#fc953d",
     RFN20 = "#fd8035",
     other = "grey")) +
-  theme_minimal() +
+  theme_bw() +
   labs(colour = "Bacillota") +
   theme(legend.position = 'bottom')
 
@@ -720,12 +738,12 @@ tsne_b <-
 tsne_c <- 
   tsne_df %>%
   ggplot(aes(x = tsne1, y = tsne2, colour = ifelse(phylum == 'Bacteroidota', as.character(order), 'other'))) +
-  geom_point(size = 4, stroke = 1, alpha = 0.8, shape = 16) + 
+  geom_point(size = 2, stroke = 1, alpha = 0.8, shape = 16) + 
   scale_colour_manual(values = c(
     Bacteroidales = "#4dc87c",
     Flavobacteriales = "#88c88b",
     'other' = "grey")) +
-  theme_minimal() +
+  theme_bw() +
   labs(colour = "Bacteroidota") +
   theme(legend.position = 'bottom')
 
@@ -733,14 +751,14 @@ tsne_c <-
 tsne_d <- 
   tsne_df %>%
   ggplot(aes(x = tsne1, y = tsne2, colour = ifelse(phylum == 'Pseudomonadota', as.character(order), 'other'))) +
-  geom_point(size = 4, stroke = 1, alpha = 0.8, shape = 16) + 
+  geom_point(size = 2, stroke = 1, alpha = 0.8, shape = 16) + 
   scale_colour_manual(values = c(
     Enterobacterales = "#60cfde",
     RF32 = "#60dfd2",
     Burkholderiales = "#5cdfb5",
     'Rs-D84' = "#40df91",
     'other' = "grey")) +
-  theme_minimal() +
+  theme_bw() +
   labs(colour = "Pseudomonadota") +
   theme(legend.position = 'bottom')
 
@@ -748,10 +766,15 @@ grid.arrange(tsne_a, tsne_b, tsne_c, tsne_d, nrow = 2)
 ```
 
 
-## 4.4 - Compare MCI between taxonomic groups (Supplementary Figs. S2 and S3)
+## Compare MCI between taxonomic groups 
+
+The resulting plots correspond to Supplementary Figure S2 and S3 in the manuscript.
 
 ```{r tidy_taxonomy_and_colors, comment = "", message = FALSE, warning = FALSE}
-main_phylums <- c("Bacillota_A", "Bacillota", "Bacteroidota", "Cyanobacteriota","Pseudomonadota", "Actinomycetota", "Verrucomicrobiota", "Campylobacterota")
+main_phylums <- c("Bacillota_A", "Bacillota", "Bacteroidota",
+                  "Cyanobacteriota","Pseudomonadota", "Actinomycetota",
+                  "Verrucomicrobiota", "Campylobacterota"
+                  )
 
 selected_taxonomy_colors <- 
   taxonomy_colors %>% 
@@ -823,21 +846,23 @@ table_two <-
   bind_rows(., table_one) %>% 
   rename(group = 'order')
 
-border_groups <- c("Bacillota_A", "Bacillota", "Bacteroidota", "Cyanobacteriota",
-                   "Pseudomonadota", "Actinomycetota", "Verrucomicrobiota", 
-                   "Campylobacterota")
+border_groups <- c("Bacillota_A", "Bacillota", "Bacteroidota",
+                   "Cyanobacteriota", "Pseudomonadota", "Actinomycetota",
+                   "Verrucomicrobiota", "Campylobacterota")
 ```
  
- ### Overall MCI by taxonomic phylum and order 
+### Overall MCI by taxonomic phylum and order 
  
 ```{r mci_boxplot, comment = "", message = FALSE, warning = FALSE, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
 table_two %>% 
   filter(group %in% selected_groups$order) %>% 
   mutate(group = factor(group, levels = selected_groups$order)) %>% 
   ggplot() +
-  geom_jitter(aes(x = group, y = avg_mci), color = 'grey', alpha = 0.5, width = 0.1) +
-  geom_violin(aes(x = group, y = avg_mci, fill = group), color = "black", size = 0.01) +
-  theme_minimal() +
+  geom_jitter(aes(x = group, y = avg_mci), 
+              color = 'grey', alpha = 0.5, width = 0.1) +
+  geom_violin(aes(x = group, y = avg_mci, fill = group),
+              color = "black", size = 0.01) +
+  theme_bw() +
   xlab("Taxonomic group") +
   ylab("Genome average metabolic capacity") +
   scale_fill_manual(values = selected_taxonomy_colors$color_order) +
@@ -866,7 +891,7 @@ table_four %>%
   ggplot() +
   geom_jitter(aes(x = group, y = length), color = 'grey', alpha = 0.5, width = 0.1) +
   geom_violin(aes(x = group, y = length, fill = group), color = "black", size = 0.01) +
-  theme_minimal() +
+  theme_bw() +
   xlab("Taxonomic group") +
   ylab("Mag length") +
   scale_fill_manual(values = selected_taxonomy_colors$color_order) +
@@ -874,26 +899,21 @@ table_four %>%
   coord_flip()
 ```
 
-### Clean environment
-
 ```{r clean_4, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```
 
 <!--chapter:end:04_mag_catalogue.Rmd-->
 
-# Chapter 5 - Alpha diversity
+# Alpha diversity
 
-## 5.1 - Load MG data
+## Load MG data
 
 ```{r load_mg_data_alpha_div, warning = FALSE, comments = "", message = FALSE}
 load("data/data_mg.Rdata")
 ```
 
-
-## 5.2 - Hill numbers
-
-### Calculate alpha diversity
+## Calculate alpha diversity
 
 ```{r alpha_div, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Neutral
@@ -949,13 +969,15 @@ alpha_div <-
   left_join(log_seq_depth, by = 'animal_code')
 ```
 
-### Save data
+Save data
 
-```{r save_alpha, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r save_alpha, comment = "", message = FALSE, warning = FALSE,, eval = FALSE}
 save(alpha_div, file = "data/alpha_div.Rdata")
 ```
 
-### Alpha diversity by sampling day (Fig. 1e)
+### Alpha diversity by sampling day 
+
+The resulting plot corresponds to Figure 2a in the manuscript.
 
 ```{r plot_div, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 12, fig.fullwidth = TRUE}
 load("data/alpha_div.Rdata")
@@ -968,15 +990,14 @@ p_n <-
          group = sampling_time,
          colour = sampling_time)) +
   geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-               width = 0.3,
-               lwd = 3,
+               width = 0.2,
+               lwd = 2,
                outlier.color = NA,
                position = position_nudge(x = -.4)
                ) +
-  ylim(200,600) +
-  geom_jitter(width = 0.15, alpha = 0.6) +
+  geom_jitter(width = 0.1, alpha = 0.6) +
   stat_summary(geom = 'crossbar',
-               width = 0.3,
+               width = 0.2,
                fatten = 0,
                color = 'white',
                position = position_nudge(x = -.4),
@@ -986,7 +1007,7 @@ p_n <-
                ) }) +
   scale_fill_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   scale_color_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
-  theme_minimal() +
+  theme_bw() +
   ggtitle("Neutral diversity") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1000,15 +1021,14 @@ p_p <-
       group = sampling_time,
       colour = sampling_time)) +
   geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-               width = 0.3,
-               lwd = 3,
+               width = 0.2,
+               lwd = 2,
                outlier.color = NA,
                position = position_nudge(x = -.4)
                ) +
-  ylim(9,21) +
-  geom_jitter(width = 0.15, alpha = 0.6) +
+  geom_jitter(width = 0.1, alpha = 0.6) +
   stat_summary(geom = "crossbar",
-               width = 0.3,
+               width = 0.2,
                fatten = 0,
                color = "white",
                position = position_nudge(x = -.4),
@@ -1018,7 +1038,8 @@ p_p <-
                ) }) +
   scale_fill_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   scale_color_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
-  theme_minimal() + ylab("Effective number of strains") +
+  theme_bw() +
+  ylab("Effective number of strains") +
   ggtitle("Phylogenetic diversity") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1032,15 +1053,14 @@ p_f_kegg <-
          group = sampling_time,
          colour = sampling_time)) +
   geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-               width = 0.3,
-               lwd = 3,
+               width = 0.2,
+               lwd = 2,
                outlier.color = NA,
                position = position_nudge(x = -.4)
   ) +
-  ylim(1.30,1.50) +
-  geom_jitter(width = 0.15, alpha = 0.6) +
+  geom_jitter(width = 0.1, alpha = 0.6) +
   stat_summary(geom = "crossbar",
-               width = 0.3,
+               width = 0.2,
                fatten = 0,
                color = "white",
                position = position_nudge(x = -.4),
@@ -1050,8 +1070,9 @@ p_f_kegg <-
                ) }) +
   scale_fill_manual(values = c("#E69F00", "#CC6677", "#56B4E9")) +
   scale_color_manual(values = c("#E69F00", "#CC6677", "#56B4E9")) +
-  theme_minimal() + ylab("Effective number of strains") +
-  ggtitle("Functional diversity KEGG") +
+  theme_bw() +
+  ylab("Effective number of strains") +
+  ggtitle("Functional diversity") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
         legend.position = "none")
@@ -1060,7 +1081,9 @@ grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
 ```
 
 
-## 5.3 - Temporal development (Supplementary Table S2)
+## Temporal development
+
+The resulting tables correspond to Supplementary Table S2
 
 ### Neutral
 
@@ -1092,24 +1115,21 @@ m_div_f_kegg <-
 summary(m_div_f_kegg)
 ```
 
-
-### Clean environment
-
 ```{r clean_5, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```
 
 <!--chapter:end:05_alpha_diversity.Rmd-->
 
-# Chapter 6 - Bacterial community composition
+# Bacterial community composition
 
-## 6.1 - Load MG data
+## Load MG data
 
-```{r load_mg_data_beta_div, echo = FALSE}
+```{r load_mg_data_beta_div}
 load("data/data_mg.Rdata")
 ```
 
-## 6.2 - Hill numbers 
+## Hill numbers 
 
 ### Calculate beta diversity
 
@@ -1143,16 +1163,20 @@ beta_q1f_kegg <-
 
 ### Save data
 
-```{r save_beta, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r save_beta, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 save(beta_q1n, 
      beta_q1p, 
      beta_q1f_gifts,
      file = "data/beta_div.Rdata")
 ```
 
-# Compare individuals from same trial and pen between days 7-21 and 21-35 (Supplementary Fig. S3)
+### Compare individuals from same trial and pen between sampling days 
 
-```{r compare_ind, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+The resulting plot corresponds to Supplementary Figure S3 in the manuscript.
+
+```{r compare_ind, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
+load("data/beta_div.Rdata")
+
 metadata_2 <-
   chicken_metadata %>%
   dplyr::rename(second = 'animal_code',
@@ -1166,9 +1190,10 @@ betadiv_n_dis <-
   rename(animal_code = 'first') %>%
   left_join(chicken_metadata, by = 'animal_code') %>%
   left_join(metadata_2, by = 'second') %>%
-  mutate(diff = case_when(sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
-                          sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
-                          sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
+  mutate(diff = case_when(
+    sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
+    sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
+    sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
   mutate(diff_trial = case_when(trial == 'CA' & trial_2 == 'CA' ~ 'CA',
                                 trial == 'CB' & trial_2 == 'CB' ~ 'CB')) %>%
   mutate(diff_pen = case_when(pen == pen_2  ~ 'same')) %>%
@@ -1180,9 +1205,10 @@ betadiv_p_dis <-
   rename(animal_code = 'first') %>%
   left_join(chicken_metadata, by = 'animal_code') %>%
   left_join(metadata_2, by = 'second') %>%
-  mutate(diff = case_when(sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
-                          sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
-                          sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
+  mutate(diff = case_when(
+    sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
+    sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
+    sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
   mutate(diff_trial = case_when(trial == 'CA' & trial_2 == 'CA' ~ 'CA',
                                 trial == 'CB' & trial_2 == 'CB' ~ 'CB')) %>%
   mutate(diff_pen = case_when(pen == pen_2  ~ 'same')) %>%
@@ -1194,9 +1220,10 @@ betadiv_f_dis_kegg <-
   rename(animal_code = 'first') %>%
   left_join(chicken_metadata, by = 'animal_code') %>%
   left_join(metadata_2, by = 'second') %>%
-  mutate(diff = case_when(sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
-                          sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
-                          sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
+  mutate(diff = case_when(
+    sampling_time == '7' & sampling_time_2 == '21' ~ '7_21',
+    sampling_time == '21' & sampling_time_2 == '35' ~ '21_35',
+    sampling_time == '7' & sampling_time_2 == '35' ~ '7_35')) %>%
   mutate(diff_trial = case_when(trial == 'CA' & trial_2 == 'CA' ~ 'CA',
                                 trial == 'CB' & trial_2 == 'CB' ~ 'CB')) %>%
   mutate(diff_pen = case_when(pen == pen_2  ~ 'same')) %>%
@@ -1217,6 +1244,8 @@ betadiv_f_dis_kegg %>%
 ```
 
 ### Plot difference between sampling points for beta diversity 
+
+Not included in the manuscript
 
 ```{r plot_beta_diff, comment="", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE, eval = FALSE}
 # Neutral
@@ -1256,13 +1285,14 @@ p_f_kegg <-
   ggtitle('Functional KEGG beta div')
 
 
-grid.arrange(p_n, p_p, p_f_kegg, ncol = 4)
+grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
 ```
 
+## Effect of design in microbiome composition
 
-## 6.3 - Effect of design in microbiome composition
+### Permanova values for different metrics of beta diversity 
 
-### Permanova values for different metrics of beta diversity (Supplementary Table S3)
+The resulting stats correspond to Supplementary Table S3 in the manuscript.
 
 ```{r permanova_betadiv, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Dissimilarity tables
@@ -1311,7 +1341,7 @@ adonis2(b1f_dis_table_kegg ~ trial + sex + breed + treatment * age,
 
 ### Community composition
 
-```{r composition, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r composition, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 perm <- how(nperm = 999)
 setBlocks(perm) <- with(chicken_metadata, pen)
 
@@ -1327,12 +1357,13 @@ adonis2(hel ~ trial * sampling_time + breed + sex + treatment,
         data = chicken_metadata)
 ```
 
+## Community composition development
 
-## 6.4 - Community composition development
+### Distance-based RDA 
 
-### Distance-based RDA (Fig. 1f)
+The resulting plot corresponds to Figure 1f in the manuscript.
 
-```{r distance_rda, echo = FALSE, fig.height = 4, fig.width = 7, fig.fullwidth = TRUE, eval = FALSE}
+```{r distance_rda, fig.height = 4, fig.width = 7, fig.fullwidth = TRUE, eval = FALSE}
 set.seed(4)
 hel_bray <- vegdist(hel, method = 'bray')
 hel_bray_sqrt <- sqrt(hel_bray)
@@ -1362,23 +1393,23 @@ db_rda_scores %>%
   theme(legend.position = 'none')
 ```
 
-### Clean environment
-
 ```{r clean_6, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 rm(list = ls())
 ```
 
 <!--chapter:end:06_beta_diversity.Rmd-->
 
-# Chapter 7 - Bacterial temporal trends
+# Bacterial temporal trends
 
-## 7.1 - Load MG data
+## Load MG data
 
-```{r load_data_mag_trends, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_data_mag_trends, message = FALSE, warning = FALSE}
 load("data/data_mg.Rdata")
 ```
 
-## 7.2 - Temporal trends related to MCI (Fig. 2c)
+## Temporal trends related to MCI 
+
+The resulting plot corresponds to Figure 2c in the manuscript.
 
 ### Calculate t-SNE based on GIFTs
 
@@ -1490,8 +1521,9 @@ tsne_d35 <-
 grid.arrange(tsne_d7, tsne_d21, tsne_d35, ncol = 3)
 ```
 
+## Compositional barplots 
 
-## 7.3 - Compositional barplots (Fig. 2d)
+The resulting plot corresponds to Figure 2d in the manuscript.
 
 ### Compositional barplot at order level
 
@@ -1551,7 +1583,9 @@ phy_order_df %>%
   theme(panel.background = element_blank())
 ```
 
-### Horizontal barplot (not in the Supplementary, but for a more detailed exploration)
+### Horizontal barplot 
+
+The plot is not in the Supplementary, but for a more detailed exploration
 
 ```{r plot_horizontal, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
 phy_order_df %>%
@@ -1608,23 +1642,21 @@ phy_order_df %>%
         strip.text = element_text(size = 8)) 
 ```
 
-### Clean environment
-
 ```{r clean_7, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```
 
 <!--chapter:end:07_temporal_trends.Rmd-->
 
-# Chapter 8 - Temporal HMSC setup
+# Temporal HMSC setup
 
 HMSC models are computationally intensive. It is advisable to run this script on a server. The code is made to be reproduced on any supercomputer.
 
-## 8.1 - Load MG data
+## Load MG data
 
 ### Define directories
 
-```{r create_directories_hmsc_temp, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r create_directories_hmsc_temp, message = FALSE, warning = FALSE, eval = FALSE}
 # Create directories
 dir.create("temporal_hmsc")
 dir.create("temporal_hmsc/model_fit")
@@ -1639,7 +1671,7 @@ PanelDir = file.path(localDir, "temporal_hmsc/panels")
 
 ### Generate input objects
 
-```{r load_mg_data_hmsc_temp, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r load_mg_data_hmsc_temp, message = FALSE, warning = FALSE, eval = FALSE}
 # Load data
 load("data/data_mg.Rdata")
 
@@ -1660,11 +1692,11 @@ for (i in 1:ncol(design)) {
 ```
 
 
-## 8.2- Prepate data for HMSC
+## Prepate data for HMSC
 
 ### Define tables
 
-```{r hmsc_tables_temp, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r hmsc_tables_temp, message = FALSE, warning = FALSE, eval = FALSE}
 # Genome count table (quantitative community data)
 YData <- log1p(mag_weighted %>% 
                  t() %>% 
@@ -1682,7 +1714,7 @@ YData <- YData[,colnames(YData) %in% genome_tree$tip.label]  # Filter missing MA
 
 ## Define formula
 
-```{r hmsc_formumla, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r hmsc_formumla, message = FALSE, warning = FALSE, eval = FALSE}
 # Define XFormula
 XFormula_Time <- ~log_seq_depth + trial + sex + breed + treatment + age
 
@@ -1693,7 +1725,7 @@ rL.Pen <- HmscRandomLevel(units = levels(StudyDesign$pen))
 
 ### Define HMSC model
 
-```{r hmsc_model, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r hmsc_model, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 m <- Hmsc(Y = YData,
                 XData = XData,
                 XFormula = XFormula_Time,
@@ -1708,7 +1740,7 @@ save(m, file = file.path(ModelDir,"unfitted_model.Rdata"))
 
 ### Define MCMC characteristics
 
-```{r mcmc_features, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r mcmc_features, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 ## How often to sample the MCM
 samples_list = c(5, 250, 250)
 
@@ -1724,10 +1756,9 @@ load(file.path(ModelDir, "unfitted_model.Rdata"))
 unf_model <- m
 ```
 
+## Fit model
 
-## 8.3 - Fit model
-
-```{r fit_model, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r fit_model, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 set.seed(1)
 
 for (Lst in 1:length(samples_list)) {
@@ -1752,10 +1783,11 @@ for (Lst in 1:length(samples_list)) {
 }
 ```
 
+## Evaluate convergence 
 
-## 8.4 - Evaluate convergence (Figure not added to Supplementary but could be included)
+Figure not added to Supplementary but could be included.
 
-```{r convergence, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r convergence, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 set.seed(1)
 
 for (i in 1) {
@@ -1839,13 +1871,17 @@ for (i in 1) {
 }
 ```
 
+```{r clean_8, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
+```
+
 <!--chapter:end:08_hmsc_temporal_setup.Rmd-->
 
-# Chapter 9 - HMSC analysis
+# HMSC analysis
 
-## 9.1 - Load model
+## Load model
 
-```{r load_model_temp, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_model_temp, comment = "", message = FALSE, warning = FALSE}
 # Directory
 localDir = "."
 ModelDir = file.path(localDir, "temporal_hmsc/models")
@@ -1853,20 +1889,21 @@ MFDir = file.path(localDir, "temporal_hmsc/model_fit")
 
 # Load model
 if(!file.exists("temporal_hmsc/models/temporal_model_thin_10_samples_250_chains_4.Rdata")){
-  download.file(url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/temporal_model_thin_10_samples_250_chains_4.Rdata',
-              destfile = 'temporal_hmsc/models/temporal_model_thin_10_samples_250_chains_4.Rdata', method = 'curl')
+  download.file(
+    url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/temporal_model_thin_10_samples_250_chains_4.Rdata',
+    destfile = 'temporal_hmsc/models/temporal_model_thin_10_samples_250_chains_4.Rdata', method = 'curl'
+    )
 }
 
 load(file = file.path(ModelDir, 'temporal_model_thin_10_samples_250_chains_4.Rdata'))
 ```
 
-
-## 9.2 - Cross-validation
+## Cross-validation
 
 The cross-validation part is also computationally intense. 
 Make sure you have the right capacity for it. 
 
-```{r cross_val_temp, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r cross_val_temp, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Create partitions
 set.seed(12)
 partition_1 <- createPartition(hM = m, nfolds = 2)
@@ -1887,7 +1924,7 @@ mean(MF$R2)
 
 ### Model fit using 2-fold CV: samples randomly assigned to folds
 
-```{r cross_val_first_part, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r cross_val_first_part, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 set.seed(1)
 predY.CV_1 <- computePredictedValues(m,
                                      expected = TRUE,
@@ -1907,7 +1944,7 @@ mean(MF_CV_1$R2)
 
 ### Model fit using 2-fold CV: each fold contains the samples from one trial
 
-```{r cross_val_second_part, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+```{r cross_val_second_part, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 set.seed(1)
 predY.CV_2 <- computePredictedValues(m,
                                      expected = TRUE,
@@ -1925,10 +1962,9 @@ MF_CV_2 <- readRDS(file = filename)
 mean(MF_CV_2$R2)
 ```
 
+## Functional structure
 
-## 9.3 - Functional structure
-
-```{r func_structure, message = FALSE, warning = FALSE, echo = FALSE}
+```{r func_structure, comment = "", message = FALSE, warning = FALSE, echo = FALSE}
 beta_post <- getPostEstimate(m, parName = "Beta")
 plotBeta(m, beta_post, supportLevel = 0.95, plotTree = TRUE)
 
@@ -1948,10 +1984,9 @@ plotGradient(m,
              showData = TRUE)
 ```
 
+## Bacterial temporal trends table
 
-## 9.4 - Bacterial temporal trends table
-
-```{r mag_trends, message = FALSE, warning = FALSE, echo = FALSE}
+```{r mag_trends, comment = "", message = FALSE, warning = FALSE, echo = FALSE}
 # Increasing MAGs
 increasers <- colnames(beta_post$support)[beta_post$support[8,] > 0.95]
 increasers_df <- data.frame(mag_id = increasers,
@@ -1974,15 +2009,16 @@ trends <-
   write_tsv("data/hmsc_mag_trend.tsv")
 ```
 
+## Correlate bacterial MCI and response to time 
 
-## 9.5 - Correlate bacterial MCI and response to time (Fig. 2f)
+The resulting plot corresponds to Figure 2f in the manuscript.
 
-```{r load_data_mag, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_data_mag, comment = "", message = FALSE, warning = FALSE, echo = FALSE}
 load("data/data_mg.Rdata")
 trends <- read_tsv("data/hmsc_mag_trend.tsv")
 ```
 
-```{r mci_response, message = FALSE, warning = FALSE, echo = FALSE}
+```{r mci_response, comment = "", message = FALSE, warning = FALSE, echo = FALSE}
 mci_df <-
   gifts_elements %>%
   as.data.frame() %>% 
@@ -2004,20 +2040,22 @@ trends %>%
         legend.position = 'none')
 ```
 
+## Variance partitioning 
 
-## 9.6 - Variance partitioning (Supplementary Table S4)
+The resulting results correspond to Supplementary Table S4 in the manuscript.
 
-```{r variance_partitioning, echo = FALSE}
+```{r variance_partitioning, comment = "", message = FALSE, warning = FALSE, echo = FALSE}
 VP <- computeVariancePartitioning(m)
 plotVariancePartitioning(hM = m, VP = VP)
 ```
 
+## Phylogenetic correlogram 
 
-## 9.7 - Phylogenetic correlogram (Fig. 1e)
+The resulting plot corresponds to Figure 1e in the manuscript.
 
 ### Calcultate phylogenetic distance 
 
-```{r load_data_community, echo = FALSE, eval = FALSE}
+```{r load_data_community, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 pw_phylo_dist <- cophenetic.phylo(genome_tree)
 xy <- t(combn(colnames(pw_phylo_dist), 2))
 pw_phylo_dist <- data.frame(xy, dist = pw_phylo_dist[xy])
@@ -2068,7 +2106,7 @@ tax_table <-
   write_tsv("data/taxonomy_distance.tsv")
 ```
 
-```{r plot_data_community, echo = FALSE, eval = FALSE}
+```{r plot_data_community, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 tax_table <- read_tsv("data/taxonomy_distance.tsv")
 
 tax_table %>%
@@ -2085,7 +2123,7 @@ ggplot(aes(x = distance,
 
 ### Phylogenetic signal
 
-```{r phylo_signal, echo = FALSE, eval = FALSE}
+```{r phylo_signal, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
 mpost <- convertToCodaObject(m)
 quantile(unlist(mpost$Rho), probs = c(.05,.5,.95))
 
@@ -2110,8 +2148,6 @@ age.cg <- readRDS(file = "age.cg.rds")
 plot(age.cg)
 ```
 
-### Clean environment
-
 ```{r clean_9, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```
@@ -2119,20 +2155,21 @@ rm(list = ls())
 
 <!--chapter:end:09_hmsc_temporal_analysis.Rmd-->
 
-# Chapter 10 - Bacterial community composition
+# Bacterial community composition
 
-## 10.1 - Load MG data
+## Load MG data
 
 ```{r load_data_mag_comp, message = FALSE, warning = FALSE, echo = FALSE}
 load("data/data_mg.Rdata")
 ```
 
+## GIFTs per MAG
 
-## 10.2 - GIFTs per MAG
+### Plot GIFTs of all bacteria by element 
 
-### Plot GIFTs of all bacteria by element (not included in Supplementary)
+This plot is not included in Supplementary
 
-```{r density_curves, message = FALSE, warning = FALSE}
+```{r density_curves, comment = "", message = FALSE, warning = FALSE}
 gifts_elements %>%
   as.data.frame() %>% 
   rownames_to_column(var = 'genome') %>% 
@@ -2151,12 +2188,11 @@ gifts_elements %>%
         legend.position = 'top')
 ```
 
-
-## 10.3 - GIFTs per community 
+## GIFTs per community 
 
 ### Calculate community GIFTs
 
-```{r community_gifts, message = FALSE, warning = FALSE}
+```{r community_gifts, comment = "", message = FALSE, warning = FALSE}
 elements_com <- to.community(gifts_elements, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2) 
 
 funcs_com <- to.community(gifts_functions, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2)
@@ -2166,14 +2202,16 @@ domains_com <- to.community(gifts_domains, sweep(hel, 2, colSums(hel), FUN = "/"
 
 ### Save data
 
-```{r save_gifts, message = FALSE, warning = FALSE}
+```{r save_gifts, comment = "", message = FALSE, warning = FALSE}
 save(elements_com,
      funcs_com,
      domains_com,
      file = "data/mci_com.Rdata")
 ```
 
-### Plot community MCI (Fig. 2g)
+### Plot community MCI 
+
+The resulting plot corresponds to Figure 2g in the manuscript.
 
 ```{r plot_com_mci, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
 load("data/mci_com.Rdata")
@@ -2215,30 +2253,27 @@ funcs_com %>%
 
 ```
 
-### Clean environment
-
 ```{r clean_10, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```
 
 <!--chapter:end:10_metabolic_capacity_index.Rmd-->
 
-# Chapter 11 - Associate microbial community metrics with chicken body weight
+# Associate microbial community metrics with chicken body weight
 
-## 11.1 - Load MG and MT data
+## Load MG and MT data
 
-```{r load_data_mag_div_bw, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_data_mag_div_bw, message = FALSE, warning = FALSE}
 load("data/data_mg.Rdata")
 load("data/alpha_div.Rdata")
 load("data/mci_com.Rdata")
 ```
 
-
-## 11.2 - Associate alpha diversity metrics with chicken BW
+## Associate alpha diversity metrics with chicken BW
 
 ### Neutral 
 
-```{r plot_regression_n, warning =FALSE, comments = "", message = FALSE}
+```{r plot_regression_n, comment = "", message = FALSE, warning = FALSE}
 ggplot(alpha_div, aes(x = neutral, y = chicken_body_weight)) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -2247,7 +2282,7 @@ ggplot(alpha_div, aes(x = neutral, y = chicken_body_weight)) +
 
 ## Phylogenetic
 
-```{r plot_regression_p, warning = FALSE, comments = "", message = FALSE}
+```{r plot_regression_p, comment = "", message = FALSE, warning = FALSE}
 ggplot(alpha_div, aes(x = phylogenetic, y = chicken_body_weight)) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -2256,19 +2291,20 @@ ggplot(alpha_div, aes(x = phylogenetic, y = chicken_body_weight)) +
 
 ## Functional KEGG
 
-```{r plot_regression_f, warning = FALSE, comments = "", message = FALSE}
+```{r plot_regression_f, comment = "", message = FALSE, warning = FALSE}
 ggplot(alpha_div, aes(x = functional_kegg, y = chicken_body_weight)) +
   geom_point() +
   geom_smooth(method = "lm") +
   facet_wrap(~ sampling_time * trial, scales = 'free')
 ```
 
+## Linear regressions 
 
-## 11.3 - Linear regressions 
+### Neutral 
 
-### Neutral (Fig. 3a)
+The resulting plot corresponds to Figure 3a in the manuscript.
 
-```{r calculate_lms_neutral, warning = FALSE, comments = "", message = FALSE}
+```{r calculate_lms_neutral, comment = "", message = FALSE, warning = FALSE}
 div_all_day_35 <-
   alpha_div %>%
   filter(sampling_time == '35') %>%
@@ -2289,7 +2325,7 @@ plot_model(N,
 
 ### Phylogenetic
 
-```{r calculate_lms_p, warning = FALSE, comments = "", message = FALSE}
+```{r calculate_lms_p, comment = "", message = FALSE, warning = FALSE}
 P <- lme(chicken_body_weight ~ age + trial + phylogenetic,
          random = ~1|pen,
          data = div_all_day_35)
@@ -2305,7 +2341,7 @@ plot_p <-
 
 ### Functional KEGG
 
-```{r calculate_lms_f, warning = FALSE, comments = "", message = FALSE}
+```{r calculate_lms_f, comment = "", message = FALSE, warning = FALSE}
 Q_kegg <- lme(chicken_body_weight ~ age + trial + functional_kegg,
          random = ~1|pen,
          data = div_all_day_35)
@@ -2319,10 +2355,9 @@ plot_q <-
              show.data = TRUE)
 ```
 
+## Associate community MCI with diversity
 
-## 11.4 - Associate community MCI with diversity
-
-```{r mci_bw, warning = FALSE, comments = "", message = FALSE}
+```{r mci_bw, comment = "", message = FALSE, warning = FALSE}
 domains_com_2 <-
   funcs_com %>%
   as.data.frame(optional = TRUE) %>% 
@@ -2352,20 +2387,18 @@ Q <- lme(functional_kegg ~ age + trial + overall_com_mci,
 summary(Q)
 ```
 
+## Associate community MCI with chicken BW
 
-## 11.5 - Associate community MCI with chicken BW
-
-```{r com_mci_vs_bw, warning = FALSE, comments = "", message = FALSE}
+```{r com_mci_vs_bw, comment = "", message = FALSE, warning = FALSE}
 MCI <- lme(chicken_body_weight ~ age + trial + overall_com_mci,
          random = ~1|pen,
          data = domains_com_2)
 summary(MCI)
 ```
 
+## Associate community weighted genome size with chicken BW
 
-# 11.6 - Associate community weighted genome size with chicken BW
-
-```{r com_genome_size_vs_bw, warning = FALSE, comments = "", message = FALSE}
+```{r com_genome_size_vs_bw, comment = "", message = FALSE, warning = FALSE}
 metadata_day_35 <-
   chicken_metadata %>%
   filter(sampling_time == "35")
@@ -2388,23 +2421,21 @@ summary(L)
 plot(L)
 ```
 
-### Clean environment
-
 ```{r clean_11, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```
 
 <!--chapter:end:11_alpha_diversity_vs_bw.Rmd-->
 
-# Chapter 12 - Bacteria vs Chicken BW HMSC setup
+# Bacteria vs Chicken BW HMSC setup
 
 ### HMSC models are computationally intensive. It is advisable to run this script on a server. The code is made to be reproduced on any supercomputer.
 
-## 12.1 - Load MG and MT data
+## Load MG and MT data
 
 ### Define directories
 
-```{r create_directories_hmsc_bw, echo = FALSE, eval = FALSE}
+```{r create_directories_hmsc_bw, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Create directories
 dir.create("hmsc_bw")
 dir.create("hmsc_bw/model_fit")
@@ -2418,7 +2449,7 @@ ModelDir = file.path(localDir, "hmsc_bw/models")
 
 ### Generate input objects
 
-```{r load_mg_data_hmsc_bw, echo = FALSE, eval = FALSE}
+```{r load_mg_data_hmsc_bw, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Load data
 load("data/data_mg.Rdata")
 
@@ -2458,12 +2489,11 @@ dim(design_day35)
 mean(rownames(design_day35) == rownames(mag_weighted_day35))
 ```
 
-
-## 12.2 - Prepate data for HMSC
+## Prepate data for HMSC
 
 ### Define tables
 
-```{r hmsc_tables_bw, echo = FALSE, eval = FALSE}
+```{r hmsc_tables_bw, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Genome count table (quantitative community data)
 YData <- log1p(mag_weighted_day35)
 
@@ -2492,7 +2522,7 @@ rownames(TrData) <- colnames(YData)
 
 ### Define formulas
 
-```{r define_model_bw, echo = FALSE, eval = FALSE}
+```{r define_model_bw, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Define TrFormula
 TrFormula <- ~MCI
 
@@ -2506,7 +2536,7 @@ rL.Pen <- HmscRandomLevel(units = levels(StudyDesign$pen))
 
 ### Define HMSC model
 
-```{r hmsc_model_bw, echo = FALSE, eval = FALSE}
+```{r hmsc_model_bw, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 m <- Hmsc(Y = YData,
                 XData = XData,
                 XFormula = XFormula,
@@ -2524,7 +2554,7 @@ rm(list = ls())
 
 ### Define MCMC
 
-```{r mcmc_features_bw, echo = FALSE, eval = FALSE}
+```{r mcmc_features_bw, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Chain characteristics
 ## How often to sample the MCM
 samples_list = c(5, 250, 250)
@@ -2541,10 +2571,9 @@ load(file.path(ModelDir,"unfitted_model.Rdata"))
 unf_model <- m
 ```
 
+## Fit model
 
-## 12.3 - Fit model
-
-```{r fit_model_bw, echo = FALSE, eval = FALSE}
+```{r fit_model_bw, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 set.seed(1)
 
 for (Lst in 1:length(samples_list)) {
@@ -2569,21 +2598,19 @@ for (Lst in 1:length(samples_list)) {
 }
 ```
 
-### Clean environment
-
 ```{r clean_12, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 rm(list = ls())
 ```
 
 <!--chapter:end:12_hmsc_bw_setup.Rmd-->
 
-# Chapter 13 - Bacteria vs Chicken BW HMSC analysis
+# Bacteria vs Chicken BW HMSC analysis
 
-## 13.1 - Load model
+## Load model
 
 ### Define directories
 
-```{r define_directories_hmsc_bw, comment = "", echo = FALSE}
+```{r define_directories_hmsc_bw, comment = "", message = FALSE, warning = FALSE}
 # Directory
 localDir = "."
 ModelDir = file.path(localDir, "hmsc_bw/models")
@@ -2592,19 +2619,19 @@ MFDir <- file.path(localDir, "hmsc_bw/model_fit")
 ```
 
 ### Load model
-```{r load_model_hmsc_bw, comment = "", echo = FALSE}
+```{r load_model_hmsc_bw, ccomment = "", message = FALSE, warning = FALSE}
 if(!file.exists("hmsc_bw/models/bw_model_thin_10_samples_250_chains_4.Rdata")){
-  download.file(url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/bw_model_thin_10_samples_250_chains_4.Rdata',
-              destfile = 'hmsc_bw/models/bw_model_thin_10_samples_250_chains_4.Rdata', method = 'curl')
+  download.file(
+    url = 'https://sid.erda.dk/share_redirect/Bd8UfDO2D6/bw_model_thin_10_samples_250_chains_4.Rdata',
+    destfile = 'hmsc_bw/models/bw_model_thin_10_samples_250_chains_4.Rdata', method = 'curl')
 }
 
 load(file = file.path(ModelDir,"bw_model_thin_10_samples_250_chains_4.Rdata"))
 ```
 
+## Evaluate model
 
-## 13.2 - Evaluate model
-
-```{r evalute_model, echo = FALSE, eval = FALSE}
+```{r evalute_model, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 partition <- createPartition(m, nfolds = 4)
 preds <- computePredictedValues(m, partition = partition, nChains = 1) # nParallel = nChains
 MFCV <- evaluateModelFit(hM = m, predY = preds)
@@ -2612,19 +2639,21 @@ MFCV <- evaluateModelFit(hM = m, predY = preds)
 save(MFCV,file = file.path(MFDir, "hmsc_bw/model_fit/MF_thin_10_samples_250_chains_4.Rdata"))
 ```
 
+## Examine species responses 
 
-## 13.3 - Examine species responses (Plot not included in Supplementary)
+Plot not included in Supplementary
 
-```{r mag_response, echo = FALSE, eval = FALSE}
+```{r mag_response, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 beta_post <- getPostEstimate(m, parName = "Beta")
 
 plotBeta(m, beta_post,supportLevel = 0.9, plotTree = TRUE)
 ```
 
+## Examine variance partition 
 
-## 13.4 - Examine variance partition (Plot not included in Supplementary)
+Plot not included in Supplementary
 
-```{r variance_part_bw, echo = FALSE, eval = FALSE}
+```{r variance_part_bw, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 varpartition <- computeVariancePartitioning(m)
 
 plotVariancePartitioning(m, VP = varpartition)
@@ -2636,7 +2665,7 @@ bw_support <- beta_post$support[4,]
 
 ## Create a data table
 
-```{r create_data_table, echo = FALSE, eval = FALSE}
+```{r create_data_table, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 load("hmsc_bw/model_fit/MF_thin_10_samples_250_chains_4.Rdata")
 
 rel_abu <- colMeans(vegan::decostand(exp(m$Y), method = "total")) * 100
@@ -2654,9 +2683,11 @@ rownames(toplot) <- NULL
 write.table(toplot, file = "data/data.txt", row.names = F)
 ```
 
-### Associate bacteria response with chicken BW (not included in Supplementary)
+### Associate bacteria response with chicken BW 
 
-```{r mag_response_chicken_bw, echo = FALSE, eval = FALSE}
+not included in Supplementary
+
+```{r mag_response_chicken_bw, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 toplot <- read.table("data/data.txt", , row.names = F)
 
 ggplot() +
@@ -2673,10 +2704,9 @@ ggplot() +
   theme_minimal()
 ```
 
+## Create table with HMSC results
 
-## 13.5 - Create table with HMSC results
-
-```{r create_table, echo = FALSE, eval = FALSE}
+```{r create_table, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Total relative abundance of species associated positively and negatively with body weight (~9%)
 sum(toplot$rel_abu[(toplot$bw_support > 0.975 | toplot$bw_support < 0.025) & (toplot$var_pred > mean(toplot$var_pred))])
 
@@ -2720,19 +2750,17 @@ bw_parameter_df$bw_trend[is.na(bw_parameter_df$bw_trend)] <- "neutral"
 write_tsv(bw_parameter_df,file = "data/hmsc_bw_trend.tsv")
 ```
 
-### Clean environment
-
 ```{r clean_13, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```
 
 <!--chapter:end:13_hmsc_bw_analysis.Rmd-->
 
-# Chapter 14 - Comparing metabolic capacity of positively and negatively associated bacteria
+# Comparing metabolic capacity of positively and negatively associated bacteria
 
-## 14.1 - Load MG data
+## Load MG data
 
-```{r load_data_func, echo = FALSE}
+```{r load_data_func, comment = "", message = FALSE, warning = FALSE}
 load("data/data_mg.Rdata")
 
 trends_bw <-
@@ -2765,13 +2793,13 @@ avg_mci_deg <- rowMeans(gifts[,grepl("D",names(gifts))])
 gifts_funct$avg_mci_deg <- avg_mci_deg
 ```
 
-## 14.2 - Taxonomy of positively and negatively associated MAGs
+## Taxonomy of positively and negatively associated MAGs
 
 ### Positive group
 
 All MAGs with positive association belong to RF39
 
-```{r Taxonomy_pos, echo = FALSE}
+```{r Taxonomy_pos, comment = "", message = FALSE, warning = FALSE}
 trends_bw %>%
   filter(trend_09 == "positive") %>%
   select(genome) %>% 
@@ -2784,7 +2812,7 @@ trends_bw %>%
 
 MAGs with negative association belong to various orders, mainly to Lachnospirales and Oscillospirales
 
-```{r Taxonomy_neg, echo = FALSE}
+```{r Taxonomy_neg, comment = "", message = FALSE, warning = FALSE}
 trends_bw %>%
   filter(trend_09 == "negative") %>%
   select(genome) %>%
@@ -2794,10 +2822,9 @@ trends_bw %>%
   sort()
 ```
 
+## Compute MCIs of BW positive and negative associated communities
 
-## 14.3 - Compute MCIs of BW positive and negative associated communities
-
-```{r bw_groups, echo = FALSE}
+```{r bw_groups, comment = "", message = FALSE, warning = FALSE}
 gifts_funct_bw_pos <-
   gifts_funct %>%
   mutate(avg_mci_bio = gifts_funct$avg_mci_bio,
@@ -2823,7 +2850,7 @@ gifts_funct_bw_neg <-
   select(-bw_effect)
 ```
 
-```{r boots_mci, echo = FALSE}
+```{r boots_mci, comment = "", message = FALSE, warning = FALSE}
 mean_func <- function(data, indices) {
   return(mean(data[indices]))
 }
@@ -2878,7 +2905,7 @@ gifts_funct_df <- data.frame(rbind(gifts_funct_bw_pos %>% mutate(bw_association 
 
 ### MCI comparisons of biosynthesis pathways
 
-```{r mci_groups, echo = FALSE}
+```{r mci_groups, comment = "", message = FALSE, warning = FALSE}
 ## B01
 p_B01_mg <-
   ggplot() +
@@ -3104,13 +3131,13 @@ p_Mci_mg <-
 
 ### The significant ones
 
-```{r selected_plots_bio, echo = FALSE, fig.height = 4, fig.width = 10, fig.fullwidth = TRUE}
+```{r selected_plots_bio, fig.height = 4, fig.width = 10, fig.fullwidth = TRUE}
 grid.arrange(p_Mci_mg, p_B04_mg, p_B08_mg, ncol = 3)
 ```
 
 ### All
 
-```{r combined_plots_bio, echo = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
+```{r combined_plots_bio, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
 grid.arrange(p_Mci_bio_mg, p_B01_mg, p_B02_mg,
              p_B03_mg, p_B04_mg, p_B06_mg, 
              p_B07_mg, p_B08_mg, p_B09_mg,
@@ -3119,7 +3146,7 @@ grid.arrange(p_Mci_bio_mg, p_B01_mg, p_B02_mg,
 
 #### MCI comparisons of degradation pathways
 
-```{r mci_groups_deg, echo = FALSE}
+```{r mci_groups_deg, comment = "", message = FALSE, warning = FALSE}
 ## D01
 p_D01_mg <-
   ggplot() +
@@ -3304,7 +3331,7 @@ p_Mci_deg_mg <-
 
 ### All 
 
-```{r combined_plots_deg, echo = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
+```{r combined_plots_deg, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
 grid.arrange(p_Mci_deg_mg, p_D01_mg, p_D02_mg,
              p_D03_mg, p_D05_mg,
              p_D06_mg, p_D07_mg, p_D08_mg,
@@ -3312,9 +3339,11 @@ grid.arrange(p_Mci_deg_mg, p_D01_mg, p_D02_mg,
 ```
 
 
-## 14.4 - Heatmap of MCI at element level (Not included in the Supplementary)
+## Heatmap of MCI at element level
 
-```{r mci_element_plot, echo = FALSE}
+Not included in Supplementary
+
+```{r mci_element_plot, comment = "", message = FALSE, warning = FALSE}
 gifts_bw_pos <-
   gifts %>%
   mutate(bw_effect = trends_bw$trend_09) %>%
@@ -3362,19 +3391,17 @@ gifts_bw_df_long %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.position = "none")
 ```
 
-### Clean environment
-
 ```{r clean_14, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```
 
 <!--chapter:end:14_functionality_bw.Rmd-->
 
-# Chapter 15 - Comparing activity of positively and negatively associated bacteria
+# Comparing activity of positively and negatively associated bacteria
 
-## 15.1 - Load data
+## Load data
 
-```{r load_data_act, echo = FALSE}
+```{r load_data_act, comment = "", message = FALSE, warning = FALSE}
 load("data/data_mt.Rdata")
 load("data/data_mg.Rdata")
 
@@ -3389,11 +3416,13 @@ trends_bw <-
 ```
 
 
-## 15.2 - Expression profiles of positively and negatively associated bacteria (Fig. 3c)
+## Expression profiles of positively and negatively associated bacteria 
+
+The resulting plot corresponds to Figure 3c in the manuscript.
 
 ### Element-based expression table of day 35 individuals
 
-```{r element_table, echo = FALSE}
+```{r element_table, comment = "", message = FALSE, warning = FALSE}
 mag_elements <- lapply(expr_counts, function(x) to.elements(x, GIFT_db2))
 
 # Convert correct tibble for applying CLR conversion
@@ -3427,7 +3456,7 @@ mean(metadata_mt$animal_code == colnames(mag_elements_day_35[,-c(1:3)]))
 
 ### Normalised expression table
 
-```{r normalise_data, echo = FALSE}
+```{r normalise_data, comment = "", message = FALSE, warning = FALSE}
 normalisation_factor <- 
   expr_counts %>% # Normalisation is performed with dist_expr because it contains the transcripts for all the functions, not only the functions considered important for the host in distillR.
   lapply(function(x) rowSums(x)) %>%
@@ -3445,7 +3474,7 @@ norm_elements_day_35 <- data.frame(mag_elements_day_35[,c(1:3)], norm_elements_d
 
 ### Filter MAGs associated with chicken body weight 
 
-```{r filter_reduced_mags, echo = FALSE}
+```{r filter_reduced_mags, comment = "", message = FALSE, warning = FALSE}
 positive_mags <- 
   trends_bw %>%
   filter(trend_09 == "positive") %>%
@@ -3471,7 +3500,7 @@ mag_subset_elements <-
 
 ### Tidy data
 
-```{r tidy_for_heatmap, echo = FALSE}
+```{r tidy_for_heatmap, comment = "", message = FALSE, warning = FALSE}
 # Filter relative abundance table
 mag_weighted_day35 <- 
   mag_weighted %>%
@@ -3510,7 +3539,7 @@ mag_subset_elements_2 <-
 
 ### Plot 
 
-```{r plot_heatmap, echo = FALSE}
+```{r plot_heatmap, comment = "", message = FALSE, warning = FALSE}
 mag_subset_elements_2 %>%
   ggplot(aes(x = Element,
              y = genome,
@@ -3530,10 +3559,9 @@ mag_subset_elements_2 %>%
         legend.position = "none")
 ```
 
+## Taxonomy of reduced MAGs
 
-## 15.3 - Taxonomy of reduced MAGs
-
-```{r taxonomy_red_mags, warning = FALSE, comments = "", message = FALSE}
+```{r taxonomy_red_mags, comment = "", message = FALSE, warning = FALSE}
 reduced_mags1 <-
   mag_subset_elements_2 %>%
   filter(Element == "B0101") %>%
@@ -3574,7 +3602,7 @@ reduced_mags_df <-
 
 All reduced MAGs with positive association belong to RF39
 
-```{r positives_red_mags, warning = FALSE, comments = "", message = FALSE}
+```{r positives_red_mags, comment = "", message = FALSE, warning = FALSE}
 positives <-
   reduced_mags_df %>%
   filter(bw_association == "positive") %>%
@@ -3589,7 +3617,7 @@ genome_taxonomy[genome_taxonomy$genome %in% positives,] %>%
 
 Reduced MAGs with negative association belong to various orders, mainly to Christensenellales
 
-```{r negatives_red_mags, warning = FALSE, comments = "", message = FALSE}
+```{r negatives_red_mags, comment = "", message = FALSE, warning = FALSE}
 negatives <-
   reduced_mags_df %>%
   filter(bw_association == "negative") %>%
@@ -3603,9 +3631,11 @@ genome_taxonomy[genome_taxonomy$genome %in% negatives,] %>%
 ```
 
 
-## 15.4 - Genomic characteristics of genome reduced MAGs (Fig. 4a)
+## Genomic characteristics of genome reduced MAGs 
 
-```{r calculating_bootstraps, warning = FALSE, comments = "", message = FALSE}
+The resulting plot corresponds to Figure 4a in the manuscript.
+
+```{r calculating_bootstraps, comment = "", message = FALSE, warning = FALSE}
 gifts <-
   gifts_elements %>%
   as.data.frame() %>% 
@@ -3654,7 +3684,7 @@ boot_mci_df[2,"ci_025"] <- bw_neg_redMAG_mci_boot_ci$bca[,4]
 boot_mci_df[2,"ci_975"] <- bw_neg_redMAG_mci_boot_ci$bca[,5]
 ```
 
-```{r plot_avg_mci, warning = FALSE, comments = "", message = FALSE, eval = FALSE, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
+```{r plot_avg_mci, warning = FALSE, comments = "", message = FALSE, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
 mci_df %>%
   ggplot()+
   geom_jitter(aes(x = bw_association, y = avg_mci, color = bw_association),
@@ -3678,7 +3708,7 @@ mci_df %>%
 
 ### Genome length of genome reduced MAGss (Fig. 4b)
 
-```{r calculating_bootstraps_length, echo = FALSE}
+```{r calculating_bootstraps_length, comment = "", message = FALSE, warning = FALSE}
 boot_length_df <- data.frame(matrix(nrow = 2, ncol = 4))
 
 colnames(boot_length_df) <- c("bw_association", "mean", "ci_025", "ci_975")
@@ -3699,7 +3729,7 @@ boot_length_df[2, "ci_025"] <- bw_neg_red_mag_length_boot_ci$bca[,4]
 boot_length_df[2, "ci_975"] <- bw_neg_red_mag_length_boot_ci$bca[,5]
 ```
 
-```{r plot_length, echo = FALSE, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
+```{r plot_length, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
 length_df %>%
   ggplot() +
   geom_jitter(aes(x = bw_association, y = mag_length, color = bw_association),
@@ -3721,9 +3751,11 @@ length_df %>%
         axis.title.y = element_text(size = 14)) 
 ```
 
-### Expression profiles of genome reduced MAGs (Fig. 4c)
+### Expression profiles of genome reduced MAGs 
 
-```{r pcoa_data, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+(Fig. 4c)
+
+```{r pcoa_data, warning = FALSE, comments = "", message = FALSE}
 comp_reduced_mags <- 
   reduced_mags_df %>% 
   left_join(genome_taxonomy, by = 'genome') %>%
@@ -3750,7 +3782,7 @@ envfit_gifts_df <-
   select(gift_id, PCOA1, PCOA2)
 ```
 
-```{r pcoa, warning = FALSE, comments = "", message = FALSE, eval = FALSE, fig.height = 12, fig.width = 12, fig.fullwidth = TRUE}
+```{r pcoa, warning = FALSE, comments = "", message = FALSE, fig.height = 12, fig.width = 12, fig.fullwidth = TRUE}
 ggplot() +
   geom_point(data = pcoa_reduced_mags_df, 
              aes(x = PCOA1, y = PCOA2, color = bw_association), 
@@ -3766,8 +3798,6 @@ ggplot() +
   theme_minimal() +
   theme(legend.position = 'none')
 ```
-
-### Clean environment
 
 ```{r clean_15, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())

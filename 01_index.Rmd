@@ -1,9 +1,9 @@
 ---
 title: "AlberdiLab | Marcos et al. 2025"
-subtitle: "Title to be added"
+subtitle: "Bacteria with reduced genomes positively associate with chicken body weight"
 author:
   - Sofia Marcos, Iñaki Odriozola, Ostaizka Aizpurua, Raphael Eisenhofer, Sarah Siu Tze Mak, Garazi Martin, Varsha Kale, Germana Baldi, Robert D Finn, Joan Tarradas, Andone Estonba, M Thomas P Gilbert, Antton Alberdi^[University of Copenhagen, antton.alberdi@sund.ku.dk]
-date: "`r Sys.Date()`"
+date: "Last update: `r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -21,11 +21,11 @@ knitr::opts_chunk$set(
     comment = NA)
 ```
 
-# Chapter 1 - Introduction
+# Introduction
 
 This WebBook contains the code written to analyse data from the study of the functional profile of metagenome-assembled genomes and temporal trends of derived microbial communities from intensively reared broiler chickens.
 
-## 1.1 - Prepare the R environment
+## Prepare the R environment
 
 ### Environment
 
