@@ -10,6 +10,8 @@ load("data/mci_com.Rdata")
 
 ## Associate alpha diversity metrics with chicken BW
 
+The resulting plots are not included in Supplementary.
+
 ### Neutral 
 
 ```{r plot_regression_n, comment = "", message = FALSE, warning = FALSE}
@@ -41,9 +43,9 @@ ggplot(alpha_div, aes(x = functional_kegg, y = chicken_body_weight)) +
 
 ### Neutral 
 
-The resulting plot corresponds to Figure 3a in the manuscript.
+The resulting plot corresponds to Figure 3a.
 
-```{r calculate_lms_neutral, comment = "", message = FALSE, warning = FALSE}
+```{r calculate_lms_neutral, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
 div_all_day_35 <-
   alpha_div %>%
   filter(sampling_time == '35') %>%
@@ -64,7 +66,7 @@ plot_model(N,
 
 ### Phylogenetic
 
-```{r calculate_lms_p, comment = "", message = FALSE, warning = FALSE}
+```{r calculate_lms_p, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
 P <- lme(chicken_body_weight ~ age + trial + phylogenetic,
          random = ~1|pen,
          data = div_all_day_35)
@@ -80,7 +82,7 @@ plot_p <-
 
 ### Functional KEGG
 
-```{r calculate_lms_f, comment = "", message = FALSE, warning = FALSE}
+```{r calculate_lms_f, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
 Q_kegg <- lme(chicken_body_weight ~ age + trial + functional_kegg,
          random = ~1|pen,
          data = div_all_day_35)
@@ -96,7 +98,7 @@ plot_q <-
 
 ## Associate community MCI with diversity
 
-```{r mci_bw, comment = "", message = FALSE, warning = FALSE}
+```{r mci_bw_n, comment = "", message = FALSE, warning = FALSE}
 domains_com_2 <-
   funcs_com %>%
   as.data.frame(optional = TRUE) %>% 
@@ -112,13 +114,17 @@ N <- lme(neutral ~ age + trial + overall_com_mci,
          random = ~1|pen,
          data = domains_com_2)
 summary(N)
+```
 
+```{r mci_bw_p, comment = "", message = FALSE, warning = FALSE}
 # Phylogenetic
 P <- lme(phylogenetic ~ age + trial + overall_com_mci,
          random = ~1|pen,
          data = domains_com_2)
 summary(P)
+```
 
+```{r mci_bw_q, comment = "", message = FALSE, warning = FALSE}
 # Functional
 Q <- lme(functional_kegg ~ age + trial + overall_com_mci,
          random = ~1|pen,
@@ -129,10 +135,10 @@ summary(Q)
 ## Associate community MCI with chicken BW
 
 ```{r com_mci_vs_bw, comment = "", message = FALSE, warning = FALSE}
-MCI <- lme(chicken_body_weight ~ age + trial + overall_com_mci,
+mci <- lme(chicken_body_weight ~ age + trial + overall_com_mci,
          random = ~1|pen,
          data = domains_com_2)
-summary(MCI)
+summary(mci)
 ```
 
 ## Associate community weighted genome size with chicken BW

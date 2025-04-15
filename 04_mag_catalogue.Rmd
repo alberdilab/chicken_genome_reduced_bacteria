@@ -6,9 +6,44 @@
 load("data/data_mg.Rdata")
 ```
 
+## Taxonomy legend 
+
+### Phylum level
+```{r plot_phylum_legend, message = FALSE, warning = FALSE}
+phylum_table <- 
+  taxonomy_colors %>% 
+  distinct(phylum, .keep_all = TRUE) %>% 
+  ggplot(aes(x = 2, y = factor(phylum, levels = phylum), fill = color_phylum)) +
+  geom_tile(color = "white", size = 0.5) +  
+  geom_text(aes(label = phylum), vjust = 0.5, size = 5, color = "black") +  
+  scale_fill_identity() +  
+  theme_void() +  
+  theme(
+    aspect.ratio = 2/1,
+    plot.margin = margin(10, 10, 10, 10)
+  )
+```
+
+### Order level
+```{r plot_order_legend, message = FALSE, warning = FALSE, fig.height = 7, fig.width = 10, fig.fullwidth = TRUE}
+order_table <- 
+  taxonomy_colors %>% 
+  ggplot(aes(x = 2, y = factor(order, levels = order), fill = color_order)) +
+  geom_tile(color = "white", size = 0.5) +  
+  geom_text(aes(label = order), vjust = 0.5, size = 4,  color = "black") +  
+  scale_fill_identity() +  
+  theme_void() +  
+  theme(
+    aspect.ratio = 2/1,
+    plot.margin = margin(10, 10, 10, 10)
+  )
+
+grid.arrange(phylum_table, order_table, ncol = 2)
+```
+
 ## Densities of overall relative abundances by phylum 
 
-The resulting plot corresponds to Figure 1a in the manuscript.
+The resulting plot corresponds to Figure 1a.
 
 ### Calculate densities
 
@@ -45,20 +80,22 @@ count_taxa <-
 
 ### Plot curves 
 
-```{r density_histogram, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
+```{r density_histogram, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 6, fig.fullwidth = TRUE}
 ggplot(count_taxa, aes(x = total_ind, colour = phylum, fill = phylum)) +
   geom_density(alpha = 0.5) +
   scale_fill_manual(values = phylum_colors) +
   scale_color_manual(values = phylum_colors) +
   scale_x_log10() +
-  theme_bw() +
-  xlab("Log transformed relative abundance") +
+  xlab("Relative abundance (log-transformed)") +
   ylab("Density") +
-  theme(panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        panel.grid.minor.y = element_blank(),
-        panel.grid.major.y = element_blank(),
-        axis.text.y = element_blank())
+  theme_minimal() +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    # axis.text.y = element_blank(),
+    legend.position = "none") 
 ```
 
 ## Functional landscape of the catalogue
@@ -83,20 +120,19 @@ tsne_df <-
   mutate(order = factor(order, levels = names(order_colors))) %>%
   mutate(phylum = factor(phylum, levels = names(phylum_colors))) %>%
   rename(tsne1 = 'V1', tsne2 = 'V2')
-
 ```
 
 ### Paint t-SNE by order and Overall Metabolic Capacity Index
 
-The resulting plots correspond to Figures 1b and 1c in the manuscript. 
+The resulting plots correspond to Figures 1b and 1c. 
 
-```{r tsne_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 6, fig.fullwidth = TRUE}
+```{r tsne_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 10, fig.fullwidth = TRUE}
 tsne_taxonomy <- 
   tsne_df %>%
   ggplot(aes(x = tsne1, y = tsne2, color = order)) +
   geom_point(size = 2, shape = 16, alpha = 0.8) +
   scale_color_manual(values = order_colors) +
-  theme_bw() +
+  theme_minimal() +
   theme(legend.position = 'none')
 
 tsne_mci <- 
@@ -104,17 +140,17 @@ tsne_mci <-
   ggplot(aes(x = tsne1, y = tsne2, color = avg_mci)) +
   geom_point(size = 2, shape = 16, alpha = 0.8) +
   scale_colour_gradientn(colours = rev(terrain.colors(10))) +
-  theme_bw()+
-  theme(legend.position = 'bottom')
+  theme_minimal()+
+  theme(legend.position = 'none')
 
-grid.arrange(tsne_taxonomy, tsne_mci, nrow = 2)
+grid.arrange(tsne_taxonomy, tsne_mci, nrow = 1)
 ```
 
 ### Interactive plot  
 
-The plot is not included in the paper but enables to explore each MAG in detail.
+The resulting interactive plot is not included in the article but enables exploring each MAG in detail.
 
-```{r interactive_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
+```{r interactive_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 6, fig.fullwidth = TRUE}
 library(plotly)
 
 p <-
@@ -130,7 +166,7 @@ ggplotly(p, tooltip = "text")
 
 ### t-SNE coloring 4 most important phylums
 
-The resulting plot corresponds to Supplementary Figure S1 in the manuscript.
+The resulting plot corresponds to Supplementary Figure S1.
 
 ```{r tsne_by_phylum, comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
 # Bacillota_A
@@ -149,7 +185,7 @@ tsne_a <-
     Monoglobales = "#b93725",
     UBA1212 = "#b10f19",
     other = "grey")) +
-  theme_bw() +
+  theme_minimal() +
   labs(colour = "Bacillota_A") +
   theme(legend.position = 'bottom',
         legend.text = element_text(size = 6),
@@ -172,7 +208,7 @@ tsne_b <-
     Bacillales = "#fc953d",
     RFN20 = "#fd8035",
     other = "grey")) +
-  theme_bw() +
+  theme_minimal() +
   labs(colour = "Bacillota") +
   theme(legend.position = 'bottom',
         legend.text = element_text(size = 6),
@@ -190,7 +226,7 @@ tsne_c <-
     Bacteroidales = "#4dc87c",
     Flavobacteriales = "#88c88b",
     'other' = "grey")) +
-  theme_bw() +
+  theme_minimal() +
   labs(colour = "Bacteroidota") +
   theme(legend.position = 'bottom',
         legend.text = element_text(size = 6),
@@ -210,7 +246,7 @@ tsne_d <-
     Burkholderiales = "#5cdfb5",
     'Rs-D84' = "#40df91",
     'other' = "grey")) +
-  theme_bw() +
+  theme_minimal() +
   labs(colour = "Pseudomonadota") +
   theme(legend.position = 'bottom',
         legend.text = element_text(size = 6),
@@ -224,7 +260,7 @@ grid.arrange(tsne_a, tsne_b, tsne_c, tsne_d, nrow = 2)
 
 ## Compare MCI between taxonomic groups 
 
-The resulting plots correspond to Supplementary Figure S2 and S3 in the manuscript.
+The resulting plot corresponds to Supplementary Figure S2.
 
 ```{r tidy_taxonomy_and_colors, comment = "", message = FALSE, warning = FALSE}
 main_phylums <- c("Bacillota_A", "Bacillota", "Bacteroidota",
@@ -318,7 +354,7 @@ table_two %>%
               color = 'grey', alpha = 0.5, width = 0.1) +
   geom_violin(aes(x = group, y = avg_mci, fill = group),
               color = "black", size = 0.01) +
-  theme_bw() +
+  theme_minimal() +
   xlab("Taxonomic group") +
   ylab("Genome average metabolic capacity") +
   scale_fill_manual(values = selected_taxonomy_colors$color_order) +
@@ -328,6 +364,8 @@ table_two %>%
 ```  
 
 ### Genome length by taxonomic phylum and order 
+
+The resulting plot is not included in the research article.
 
 ```{r length_boxplot, comment = "", message = FALSE, warning = FALSE, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
 table_three <- 
@@ -347,7 +385,7 @@ table_four %>%
   ggplot() +
   geom_jitter(aes(x = group, y = length), color = 'grey', alpha = 0.5, width = 0.1) +
   geom_violin(aes(x = group, y = length, fill = group), color = "black", size = 0.01) +
-  theme_bw() +
+  theme_minimal() +
   xlab("Taxonomic group") +
   ylab("Mag length") +
   scale_fill_manual(values = selected_taxonomy_colors$color_order) +

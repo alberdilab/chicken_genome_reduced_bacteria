@@ -90,7 +90,7 @@ library(nlme)
 library(boot)
 ```
 
-<!--chapter:end:01_index.Rmd-->
+<!--chapter:end:index.Rmd-->
 
 # Metagenomic data preparation
 
@@ -263,7 +263,7 @@ phylo_samples <-
   column_to_rownames("animal_code") %>% 
   sample_data() # Convert to phyloseq sample_data object
 
-phylo_genome <- otu_table(mag_weighted, taxa_are_rows = TRUE) 
+phylo_genome <- otu_table(total, taxa_are_rows = TRUE) 
 
 phylo_taxonomy <- 
   genome_taxonomy %>%
@@ -567,10 +567,44 @@ rm(list = ls())
 load("data/data_mg.Rdata")
 ```
 
- 
+## Taxonomy legend 
+
+### Phylum level
+```{r plot_phylum_legend, message = FALSE, warning = FALSE}
+phylum_table <- 
+  taxonomy_colors %>% 
+  distinct(phylum, .keep_all = TRUE) %>% 
+  ggplot(aes(x = 2, y = factor(phylum, levels = phylum), fill = color_phylum)) +
+  geom_tile(color = "white", size = 0.5) +  
+  geom_text(aes(label = phylum), vjust = 0.5, size = 5, color = "black") +  
+  scale_fill_identity() +  
+  theme_void() +  
+  theme(
+    aspect.ratio = 2/1,
+    plot.margin = margin(10, 10, 10, 10)
+  )
+```
+
+### Order level
+```{r plot_order_legend, message = FALSE, warning = FALSE, fig.height = 7, fig.width = 10, fig.fullwidth = TRUE}
+order_table <- 
+  taxonomy_colors %>% 
+  ggplot(aes(x = 2, y = factor(order, levels = order), fill = color_order)) +
+  geom_tile(color = "white", size = 0.5) +  
+  geom_text(aes(label = order), vjust = 0.5, size = 4,  color = "black") +  
+  scale_fill_identity() +  
+  theme_void() +  
+  theme(
+    aspect.ratio = 2/1,
+    plot.margin = margin(10, 10, 10, 10)
+  )
+
+grid.arrange(phylum_table, order_table, ncol = 2)
+```
+
 ## Densities of overall relative abundances by phylum 
 
-The resulting plot corresponds to Fig. 1a in the manuscript.
+The resulting plot corresponds to Figure 1a.
 
 ### Calculate densities
 
@@ -607,22 +641,23 @@ count_taxa <-
 
 ### Plot curves 
 
-```{r density_histogram, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
+```{r density_histogram, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 6, fig.fullwidth = TRUE}
 ggplot(count_taxa, aes(x = total_ind, colour = phylum, fill = phylum)) +
   geom_density(alpha = 0.5) +
   scale_fill_manual(values = phylum_colors) +
   scale_color_manual(values = phylum_colors) +
   scale_x_log10() +
-  theme_bw() +
-  xlab("Log transformed relative abundance") +
+  xlab("Relative abundance (log-transformed)") +
   ylab("Density") +
-  theme(panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        panel.grid.minor.y = element_blank(),
-        panel.grid.major.y = element_blank(),
-        axis.text.y = element_blank())
+  theme_minimal() +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    # axis.text.y = element_blank(),
+    legend.position = "none") 
 ```
-
 
 ## Functional landscape of the catalogue
 
@@ -646,20 +681,19 @@ tsne_df <-
   mutate(order = factor(order, levels = names(order_colors))) %>%
   mutate(phylum = factor(phylum, levels = names(phylum_colors))) %>%
   rename(tsne1 = 'V1', tsne2 = 'V2')
-
 ```
 
 ### Paint t-SNE by order and Overall Metabolic Capacity Index
 
-The resulting plots correspond to Figures 1b and 1c in the manuscript. 
+The resulting plots correspond to Figures 1b and 1c. 
 
-```{r tsne_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 6, fig.fullwidth = TRUE}
+```{r tsne_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 10, fig.fullwidth = TRUE}
 tsne_taxonomy <- 
   tsne_df %>%
   ggplot(aes(x = tsne1, y = tsne2, color = order)) +
   geom_point(size = 2, shape = 16, alpha = 0.8) +
   scale_color_manual(values = order_colors) +
-  theme_bw() +
+  theme_minimal() +
   theme(legend.position = 'none')
 
 tsne_mci <- 
@@ -667,17 +701,17 @@ tsne_mci <-
   ggplot(aes(x = tsne1, y = tsne2, color = avg_mci)) +
   geom_point(size = 2, shape = 16, alpha = 0.8) +
   scale_colour_gradientn(colours = rev(terrain.colors(10))) +
-  theme_bw()+
-  theme(legend.position = 'bottom')
+  theme_minimal()+
+  theme(legend.position = 'none')
 
-grid.arrange(tsne_taxonomy, tsne_mci, nrow = 2)
+grid.arrange(tsne_taxonomy, tsne_mci, nrow = 1)
 ```
 
 ### Interactive plot  
 
-The plot is not included in the paper but enables to explore each MAG in detail.
+The resulting interactive plot is not included in the article but enables exploring each MAG in detail.
 
-```{r interactive_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
+```{r interactive_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 6, fig.fullwidth = TRUE}
 library(plotly)
 
 p <-
@@ -693,9 +727,9 @@ ggplotly(p, tooltip = "text")
 
 ### t-SNE coloring 4 most important phylums
 
-The resulting plot corresponds to Supplementary Figure S1 in the manuscript.
+The resulting plot corresponds to Supplementary Figure S1.
 
-```{r tsne_by_phylum, comment = "", message = FALSE, warning = FALSE, fig.height = 8, fig.width = 12, fig.fullwidth = TRUE}
+```{r tsne_by_phylum, comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
 # Bacillota_A
 tsne_a <- 
   tsne_df %>%
@@ -712,9 +746,14 @@ tsne_a <-
     Monoglobales = "#b93725",
     UBA1212 = "#b10f19",
     other = "grey")) +
-  theme_bw() +
+  theme_minimal() +
   labs(colour = "Bacillota_A") +
-  theme(legend.position = 'bottom')
+  theme(legend.position = 'bottom',
+        legend.text = element_text(size = 6),
+        legend.title = element_text(size = 8),
+        legend.key.height = unit(0.01, "cm"),  
+        legend.spacing.y = unit(0.01, "cm"))+
+  guides(color = guide_legend(byrow = TRUE, title.position = "top"))
 
 # Bacillota
 tsne_b <- 
@@ -730,9 +769,14 @@ tsne_b <-
     Bacillales = "#fc953d",
     RFN20 = "#fd8035",
     other = "grey")) +
-  theme_bw() +
+  theme_minimal() +
   labs(colour = "Bacillota") +
-  theme(legend.position = 'bottom')
+  theme(legend.position = 'bottom',
+        legend.text = element_text(size = 6),
+        legend.title = element_text(size = 8),
+        legend.key.height = unit(0.01, "cm"),  
+        legend.spacing.y = unit(0.01, "cm"))+
+  guides(color = guide_legend(byrow = TRUE, title.position = "top"))
 
 # Bacteroidota
 tsne_c <- 
@@ -743,9 +787,14 @@ tsne_c <-
     Bacteroidales = "#4dc87c",
     Flavobacteriales = "#88c88b",
     'other' = "grey")) +
-  theme_bw() +
+  theme_minimal() +
   labs(colour = "Bacteroidota") +
-  theme(legend.position = 'bottom')
+  theme(legend.position = 'bottom',
+        legend.text = element_text(size = 6),
+        legend.title = element_text(size = 8),
+        legend.key.height = unit(0.01, "cm"),  
+        legend.spacing.y = unit(0.01, "cm"))+
+  guides(color = guide_legend(byrow = TRUE, title.position = "top"))
 
 # Pseudomonadota
 tsne_d <- 
@@ -758,17 +807,21 @@ tsne_d <-
     Burkholderiales = "#5cdfb5",
     'Rs-D84' = "#40df91",
     'other' = "grey")) +
-  theme_bw() +
+  theme_minimal() +
   labs(colour = "Pseudomonadota") +
-  theme(legend.position = 'bottom')
+  theme(legend.position = 'bottom',
+        legend.text = element_text(size = 6),
+        legend.title = element_text(size = 8),
+        legend.key.height = unit(0.01, "cm"),  
+        legend.spacing.y = unit(0.01, "cm"))+
+  guides(color = guide_legend(byrow = TRUE, title.position = "top"))
 
 grid.arrange(tsne_a, tsne_b, tsne_c, tsne_d, nrow = 2)
 ```
 
-
 ## Compare MCI between taxonomic groups 
 
-The resulting plots correspond to Supplementary Figure S2 and S3 in the manuscript.
+The resulting plot corresponds to Supplementary Figure S2.
 
 ```{r tidy_taxonomy_and_colors, comment = "", message = FALSE, warning = FALSE}
 main_phylums <- c("Bacillota_A", "Bacillota", "Bacteroidota",
@@ -862,7 +915,7 @@ table_two %>%
               color = 'grey', alpha = 0.5, width = 0.1) +
   geom_violin(aes(x = group, y = avg_mci, fill = group),
               color = "black", size = 0.01) +
-  theme_bw() +
+  theme_minimal() +
   xlab("Taxonomic group") +
   ylab("Genome average metabolic capacity") +
   scale_fill_manual(values = selected_taxonomy_colors$color_order) +
@@ -872,6 +925,8 @@ table_two %>%
 ```  
 
 ### Genome length by taxonomic phylum and order 
+
+The resulting plot is not included in the research article.
 
 ```{r length_boxplot, comment = "", message = FALSE, warning = FALSE, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
 table_three <- 
@@ -891,7 +946,7 @@ table_four %>%
   ggplot() +
   geom_jitter(aes(x = group, y = length), color = 'grey', alpha = 0.5, width = 0.1) +
   geom_violin(aes(x = group, y = length, fill = group), color = "black", size = 0.01) +
-  theme_bw() +
+  theme_minimal() +
   xlab("Taxonomic group") +
   ylab("Mag length") +
   scale_fill_manual(values = selected_taxonomy_colors$color_order) +
@@ -913,7 +968,7 @@ rm(list = ls())
 load("data/data_mg.Rdata")
 ```
 
-## Calculate alpha diversity
+## Hill numbers - Alpha diversity
 
 ```{r alpha_div, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Neutral
@@ -969,15 +1024,13 @@ alpha_div <-
   left_join(log_seq_depth, by = 'animal_code')
 ```
 
-Save data
-
-```{r save_alpha, comment = "", message = FALSE, warning = FALSE,, eval = FALSE}
+```{r save_alpha, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 save(alpha_div, file = "data/alpha_div.Rdata")
 ```
 
 ### Alpha diversity by sampling day 
 
-The resulting plot corresponds to Figure 2a in the manuscript.
+The resulting plot corresponds to Figure 2a.
 
 ```{r plot_div, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 12, fig.fullwidth = TRUE}
 load("data/alpha_div.Rdata")
@@ -1007,7 +1060,9 @@ p_n <-
                ) }) +
   scale_fill_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   scale_color_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
-  theme_bw() +
+  theme_minimal() +
+  ylab("Effective number of strains") +
+  xlab(NULL) +
   ggtitle("Neutral diversity") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1038,8 +1093,8 @@ p_p <-
                ) }) +
   scale_fill_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   scale_color_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
-  theme_bw() +
-  ylab("Effective number of strains") +
+  theme_minimal() +
+  labs(x =NULL, y = NULL) +
   ggtitle("Phylogenetic diversity") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1070,8 +1125,8 @@ p_f_kegg <-
                ) }) +
   scale_fill_manual(values = c("#E69F00", "#CC6677", "#56B4E9")) +
   scale_color_manual(values = c("#E69F00", "#CC6677", "#56B4E9")) +
-  theme_bw() +
-  ylab("Effective number of strains") +
+  theme_minimal() +
+  labs(x =NULL, y = NULL) +
   ggtitle("Functional diversity") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1080,14 +1135,13 @@ p_f_kegg <-
 grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
 ```
 
-
 ## Temporal development
 
-The resulting tables correspond to Supplementary Table S2
+The resulting tables correspond to Supplementary Table S2.
 
 ### Neutral
 
-```{r}
+```{r m_div_n, , comment = "", message = FALSE, warning = FALSE}
 m_div_n <-
   lme(neutral ~ seq_depth + sex + breed + treatment + trial * age,
       random = ~1|pen,
@@ -1097,7 +1151,7 @@ summary(m_div_n)
 
 ### Phylogenetic
 
-```{r}
+```{r m_div_p, comment = "", message = FALSE, warning = FALSE}
 m_div_p <-
   lme(phylogenetic ~ seq_depth + sex + breed + treatment + trial * age,
       random = ~ 1|pen,
@@ -1107,7 +1161,7 @@ summary(m_div_p)
 
 ### Functional KEGG
 
-```{r}
+```{r m_div_f_kegg, comment = "", message = FALSE, warning = FALSE}
 m_div_f_kegg <-
   lme(functional_kegg ~ seq_depth + sex + breed + treatment + trial * age,
       random = ~ 1|pen,
@@ -1129,9 +1183,7 @@ rm(list = ls())
 load("data/data_mg.Rdata")
 ```
 
-## Hill numbers 
-
-### Calculate beta diversity
+## Hill numbers - beta diversity
 
 ```{r beta_div, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 # Neutral
@@ -1161,8 +1213,6 @@ beta_q1f_kegg <-
   hillpair(., q = 1, dist = dist_kegg, metric = "S", out = "pair")
 ```
 
-### Save data
-
 ```{r save_beta, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 save(beta_q1n, 
      beta_q1p, 
@@ -1172,9 +1222,9 @@ save(beta_q1n,
 
 ### Compare individuals from same trial and pen between sampling days 
 
-The resulting plot corresponds to Supplementary Figure S3 in the manuscript.
+The resulting stats correspond to Supplementary Table S3.
 
-```{r compare_ind, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
+```{r compare_ind, comment = "", message = FALSE, warning = FALSE}
 load("data/beta_div.Rdata")
 
 metadata_2 <-
@@ -1228,16 +1278,21 @@ betadiv_f_dis_kegg <-
                                 trial == 'CB' & trial_2 == 'CB' ~ 'CB')) %>%
   mutate(diff_pen = case_when(pen == pen_2  ~ 'same')) %>%
   drop_na(diff, diff_trial, diff_pen)
+```
 
-# Stats
+```{r n_dis_stats, comment = "", message = FALSE, warning = FALSE}
 betadiv_n_dis %>%
   group_by(diff) %>%
   summarise(mean = mean(S), sd = sd(S))
+```
 
+```{r p_dis_stats, comment = "", message = FALSE, warning = FALSE}
 betadiv_p_dis %>%
   group_by(diff) %>%
   summarise(mean = mean(S), sd = sd(S))
+```
 
+```{r f_dis_stats, comment = "", message = FALSE, warning = FALSE}
 betadiv_f_dis_kegg %>%
   group_by(diff) %>%
   summarise(mean = mean(S), sd = sd(S))
@@ -1245,9 +1300,9 @@ betadiv_f_dis_kegg %>%
 
 ### Plot difference between sampling points for beta diversity 
 
-Not included in the manuscript
+The resulting plot corresponds to Supplementary Figure S3.
 
-```{r plot_beta_diff, comment="", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE, eval = FALSE}
+```{r plot_beta_diff, comment="", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 10, fig.fullwidth = TRUE}
 # Neutral
 p_n <- 
   betadiv_n_dis %>%
@@ -1258,7 +1313,7 @@ p_n <-
   ylim(0,0.5) +
   theme_minimal() +
   theme(legend.position = 'none') +
-  ggtitle('Neutral beta div')
+  ggtitle('Neutral beta diversity')
 
 # Phylogenetic
 p_p <- 
@@ -1270,7 +1325,7 @@ p_p <-
   ylim(0,0.5) +
   theme_minimal() +
   theme(legend.position = 'none') +
-  ggtitle('Phylogenetic beta div')
+  ggtitle('Phylogenetic beta diversity')
 
 # Functional KEGG
 p_f_kegg <-
@@ -1282,7 +1337,7 @@ p_f_kegg <-
   ylim(0,0.5) +
   theme_minimal() +
   theme(legend.position = 'none') +
-  ggtitle('Functional KEGG beta div')
+  ggtitle('Functional KEGG beta diversity')
 
 
 grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
@@ -1292,9 +1347,9 @@ grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
 
 ### Permanova values for different metrics of beta diversity 
 
-The resulting stats correspond to Supplementary Table S3 in the manuscript.
+The resulting stats correspond to Supplementary Table S3.
 
-```{r permanova_betadiv, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
+```{r permanova_n_betadiv, comment = "", message = FALSE, warning = FALSE}
 # Dissimilarity tables
 perm <- how(nperm = 999)
 setBlocks(perm) <- with(chicken_metadata, pen)
@@ -1311,7 +1366,9 @@ b1n_dis_table <-
 adonis2(b1n_dis_table ~ trial + sex + breed + treatment * age,
         permutations = perm,
         data = chicken_metadata)
+```
 
+```{r permanova_p_betadiv, comment = "", message = FALSE, warning = FALSE}
 # Phylogenetic
 b1p_dis_table <- 
   beta_q1p %>%
@@ -1324,7 +1381,9 @@ b1p_dis_table <-
 adonis2(b1p_dis_table ~ trial + sex + breed + treatment * age,
         permutations = perm,
         data = chicken_metadata)
+```
 
+```{r permanova_f_betadiv, comment = "", message = FALSE, warning = FALSE}
 # Functional KEGG
 b1f_dis_table_kegg <-
   beta_q1f_kegg %>%
@@ -1341,18 +1400,23 @@ adonis2(b1f_dis_table_kegg ~ trial + sex + breed + treatment * age,
 
 ### Community composition
 
-```{r composition, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
+```{r composition, comment = "", message = FALSE, warning = FALSE}
 perm <- how(nperm = 999)
 setBlocks(perm) <- with(chicken_metadata, pen)
 
-adonis2(hel ~ trial * sampling_time + 
+t_hel <- 
+ hel %>% 
+  t() %>% 
+  as.data.frame()
+  
+adonis2(t_hel ~ trial * sampling_time + 
               breed * sampling_time +
               sex * sampling_time +
               treatment * sampling_time,
         permutations = perm,
         data = chicken_metadata)
 
-adonis2(hel ~ trial * sampling_time + breed + sex + treatment,
+adonis2(t_hel ~ trial * sampling_time + breed + sex + treatment,
         permutations = perm,
         data = chicken_metadata)
 ```
@@ -1363,21 +1427,22 @@ adonis2(hel ~ trial * sampling_time + breed + sex + treatment,
 
 The resulting plot corresponds to Figure 1f in the manuscript.
 
-```{r distance_rda, fig.height = 4, fig.width = 7, fig.fullwidth = TRUE, eval = FALSE}
+```{r distance_rda_stats, comment = "", message = FALSE, warning = FALSE}
 set.seed(4)
-hel_bray <- vegdist(hel, method = 'bray')
+hel_bray <- vegdist(t(hel), method = 'bray')
 hel_bray_sqrt <- sqrt(hel_bray)
 
-pcoa <- cmdscale(hel_bray_sqrt, k = nrow(hel) - 1, eig = TRUE)
+pcoa <- cmdscale(hel_bray_sqrt, k = ncol(hel) - 1, eig = TRUE)
 pcoa_scores <- pcoa$points
 
 db_rda <- rda(pcoa_scores ~ sampling_time, data = chicken_metadata)
 
 # Stats
 anova(db_rda, by = 'term')
-summary(db_rda)
 RsquareAdj(db_rda)
+```
 
+```{r distance_rda_plot, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
 db_rda_scores <-
   data.frame(
     scores(db_rda, display = 'wa'),
@@ -1389,11 +1454,11 @@ db_rda_scores %>%
   ggplot(aes(x = RDA1, y = RDA2, colour = time)) +
   geom_point() +
   scale_color_manual(values = c('#e6a024', '#cc6777', '#5bb4e5')) +
-  theme_bw() +
+  theme_minimal() +
   theme(legend.position = 'none')
 ```
 
-```{r clean_6, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
+```{r clean_6, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```
 
@@ -1409,7 +1474,7 @@ load("data/data_mg.Rdata")
 
 ## Temporal trends related to MCI 
 
-The resulting plot corresponds to Figure 2c in the manuscript.
+The resulting plot corresponds to Figure 2c.
 
 ### Calculate t-SNE based on GIFTs
 
@@ -1523,7 +1588,7 @@ grid.arrange(tsne_d7, tsne_d21, tsne_d35, ncol = 3)
 
 ## Compositional barplots 
 
-The resulting plot corresponds to Figure 2d in the manuscript.
+The resulting plot corresponds to Figure 2d.
 
 ### Compositional barplot at order level
 
@@ -1544,7 +1609,8 @@ phy_order_df <-
   separate_wider_delim(trial_age, "_", names = c("trial", "sampling_time"))
 ```
 
-```{r oplot_order, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 9, fig.fullwidth = TRUE}
+```{r oplot_order, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 12, fig.fullwidth = TRUE}
+# separating by sampling time
 phy_order_df %>%
   mutate(Sample = str_remove(Sample, "_.*")) %>% 
   rename(Trial = 'Sample') %>% 
@@ -1567,11 +1633,15 @@ phy_order_df %>%
                                            'Synergistales','Campylobacterales',
                                            'Saccharimonadales','Methanobacteriales',
                                            'Methanomicrobiales'))) %>%
-    mutate(sampling_time = factor(sampling_time,
-                                  levels = c("7", "21", "35"))) %>% 
-    ggplot() +
-  geom_bar(aes(x = Trial, y = Abundance, color = order, fill = order),
-           stat = "identity", position = "stack") +
+  mutate(sampling_time = factor(sampling_time,
+                                levels = c("7", "21", "35"))) %>% 
+  filter(Abundance > 0) %>%
+  group_by(sampling_time) %>%
+  mutate(Trial = factor(Trial)) %>%
+  ungroup() %>%
+  ggplot() +
+  geom_bar(aes(x = Trial, y = Abundance, fill = order),
+           stat = "identity", position = "stack", color ="black", size = 0.08) +
   facet_wrap(~sampling_time, scales = "free_x",
              labeller = as_labeller(c('7' = 'Day 7',
                                       '21' = 'Day 21',
@@ -1580,14 +1650,16 @@ phy_order_df %>%
   scale_fill_manual('Order', values = order_colors) +
   ylab('Relative abundance') +
   xlab('Trial') +
-  theme(panel.background = element_blank())
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x =element_blank(),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        legend.position = "none",
+        )
 ```
 
-### Horizontal barplot 
-
-The plot is not in the Supplementary, but for a more detailed exploration
-
-```{r plot_horizontal, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
+```{r plot_horizontal, comment = "", message = FALSE, warning = FALSE, fig.height = 6, fig.width = 12, fig.fullwidth = TRUE}
+# separating by sampling time and trial
 phy_order_df %>%
   mutate(order = factor(order, 
                         levels = c('Veillonellales', 'Acidaminococcales',
@@ -1619,27 +1691,26 @@ phy_order_df %>%
                                      replacement = "Day 35")) %>%
   mutate(sampling_time = factor(sampling_time,
                                 levels = c("Day 7", "Day 21", "Day 35"))) %>%
-  ggplot(aes(x = Abundance, y = Sample,
-             fill = order, group = order, color = order)) +
-  geom_bar(stat = "identity", position = "stack", width = 1.1) +
-  facet_nested(sampling_time * trial ~ ., scales = "free_y") +
-  guides(fill = guide_legend(ncol = 1),
-         color = guide_legend(ncol = 1)
-         ) +
+  ggplot(aes(x = Sample, y = Abundance,
+             fill = order, group = order)) +
+  geom_bar(stat = "identity", position = "stack", width = 1.1,
+         color ="black", size = 0.08) +
+  facet_nested(.~ sampling_time * trial, scales = "free_x") +
   scale_color_manual('Order', values = order_colors) +
   scale_fill_manual('Order', values = order_colors) +
-  xlab('Relative abundance') +
-  theme(axis.text.y = element_blank(),
-        axis.title.y = element_blank(),
-        axis.ticks.y = element_blank(),
+  ylab('Relative abundance') +
+  theme(axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
         panel.background = element_blank(),
-        panel.spacing = unit(0.01, "lines"),
         panel.border = element_blank(),
+        panel.spacing.x = unit(0.1, "cm"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         legend.text = element_text(size = 8),
         legend.title = element_text(size = 10),
-        strip.text = element_text(size = 8)) 
+        strip.text = element_text(size = 8),
+        legend.position = "none") 
 ```
 
 ```{r clean_7, comment = "", message = FALSE, warning = FALSE}
@@ -1785,7 +1856,7 @@ for (Lst in 1:length(samples_list)) {
 
 ## Evaluate convergence 
 
-Figure not added to Supplementary but could be included.
+Figure not added to Supplementary.
 
 ```{r convergence, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 set.seed(1)
@@ -1964,7 +2035,7 @@ mean(MF_CV_2$R2)
 
 ## Functional structure
 
-```{r func_structure, comment = "", message = FALSE, warning = FALSE, echo = FALSE}
+```{r func_structure, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 beta_post <- getPostEstimate(m, parName = "Beta")
 plotBeta(m, beta_post, supportLevel = 0.95, plotTree = TRUE)
 
@@ -1986,17 +2057,19 @@ plotGradient(m,
 
 ## Bacterial temporal trends table
 
-```{r mag_trends, comment = "", message = FALSE, warning = FALSE, echo = FALSE}
+```{r mag_trends, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
+beta_post <- getPostEstimate(m, parName = "Beta")
+
 # Increasing MAGs
 increasers <- colnames(beta_post$support)[beta_post$support[8,] > 0.95]
 increasers_df <- data.frame(mag_id = increasers,
-                            parameter = beta_post$mean[4,colnames(m$Y) %in% increasers])
+                            parameter = beta_post$mean[8,colnames(m$Y) %in% increasers])
 increasers_df$hmsc_trend <- "increaser"
 
 # Decreasing MAGs
 decreasers <- colnames(beta_post$support)[beta_post$support[8,] < 0.05]
 decreasers_df <- data.frame(mag_id = decreasers,
-                            parameter = beta_post$mean[4,colnames(m$Y) %in% decreasers])
+                            parameter = beta_post$mean[8,colnames(m$Y) %in% decreasers])
 decreasers_df$hmsc_trend <- "decreaser"
 
 trends <- 
@@ -2011,14 +2084,14 @@ trends <-
 
 ## Correlate bacterial MCI and response to time 
 
-The resulting plot corresponds to Figure 2f in the manuscript.
+The resulting plot corresponds to Figure 2f.
 
-```{r load_data_mag, comment = "", message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_data_mag, comment = "", message = FALSE, warning = FALSE}
 load("data/data_mg.Rdata")
 trends <- read_tsv("data/hmsc_mag_trend.tsv")
 ```
 
-```{r mci_response, comment = "", message = FALSE, warning = FALSE, echo = FALSE}
+```{r mci_response, comment = "", message = FALSE, warning = FALSE, fig.height = 6, fig.width = 8, fig.fullwidth = TRUE}
 mci_df <-
   gifts_elements %>%
   as.data.frame() %>% 
@@ -2042,16 +2115,16 @@ trends %>%
 
 ## Variance partitioning 
 
-The resulting results correspond to Supplementary Table S4 in the manuscript.
+The resulting results correspond to Supplementary Table S4.
 
-```{r variance_partitioning, comment = "", message = FALSE, warning = FALSE, echo = FALSE}
+```{r variance_partitioning, comment = "", message = FALSE, warning = FALSE}
 VP <- computeVariancePartitioning(m)
 plotVariancePartitioning(hM = m, VP = VP)
 ```
 
 ## Phylogenetic correlogram 
 
-The resulting plot corresponds to Figure 1e in the manuscript.
+The resulting plot corresponds to Figure 1e.
 
 ### Calcultate phylogenetic distance 
 
@@ -2123,7 +2196,7 @@ ggplot(aes(x = distance,
 
 ### Phylogenetic signal
 
-```{r phylo_signal, comment = "", echo = FALSE, message = FALSE, warning = FALSE, eval = FALSE}
+```{r phylo_signal, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 mpost <- convertToCodaObject(m)
 quantile(unlist(mpost$Rho), probs = c(.05,.5,.95))
 
@@ -2159,7 +2232,7 @@ rm(list = ls())
 
 ## Load MG data
 
-```{r load_data_mag_comp, message = FALSE, warning = FALSE, echo = FALSE}
+```{r load_data_mag_comp, comment = "", message = FALSE, warning = FALSE}
 load("data/data_mg.Rdata")
 ```
 
@@ -2199,8 +2272,6 @@ funcs_com <- to.community(gifts_functions, sweep(hel, 2, colSums(hel), FUN = "/"
 
 domains_com <- to.community(gifts_domains, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2)
 ```
-
-### Save data
 
 ```{r save_gifts, comment = "", message = FALSE, warning = FALSE}
 save(elements_com,
@@ -2250,7 +2321,6 @@ funcs_com %>%
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
         legend.position = 'none')
-
 ```
 
 ```{r clean_10, comment = "", message = FALSE, warning = FALSE}
@@ -2270,6 +2340,8 @@ load("data/mci_com.Rdata")
 ```
 
 ## Associate alpha diversity metrics with chicken BW
+
+The resulting plots are not included in Supplementary.
 
 ### Neutral 
 
@@ -2302,9 +2374,9 @@ ggplot(alpha_div, aes(x = functional_kegg, y = chicken_body_weight)) +
 
 ### Neutral 
 
-The resulting plot corresponds to Figure 3a in the manuscript.
+The resulting plot corresponds to Figure 3a.
 
-```{r calculate_lms_neutral, comment = "", message = FALSE, warning = FALSE}
+```{r calculate_lms_neutral, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
 div_all_day_35 <-
   alpha_div %>%
   filter(sampling_time == '35') %>%
@@ -2325,7 +2397,7 @@ plot_model(N,
 
 ### Phylogenetic
 
-```{r calculate_lms_p, comment = "", message = FALSE, warning = FALSE}
+```{r calculate_lms_p, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
 P <- lme(chicken_body_weight ~ age + trial + phylogenetic,
          random = ~1|pen,
          data = div_all_day_35)
@@ -2341,7 +2413,7 @@ plot_p <-
 
 ### Functional KEGG
 
-```{r calculate_lms_f, comment = "", message = FALSE, warning = FALSE}
+```{r calculate_lms_f, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
 Q_kegg <- lme(chicken_body_weight ~ age + trial + functional_kegg,
          random = ~1|pen,
          data = div_all_day_35)
@@ -2357,7 +2429,7 @@ plot_q <-
 
 ## Associate community MCI with diversity
 
-```{r mci_bw, comment = "", message = FALSE, warning = FALSE}
+```{r mci_bw_n, comment = "", message = FALSE, warning = FALSE}
 domains_com_2 <-
   funcs_com %>%
   as.data.frame(optional = TRUE) %>% 
@@ -2373,13 +2445,17 @@ N <- lme(neutral ~ age + trial + overall_com_mci,
          random = ~1|pen,
          data = domains_com_2)
 summary(N)
+```
 
+```{r mci_bw_p, comment = "", message = FALSE, warning = FALSE}
 # Phylogenetic
 P <- lme(phylogenetic ~ age + trial + overall_com_mci,
          random = ~1|pen,
          data = domains_com_2)
 summary(P)
+```
 
+```{r mci_bw_q, comment = "", message = FALSE, warning = FALSE}
 # Functional
 Q <- lme(functional_kegg ~ age + trial + overall_com_mci,
          random = ~1|pen,
@@ -2390,10 +2466,10 @@ summary(Q)
 ## Associate community MCI with chicken BW
 
 ```{r com_mci_vs_bw, comment = "", message = FALSE, warning = FALSE}
-MCI <- lme(chicken_body_weight ~ age + trial + overall_com_mci,
+mci <- lme(chicken_body_weight ~ age + trial + overall_com_mci,
          random = ~1|pen,
          data = domains_com_2)
-summary(MCI)
+summary(mci)
 ```
 
 ## Associate community weighted genome size with chicken BW
@@ -2429,7 +2505,7 @@ rm(list = ls())
 
 # Bacteria vs Chicken BW HMSC setup
 
-### HMSC models are computationally intensive. It is advisable to run this script on a server. The code is made to be reproduced on any supercomputer.
+HMSC models are computationally intensive. It is advisable to run this script on a server. The code is made to be reproduced on any supercomputer.
 
 ## Load MG and MT data
 
@@ -3131,13 +3207,13 @@ p_Mci_mg <-
 
 ### The significant ones
 
-```{r selected_plots_bio, fig.height = 4, fig.width = 10, fig.fullwidth = TRUE}
+```{r selected_plots_bio, , comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 12, fig.fullwidth = TRUE}
 grid.arrange(p_Mci_mg, p_B04_mg, p_B08_mg, ncol = 3)
 ```
 
 ### All
 
-```{r combined_plots_bio, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
+```{r combined_plots_bio, , comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
 grid.arrange(p_Mci_bio_mg, p_B01_mg, p_B02_mg,
              p_B03_mg, p_B04_mg, p_B06_mg, 
              p_B07_mg, p_B08_mg, p_B09_mg,
@@ -3331,7 +3407,7 @@ p_Mci_deg_mg <-
 
 ### All 
 
-```{r combined_plots_deg, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
+```{r combined_plots_deg, , comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
 grid.arrange(p_Mci_deg_mg, p_D01_mg, p_D02_mg,
              p_D03_mg, p_D05_mg,
              p_D06_mg, p_D07_mg, p_D08_mg,
@@ -3341,9 +3417,9 @@ grid.arrange(p_Mci_deg_mg, p_D01_mg, p_D02_mg,
 
 ## Heatmap of MCI at element level
 
-Not included in Supplementary
+Not included in Supplementary.
 
-```{r mci_element_plot, comment = "", message = FALSE, warning = FALSE}
+```{r mci_element_plot, comment = "", message = FALSE, warning = FALSE, fig.height = 8, fig.width = 12, fig.fullwidth = TRUE}
 gifts_bw_pos <-
   gifts %>%
   mutate(bw_effect = trends_bw$trend_09) %>%
@@ -3482,9 +3558,15 @@ positive_mags <-
   unlist() %>%
   as.character()
 
-n_neg_sp <- 50 # Filter 50 negative MAGs for the figure
-
 negative_mags <- 
+  trends_bw %>%
+  filter(trend_09 == "negative") %>%
+  select(genome) %>%
+  unlist() %>%
+  as.character()
+
+n_neg_sp <- 50 # Filter 50 negative MAGs for the figure
+negative_mags_top50 <- 
   trends_bw %>%
   filter(trend_09 == "negative") %>%
   arrange(parameter) %>%
@@ -3496,6 +3578,10 @@ negative_mags <-
 mag_subset_elements <-
   norm_elements_day_35 %>%
   filter(MAG %in% c(positive_mags, negative_mags))
+
+mag_subset_element_top50s <-
+  norm_elements_day_35 %>%
+  filter(MAG %in% c(positive_mags, negative_mags_top50))
 ```
 
 ### Tidy data
@@ -3521,6 +3607,22 @@ total_day35 <-
   select(genome, mean_abundance)
 
 mag_subset_elements_2 <-
+  mag_subset_element_top50s %>%
+  rename(genome = 'MAG') %>% 
+  left_join(total_day35, by = "genome") %>%
+  mutate(across(CA01.15:CB24.14, ~ .x / mean_abundance)) %>%
+  select(-mean_abundance) %>%
+  mutate(bw_association = if_else(genome %in% positive_mags, "positive", "negative")) %>%
+  mutate(avg_expr_million = rowMeans(across(CA01.15:CB24.14)) * 1000000) %>%
+  filter(!grepl("S", Function)) %>%
+  group_by(Element) %>%
+  filter(sum(avg_expr_million) > 0) %>%
+  ungroup() %>%
+  group_by(genome) %>%
+  filter(sum(avg_expr_million) > 0) %>%
+  ungroup()
+
+mag_subset_elements_3 <-
   mag_subset_elements %>%
   rename(genome = 'MAG') %>% 
   left_join(total_day35, by = "genome") %>%
@@ -3563,7 +3665,7 @@ mag_subset_elements_2 %>%
 
 ```{r taxonomy_red_mags, comment = "", message = FALSE, warning = FALSE}
 reduced_mags1 <-
-  mag_subset_elements_2 %>%
+  mag_subset_elements_3 %>%
   filter(Element == "B0101") %>%
   filter(avg_expr_million == 0) %>%
   select(genome) %>%
@@ -3571,7 +3673,7 @@ reduced_mags1 <-
   as.character()
 
 reduced_mags2 <- 
-  mag_subset_elements_2 %>%
+  mag_subset_elements_3 %>%
   filter(Element == "B0102") %>%
   filter(avg_expr_million == 0) %>%
   select(genome) %>%
@@ -3579,7 +3681,7 @@ reduced_mags2 <-
   as.character()
 
 reduced_mags3 <-
-  mag_subset_elements_2 %>%
+  mag_subset_elements_3 %>%
   filter(Element == "B0103") %>%
   filter(avg_expr_million == 0) %>%
   select(genome) %>%
@@ -3589,7 +3691,7 @@ reduced_mags3 <-
 reduced_mags <- intersect(intersect(reduced_mags1, reduced_mags2), reduced_mags3)
 
 reduced_mags_df <-
-  mag_subset_elements_2 %>%
+  mag_subset_elements_3 %>%
   filter(genome %in% reduced_mags) %>%
   group_by(Element) %>%
   filter(sum(avg_expr_million) > 0) %>%
@@ -3615,6 +3717,12 @@ genome_taxonomy[genome_taxonomy$genome %in% positives,] %>%
   table()
 ```
 
+```{r taxonomy_positives_red_mags, comment = "", message = FALSE, warning = FALSE}
+genome_taxonomy[genome_taxonomy$genome %in% positives,] %>%
+  select(family) %>%
+  table()
+```
+
 Reduced MAGs with negative association belong to various orders, mainly to Christensenellales
 
 ```{r negatives_red_mags, comment = "", message = FALSE, warning = FALSE}
@@ -3626,6 +3734,12 @@ negatives <-
   as.character()
 
 genome_taxonomy[genome_taxonomy$genome %in% negatives,] %>%
+  select(order) %>%
+  table()
+```
+
+```{r tax_negatives_red_mags, comment = "", message = FALSE, warning = FALSE}
+genome_taxonomy[genome_taxonomy$genome %in% negatives,] %>%
   select(family) %>%
   table()
 ```
@@ -3633,7 +3747,7 @@ genome_taxonomy[genome_taxonomy$genome %in% negatives,] %>%
 
 ## Genomic characteristics of genome reduced MAGs 
 
-The resulting plot corresponds to Figure 4a in the manuscript.
+The resulting plot corresponds to Figure 4a.
 
 ```{r calculating_bootstraps, comment = "", message = FALSE, warning = FALSE}
 gifts <-
@@ -3648,7 +3762,7 @@ mci_df <-
   rownames_to_column(var = "genome") %>%
   left_join(reduced_mags_df, by = "genome") %>%
   left_join(genome_taxonomy, by = "genome") %>%
-  filter(family == "UBA1242" | family == "UBA660") %>%
+  filter(family=="UBA1242"| order=="RF39") %>%
   select(genome, avg_mci, bw_association)
 
 length_df <- 
@@ -3656,7 +3770,7 @@ length_df <-
   filter(genome %in% reduced_mags_df$genome) %>%
   left_join(mci_df, by = "genome") %>%
   left_join(genome_taxonomy, by = "genome") %>%
-  filter(family == "UBA1242" | family == "UBA660") %>%
+  filter(family=="UBA1242"|order=="RF39") %>%
   select(genome, mag_length, bw_association)
 
 
@@ -3706,7 +3820,9 @@ mci_df %>%
         axis.title.y = element_text(size = 14)) 
 ```
 
-### Genome length of genome reduced MAGss (Fig. 4b)
+### Genome length of genome reduced MAGss 
+
+The resulting plot corresponds to Figure 4b.
 
 ```{r calculating_bootstraps_length, comment = "", message = FALSE, warning = FALSE}
 boot_length_df <- data.frame(matrix(nrow = 2, ncol = 4))
@@ -3730,7 +3846,8 @@ boot_length_df[2, "ci_975"] <- bw_neg_red_mag_length_boot_ci$bca[,5]
 ```
 
 ```{r plot_length, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
-length_df %>%
+length_red_genomes <-
+  length_df %>%
   ggplot() +
   geom_jitter(aes(x = bw_association, y = mag_length, color = bw_association),
               alpha = 0.5, width = 0.25) +
@@ -3749,17 +3866,20 @@ length_df %>%
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12),
         axis.title.y = element_text(size = 14)) 
+ggsave("length_red_genomes_plot.png", length_red_genomes, width = 5, height = 5)
+ggsave("length_red_genomes_plot.pdf", length_red_genomes, width = 5, height = 5)
+
 ```
 
 ### Expression profiles of genome reduced MAGs 
 
-(Fig. 4c)
+The resulting plot corresponds to Figure 4c.
 
 ```{r pcoa_data, warning = FALSE, comments = "", message = FALSE}
 comp_reduced_mags <- 
   reduced_mags_df %>% 
   left_join(genome_taxonomy, by = 'genome') %>%
-  filter(family == "UBA1242" | family == "UBA660") %>%
+  filter(family=="UBA1242"|order=="RF39") %>%
   select(-domain:-species)
 
 reduced_mags_dist <- vegdist(sqrt(comp_reduced_mags[, -c(1:3)]), method = "bray")
@@ -3797,6 +3917,36 @@ ggplot() +
   geom_label_repel(data = envfit_gifts_df, aes(x = PCOA1, y = PCOA2, label = gift_id), size = 3) +
   theme_minimal() +
   theme(legend.position = 'none')
+```
+
+### Activity heatmap of genome reduced bacteria 
+
+```{r plot_heatmap_reduced, comment = "", message = FALSE, fig.width = 3, fig.height = 6, warning = FALSE}
+mag_subset_elements_3 %>%
+  left_join(genome_taxonomy, by = 'genome') %>%
+  filter(family == "UBA1242" | family == "UBA660") %>%
+  select(-domain:-species) %>% 
+  group_by(Element) %>%
+  filter(sum(avg_expr_million) > 0) %>%
+  ungroup() %>%
+  group_by(genome) %>%
+  filter(sum(avg_expr_million) > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = genome,
+             y = Element,
+             fill = bw_association,
+             group = Function,
+             alpha = log(avg_expr_million, 2))) +
+  geom_tile(color = "#ffffff") +
+  scale_y_discrete(guide = guide_axis(check.overlap = TRUE)) +
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
+  scale_fill_manual(values = c("red3",
+                               "blue3"),
+                    na.value = "#f4f4f4") +
+  facet_grid(Function ~ bw_association, scales = "free", space = "free") +
+  theme_void(base_size = 8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+        legend.position = "none")
 ```
 
 ```{r clean_15, comment = "", message = FALSE, warning = FALSE}

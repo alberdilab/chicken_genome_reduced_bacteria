@@ -373,13 +373,13 @@ p_Mci_mg <-
 
 ### The significant ones
 
-```{r selected_plots_bio, fig.height = 4, fig.width = 10, fig.fullwidth = TRUE}
+```{r selected_plots_bio, , comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 12, fig.fullwidth = TRUE}
 grid.arrange(p_Mci_mg, p_B04_mg, p_B08_mg, ncol = 3)
 ```
 
 ### All
 
-```{r combined_plots_bio, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
+```{r combined_plots_bio, , comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
 grid.arrange(p_Mci_bio_mg, p_B01_mg, p_B02_mg,
              p_B03_mg, p_B04_mg, p_B06_mg, 
              p_B07_mg, p_B08_mg, p_B09_mg,
@@ -573,7 +573,7 @@ p_Mci_deg_mg <-
 
 ### All 
 
-```{r combined_plots_deg, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
+```{r combined_plots_deg, , comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
 grid.arrange(p_Mci_deg_mg, p_D01_mg, p_D02_mg,
              p_D03_mg, p_D05_mg,
              p_D06_mg, p_D07_mg, p_D08_mg,
@@ -583,9 +583,9 @@ grid.arrange(p_Mci_deg_mg, p_D01_mg, p_D02_mg,
 
 ## Heatmap of MCI at element level
 
-Not included in Supplementary
+Not included in Supplementary.
 
-```{r mci_element_plot, comment = "", message = FALSE, warning = FALSE}
+```{r mci_element_plot, comment = "", message = FALSE, warning = FALSE, fig.height = 8, fig.width = 12, fig.fullwidth = TRUE}
 gifts_bw_pos <-
   gifts %>%
   mutate(bw_effect = trends_bw$trend_09) %>%

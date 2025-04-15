@@ -91,7 +91,6 @@ funcs_com %>%
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
         legend.position = 'none')
-
 ```
 
 ```{r clean_10, comment = "", message = FALSE, warning = FALSE}
