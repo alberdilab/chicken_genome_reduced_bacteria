@@ -135,7 +135,7 @@ for (Lst in 1:length(samples_list)) {
 
 ## Evaluate convergence 
 
-Figure not added to Supplementary but could be included.
+Figure not added to Supplementary.
 
 ```{r convergence, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 set.seed(1)

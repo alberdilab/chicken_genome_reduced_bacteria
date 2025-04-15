@@ -8,7 +8,7 @@ load("data/data_mg.Rdata")
 
 ## Temporal trends related to MCI 
 
-The resulting plot corresponds to Figure 2c in the manuscript.
+The resulting plot corresponds to Figure 2c.
 
 ### Calculate t-SNE based on GIFTs
 
@@ -94,7 +94,7 @@ tsne_d7 <-
   ggplot(aes(x = tsne1, y = tsne2, color = order, size = abundance)) +
   geom_point(shape = 16, alpha = 0.8) +
   scale_color_manual(values = order_colors) +
-  theme_bw() +
+  theme_minimal() +
   theme(legend.position = 'none')
 
 # Day 21
@@ -104,7 +104,7 @@ tsne_d21 <-
   ggplot(aes(x = tsne1, y = tsne2, color = order, size = abundance)) +
   geom_point(shape = 16, alpha = 0.8) +
   scale_color_manual(values = order_colors) +
-  theme_bw() +
+  theme_minimal() +
   theme(legend.position = 'none')
 
 # Day 35
@@ -114,7 +114,7 @@ tsne_d35 <-
   ggplot(aes(x = tsne1, y = tsne2, color = order, size = abundance)) +
   geom_point(shape = 16, alpha = 0.8) +
   scale_color_manual(values = order_colors) +
-  theme_bw() +
+  theme_minimal() +
   theme(legend.position = 'none')
 
 grid.arrange(tsne_d7, tsne_d21, tsne_d35, ncol = 3)
@@ -122,7 +122,7 @@ grid.arrange(tsne_d7, tsne_d21, tsne_d35, ncol = 3)
 
 ## Compositional barplots 
 
-The resulting plot corresponds to Figure 2d in the manuscript.
+The resulting plot corresponds to Figure 2d.
 
 ### Compositional barplot at order level
 
@@ -143,7 +143,8 @@ phy_order_df <-
   separate_wider_delim(trial_age, "_", names = c("trial", "sampling_time"))
 ```
 
-```{r oplot_order, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 9, fig.fullwidth = TRUE}
+```{r oplot_order, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 12, fig.fullwidth = TRUE}
+# separating by sampling time
 phy_order_df %>%
   mutate(Sample = str_remove(Sample, "_.*")) %>% 
   rename(Trial = 'Sample') %>% 
@@ -166,11 +167,15 @@ phy_order_df %>%
                                            'Synergistales','Campylobacterales',
                                            'Saccharimonadales','Methanobacteriales',
                                            'Methanomicrobiales'))) %>%
-    mutate(sampling_time = factor(sampling_time,
-                                  levels = c("7", "21", "35"))) %>% 
+  mutate(sampling_time = factor(sampling_time,
+                                levels = c("7", "21", "35"))) %>% 
+  filter(Abundance > 0) %>%
+  group_by(sampling_time) %>%
+  mutate(Trial = factor(Trial)) %>%
+  ungroup() %>%
   ggplot() +
-  geom_bar(aes(x = Trial, y = Abundance, color = order, fill = order),
-           stat = "identity", position = "stack") +
+  geom_bar(aes(x = Trial, y = Abundance, fill = order),
+           stat = "identity", position = "stack", color ="black", size = 0.08) +
   facet_wrap(~sampling_time, scales = "free_x",
              labeller = as_labeller(c('7' = 'Day 7',
                                       '21' = 'Day 21',
@@ -179,15 +184,16 @@ phy_order_df %>%
   scale_fill_manual('Order', values = order_colors) +
   ylab('Relative abundance') +
   xlab('Trial') +
-  theme_bw() +
-  theme(panel.background = element_blank())
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x =element_blank(),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        legend.position = "none",
+        )
 ```
 
-### Horizontal barplot 
-
-The plot is not in the Supplementary, but for a more detailed exploration
-
-```{r plot_horizontal, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
+```{r plot_horizontal, comment = "", message = FALSE, warning = FALSE, fig.height = 3, fig.width = 12, fig.fullwidth = TRUE}
+# separating by sampling time and trial
 phy_order_df %>%
   mutate(order = factor(order, 
                         levels = c('Veillonellales', 'Acidaminococcales',
@@ -219,28 +225,26 @@ phy_order_df %>%
                                      replacement = "Day 35")) %>%
   mutate(sampling_time = factor(sampling_time,
                                 levels = c("Day 7", "Day 21", "Day 35"))) %>%
-  ggplot(aes(x = Abundance, y = Sample,
-             fill = order, group = order, color = order)) +
-  geom_bar(stat = "identity", position = "stack", width = 1.1) +
-  facet_nested(sampling_time * trial ~ ., scales = "free_y") +
-  guides(fill = guide_legend(ncol = 1),
-         color = guide_legend(ncol = 1)
-         ) +
+  ggplot(aes(x = Sample, y = Abundance,
+             fill = order, group = order)) +
+  geom_bar(stat = "identity", position = "stack", width = 1.1,
+         color ="black", size = 0.08) +
+  facet_nested(.~ sampling_time * trial, scales = "free_x") +
   scale_color_manual('Order', values = order_colors) +
   scale_fill_manual('Order', values = order_colors) +
-  xlab('Relative abundance') +
-  theme_bw() +
-  theme(axis.text.y = element_blank(),
-        axis.title.y = element_blank(),
-        axis.ticks.y = element_blank(),
+  ylab('Relative abundance') +
+  theme(axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
         panel.background = element_blank(),
-        panel.spacing = unit(0.01, "lines"),
         panel.border = element_blank(),
+        panel.spacing.x = unit(0.1, "cm"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         legend.text = element_text(size = 8),
         legend.title = element_text(size = 10),
-        strip.text = element_text(size = 8)) 
+        strip.text = element_text(size = 8),
+        legend.position = "none") 
 ```
 
 ```{r clean_7, comment = "", message = FALSE, warning = FALSE}

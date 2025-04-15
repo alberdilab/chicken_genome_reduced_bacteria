@@ -85,7 +85,7 @@ mean(MF_CV_2$R2)
 
 ## Functional structure
 
-```{r func_structure, comment = "", message = FALSE, warning = FALSE}
+```{r func_structure, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
 beta_post <- getPostEstimate(m, parName = "Beta")
 plotBeta(m, beta_post, supportLevel = 0.95, plotTree = TRUE)
 
@@ -108,16 +108,18 @@ plotGradient(m,
 ## Bacterial temporal trends table
 
 ```{r mag_trends, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
+beta_post <- getPostEstimate(m, parName = "Beta")
+
 # Increasing MAGs
 increasers <- colnames(beta_post$support)[beta_post$support[8,] > 0.95]
 increasers_df <- data.frame(mag_id = increasers,
-                            parameter = beta_post$mean[4,colnames(m$Y) %in% increasers])
+                            parameter = beta_post$mean[8,colnames(m$Y) %in% increasers])
 increasers_df$hmsc_trend <- "increaser"
 
 # Decreasing MAGs
 decreasers <- colnames(beta_post$support)[beta_post$support[8,] < 0.05]
 decreasers_df <- data.frame(mag_id = decreasers,
-                            parameter = beta_post$mean[4,colnames(m$Y) %in% decreasers])
+                            parameter = beta_post$mean[8,colnames(m$Y) %in% decreasers])
 decreasers_df$hmsc_trend <- "decreaser"
 
 trends <- 
@@ -132,14 +134,14 @@ trends <-
 
 ## Correlate bacterial MCI and response to time 
 
-The resulting plot corresponds to Figure 2f in the manuscript.
+The resulting plot corresponds to Figure 2f.
 
 ```{r load_data_mag, comment = "", message = FALSE, warning = FALSE}
 load("data/data_mg.Rdata")
 trends <- read_tsv("data/hmsc_mag_trend.tsv")
 ```
 
-```{r mci_response, comment = "", message = FALSE, warning = FALSE}
+```{r mci_response, comment = "", message = FALSE, warning = FALSE, fig.height = 6, fig.width = 8, fig.fullwidth = TRUE}
 mci_df <-
   gifts_elements %>%
   as.data.frame() %>% 
@@ -163,7 +165,7 @@ trends %>%
 
 ## Variance partitioning 
 
-The resulting results correspond to Supplementary Table S4 in the manuscript.
+The resulting results correspond to Supplementary Table S4.
 
 ```{r variance_partitioning, comment = "", message = FALSE, warning = FALSE}
 VP <- computeVariancePartitioning(m)
@@ -172,7 +174,7 @@ plotVariancePartitioning(hM = m, VP = VP)
 
 ## Phylogenetic correlogram 
 
-The resulting plot corresponds to Figure 1e in the manuscript.
+The resulting plot corresponds to Figure 1e.
 
 ### Calcultate phylogenetic distance 
 

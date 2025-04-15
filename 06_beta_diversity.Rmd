@@ -45,9 +45,9 @@ save(beta_q1n,
 
 ### Compare individuals from same trial and pen between sampling days 
 
-The resulting stats corresponds to Supplementary Table S3 in the manuscript.
+The resulting stats correspond to Supplementary Table S3.
 
-```{r compare_ind, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
+```{r compare_ind, comment = "", message = FALSE, warning = FALSE}
 load("data/beta_div.Rdata")
 
 metadata_2 <-
@@ -101,16 +101,21 @@ betadiv_f_dis_kegg <-
                                 trial == 'CB' & trial_2 == 'CB' ~ 'CB')) %>%
   mutate(diff_pen = case_when(pen == pen_2  ~ 'same')) %>%
   drop_na(diff, diff_trial, diff_pen)
+```
 
-# Stats
+```{r n_dis_stats, comment = "", message = FALSE, warning = FALSE}
 betadiv_n_dis %>%
   group_by(diff) %>%
   summarise(mean = mean(S), sd = sd(S))
+```
 
+```{r p_dis_stats, comment = "", message = FALSE, warning = FALSE}
 betadiv_p_dis %>%
   group_by(diff) %>%
   summarise(mean = mean(S), sd = sd(S))
+```
 
+```{r f_dis_stats, comment = "", message = FALSE, warning = FALSE}
 betadiv_f_dis_kegg %>%
   group_by(diff) %>%
   summarise(mean = mean(S), sd = sd(S))
@@ -118,9 +123,9 @@ betadiv_f_dis_kegg %>%
 
 ### Plot difference between sampling points for beta diversity 
 
-Not included in the manuscript
+The resulting plot corresponds to Supplementary Figure S3.
 
-```{r plot_beta_diff, comment="", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE, eval = FALSE}
+```{r plot_beta_diff, comment="", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 10, fig.fullwidth = TRUE}
 # Neutral
 p_n <- 
   betadiv_n_dis %>%
@@ -131,7 +136,7 @@ p_n <-
   ylim(0,0.5) +
   theme_minimal() +
   theme(legend.position = 'none') +
-  ggtitle('Neutral beta div')
+  ggtitle('Neutral beta diversity')
 
 # Phylogenetic
 p_p <- 
@@ -143,7 +148,7 @@ p_p <-
   ylim(0,0.5) +
   theme_minimal() +
   theme(legend.position = 'none') +
-  ggtitle('Phylogenetic beta div')
+  ggtitle('Phylogenetic beta diversity')
 
 # Functional KEGG
 p_f_kegg <-
@@ -155,7 +160,7 @@ p_f_kegg <-
   ylim(0,0.5) +
   theme_minimal() +
   theme(legend.position = 'none') +
-  ggtitle('Functional KEGG beta div')
+  ggtitle('Functional KEGG beta diversity')
 
 
 grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
@@ -165,9 +170,9 @@ grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
 
 ### Permanova values for different metrics of beta diversity 
 
-The resulting stats correspond to Supplementary Table S3 in the manuscript.
+The resulting stats correspond to Supplementary Table S3.
 
-```{r permanova_betadiv, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
+```{r permanova_n_betadiv, comment = "", message = FALSE, warning = FALSE}
 # Dissimilarity tables
 perm <- how(nperm = 999)
 setBlocks(perm) <- with(chicken_metadata, pen)
@@ -184,7 +189,9 @@ b1n_dis_table <-
 adonis2(b1n_dis_table ~ trial + sex + breed + treatment * age,
         permutations = perm,
         data = chicken_metadata)
+```
 
+```{r permanova_p_betadiv, comment = "", message = FALSE, warning = FALSE}
 # Phylogenetic
 b1p_dis_table <- 
   beta_q1p %>%
@@ -197,7 +204,9 @@ b1p_dis_table <-
 adonis2(b1p_dis_table ~ trial + sex + breed + treatment * age,
         permutations = perm,
         data = chicken_metadata)
+```
 
+```{r permanova_f_betadiv, comment = "", message = FALSE, warning = FALSE}
 # Functional KEGG
 b1f_dis_table_kegg <-
   beta_q1f_kegg %>%
@@ -214,18 +223,23 @@ adonis2(b1f_dis_table_kegg ~ trial + sex + breed + treatment * age,
 
 ### Community composition
 
-```{r composition, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
+```{r composition, comment = "", message = FALSE, warning = FALSE}
 perm <- how(nperm = 999)
 setBlocks(perm) <- with(chicken_metadata, pen)
 
-adonis2(hel ~ trial * sampling_time + 
+t_hel <- 
+ hel %>% 
+  t() %>% 
+  as.data.frame()
+  
+adonis2(t_hel ~ trial * sampling_time + 
               breed * sampling_time +
               sex * sampling_time +
               treatment * sampling_time,
         permutations = perm,
         data = chicken_metadata)
 
-adonis2(hel ~ trial * sampling_time + breed + sex + treatment,
+adonis2(t_hel ~ trial * sampling_time + breed + sex + treatment,
         permutations = perm,
         data = chicken_metadata)
 ```
@@ -236,21 +250,22 @@ adonis2(hel ~ trial * sampling_time + breed + sex + treatment,
 
 The resulting plot corresponds to Figure 1f in the manuscript.
 
-```{r distance_rda, fig.height = 4, fig.width = 7, fig.fullwidth = TRUE, eval = FALSE}
+```{r distance_rda_stats, comment = "", message = FALSE, warning = FALSE}
 set.seed(4)
-hel_bray <- vegdist(hel, method = 'bray')
+hel_bray <- vegdist(t(hel), method = 'bray')
 hel_bray_sqrt <- sqrt(hel_bray)
 
-pcoa <- cmdscale(hel_bray_sqrt, k = nrow(hel) - 1, eig = TRUE)
+pcoa <- cmdscale(hel_bray_sqrt, k = ncol(hel) - 1, eig = TRUE)
 pcoa_scores <- pcoa$points
 
 db_rda <- rda(pcoa_scores ~ sampling_time, data = chicken_metadata)
 
 # Stats
 anova(db_rda, by = 'term')
-summary(db_rda)
 RsquareAdj(db_rda)
+```
 
+```{r distance_rda_plot, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
 db_rda_scores <-
   data.frame(
     scores(db_rda, display = 'wa'),
@@ -262,10 +277,10 @@ db_rda_scores %>%
   ggplot(aes(x = RDA1, y = RDA2, colour = time)) +
   geom_point() +
   scale_color_manual(values = c('#e6a024', '#cc6777', '#5bb4e5')) +
-  theme_bw() +
+  theme_minimal() +
   theme(legend.position = 'none')
 ```
 
-```{r clean_6, comment = "", message = FALSE, warning = FALSE, eval = FALSE}
+```{r clean_6, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```

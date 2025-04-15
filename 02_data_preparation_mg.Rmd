@@ -169,7 +169,7 @@ phylo_samples <-
   column_to_rownames("animal_code") %>% 
   sample_data() # Convert to phyloseq sample_data object
 
-phylo_genome <- otu_table(mag_weighted, taxa_are_rows = TRUE) 
+phylo_genome <- otu_table(total, taxa_are_rows = TRUE) 
 
 phylo_taxonomy <- 
   genome_taxonomy %>%
