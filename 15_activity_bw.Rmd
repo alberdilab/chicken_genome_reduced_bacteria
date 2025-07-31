@@ -14,6 +14,10 @@ trends_bw <-
   mutate(trend_09 = case_when(bw_support > 0.95 ~ 'positive',
                            bw_support < 0.05 ~ 'negative',
                            TRUE ~ 'non-significant'))
+
+
+gift_colors <- read_tsv("data/gift_colors.tsv") %>% 
+  mutate(legend = str_c(Code_function, " - ", Function))
 ```
 
 
@@ -166,23 +170,22 @@ mag_subset_elements_3 <-
 
 ### Plot 
 
-```{r plot_heatmap, comment = "", message = FALSE, warning = FALSE}
+```{r plot_heatmap, comment = "", message = FALSE, warning = FALSE, fig.height = 8, fig.width = 12, fig.fullwidth = TRUE}
 mag_subset_elements_2 %>%
-  ggplot(aes(x = Element,
-             y = genome,
-             fill = bw_association,
-             group = Function,
-             alpha = log(avg_expr_million, 2))) +
+  rename(Code_function = "Function") %>% 
+  left_join(gift_colors, by = "Code_function") %>%
+  ggplot(aes(x = genome, y = Element, fill = bw_association, group = legend, alpha = log(avg_expr_million, 2))) +
   geom_tile(color = "#ffffff") +
   scale_y_discrete(guide = guide_axis(check.overlap = TRUE)) +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   scale_fill_manual(values = c("red3",
                                "blue3"),
                     na.value = "#f4f4f4") +
-  facet_grid(bw_association ~ Function, scales = "free", space = "free") +
+  facet_grid(legend ~ bw_association, scales = "free", space = "free") +
   theme_void(base_size = 8) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-        strip.text.y = element_text(size = 12, angle = -90),
+  theme(axis.text.x = element_text(size = 5, angle = 90),
+        axis.text.y = element_text(size = 5),
+        strip.text.y = element_blank(),
         legend.position = "none")
 ```
 
@@ -339,10 +342,10 @@ mci_df %>%
   xlab("Body-weight association")+
   theme_minimal()+
   theme(legend.position = 'none',
-        axis.title.x = element_text(size = 14),
-        axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12),
-        axis.title.y = element_text(size = 14)) 
+        axis.title.x = element_text(size = 12),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10),
+        axis.title.y = element_text(size = 12)) 
 ```
 
 ### Genome length of genome reduced MAGss 
@@ -371,8 +374,7 @@ boot_length_df[2, "ci_975"] <- bw_neg_red_mag_length_boot_ci$bca[,5]
 ```
 
 ```{r plot_length, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
-length_red_genomes <-
-  length_df %>%
+length_df %>%
   ggplot() +
   geom_jitter(aes(x = bw_association, y = mag_length, color = bw_association),
               alpha = 0.5, width = 0.25) +
@@ -387,13 +389,10 @@ length_red_genomes <-
   xlab("Body-weight association") +
   theme_minimal() +
   theme(legend.position = 'none',
-        axis.title.x = element_text(size = 14),
-        axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12),
-        axis.title.y = element_text(size = 14)) 
-ggsave("length_red_genomes_plot.png", length_red_genomes, width = 5, height = 5)
-ggsave("length_red_genomes_plot.pdf", length_red_genomes, width = 5, height = 5)
-
+        axis.title.x = element_text(size = 12),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10),
+        axis.title.y = element_text(size = 12)) 
 ```
 
 ### Expression profiles of genome reduced MAGs 
@@ -427,7 +426,7 @@ envfit_gifts_df <-
   select(gift_id, PCOA1, PCOA2)
 ```
 
-```{r pcoa, warning = FALSE, comments = "", message = FALSE, fig.height = 12, fig.width = 12, fig.fullwidth = TRUE}
+```{r pcoa, warning = FALSE, comments = "", message = FALSE, fig.height = 9, fig.width = 9, fig.fullwidth = TRUE}
 ggplot() +
   geom_point(data = pcoa_reduced_mags_df, 
              aes(x = PCOA1, y = PCOA2, color = bw_association), 
@@ -436,18 +435,27 @@ ggplot() +
              alpha = 0.8) +
   scale_color_manual(values = c("red3","blue3")) +
   geom_segment(data = envfit_gifts_df, 
-               aes(x = 0, xend = PCOA1, y = 0 , yend = PCOA2),
-               arrow = arrow(length = unit(0.10, "cm")),
-               color="gray20") +
-  geom_label_repel(data = envfit_gifts_df, aes(x = PCOA1, y = PCOA2, label = gift_id), size = 3) +
+               aes(x = 0, xend = PCOA1*0.5, y = 0 , yend = PCOA2*0.5),
+               arrow = arrow(length = unit(0.25, "cm")),
+               color="gray20",
+               linewidth = 0.2) +
+  geom_label_repel(data = envfit_gifts_df, aes(x = PCOA1*0.5, y = PCOA2*0.5, label = gift_id), size = 1, max.overlaps = 10) +
   theme_minimal() +
-  theme(legend.position = 'none')
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10))
 ```
 
 ### Activity heatmap of genome reduced bacteria 
 
-```{r plot_heatmap_reduced, comment = "", message = FALSE, fig.width = 3, fig.height = 6, warning = FALSE}
+```{r plot_heatmap_reduced, comment = "", message = FALSE, fig.width = 9, fig.height = 9, warning = FALSE}
 mag_subset_elements_3 %>%
+  rename(Code_element = "Element") %>% 
+  rename(Code_function = "Function") %>% 
+  left_join(GIFT_db2 %>%  select (Code_element, Code_function, Element, Function)) %>%
+  left_join(gift_colors, by = "Code_function") %>% 
   left_join(genome_taxonomy, by = 'genome') %>%
   filter(family == "UBA1242" | family == "UBA660") %>%
   select(-domain:-species) %>% 
@@ -458,9 +466,9 @@ mag_subset_elements_3 %>%
   filter(sum(avg_expr_million) > 0) %>%
   ungroup() %>%
   ggplot(aes(x = genome,
-             y = Element,
+             y = Code_element,
              fill = bw_association,
-             group = Function,
+             group = legend,
              alpha = log(avg_expr_million, 2))) +
   geom_tile(color = "#ffffff") +
   scale_y_discrete(guide = guide_axis(check.overlap = TRUE)) +
@@ -468,9 +476,11 @@ mag_subset_elements_3 %>%
   scale_fill_manual(values = c("red3",
                                "blue3"),
                     na.value = "#f4f4f4") +
-  facet_grid(Function ~ bw_association, scales = "free", space = "free") +
+  facet_grid(legend ~ bw_association, scales = "free", space = "free") +
   theme_void(base_size = 8) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+  theme(axis.text.x = element_text(angle = 90, vjust = 0, hjust = 1),
+        axis.text.y = element_text(size = 5, vjust = 0, hjust = 1),
+        strip.text.y = element_blank(),
         legend.position = "none")
 ```
 

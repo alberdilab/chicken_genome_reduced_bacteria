@@ -49,8 +49,8 @@ The resulting plot corresponds to Figure 3a.
 div_all_day_35 <-
   alpha_div %>%
   filter(sampling_time == '35') %>%
-  filter(trial != 'CC') %>% 
-  filter(!animal_code %in% c("CB12.17", "CA04.16", "CA03.17")) # ¿? double check if we are OK filtering some samples, they show out of place diversity
+  filter(trial != 'CC') #%>% 
+  # filter(!animal_code %in% c("CB12.17", "CA04.16", "CA03.17")) # ¿? double check if we are OK filtering some samples, they show out of place diversity
 
 N <- lme(chicken_body_weight ~ age + trial + neutral,
          random = ~1|pen,

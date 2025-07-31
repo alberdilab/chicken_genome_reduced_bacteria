@@ -6,123 +6,58 @@
 load("data/data_mg.Rdata")
 ```
 
-## Temporal trends related to MCI 
+## Functional ordination - Temporal PCoA with PCA loadings 
 
 The resulting plot corresponds to Figure 2c.
 
-### Calculate t-SNE based on GIFTs
-
-```{r tsne_temp, comment = "", message = FALSE, warning = FALSE}
-set.seed(100)
-tsne_func <- Rtsne(X = gifts_elements, dims = 2, check_duplicates = FALSE)
-
-genome_taxonomy <- 
-  genome_taxonomy %>% 
-  mutate(avg_mci = rowMeans(gifts_elements)) %>% 
-  mutate(length = genome_stats$mag_length)
-
-tsne_df <-
-  tsne_func$Y %>%
+``` {r temp_pcoa_ordination, comment = "", message = FALSE, warning = FALSE, fig.height = 7, fig.width = 9, fig.fullwidth = TRUE}
+gift_pcoa <- 
+  gifts_elements %>% 
   as.data.frame() %>%
-  mutate(genome = rownames(gifts_elements)) %>%
-  left_join(genome_taxonomy, by = 'genome') %>%
-  mutate_at(vars(phylum, class, order, family), factor) %>%
-  mutate(order = factor(order, levels = names(order_colors))) %>%
-  mutate(phylum = factor(phylum, levels = names(phylum_colors))) %>%
-  rename(tsne1 = 'V1', tsne2 = 'V2')
-```
+  vegdist(method="euclidean") %>%
+  pcoa()
 
-### Divide relative abundances by sampling time 
+gift_pcoa_rel_eigen <- gift_pcoa$values$Relative_eig[1:10]
 
-```{r filter_data_by_day, comment = "", message = FALSE, warning = FALSE}
-# Day 7
-met_d7 <- 
-  chicken_metadata %>% 
-  filter(sampling_time == 7) 
-
-abun_d7 <-  
-  hel %>% 
-  t() %>% 
+# Get genome positions
+gift_pcoa_vectors <- 
+  gift_pcoa$vectors %>% #extract vectors
   as.data.frame() %>% 
-  filter(rownames(.) %in% met_d7$animal_code) %>% 
-  summarise(across(everything(), mean, na.rm = TRUE)) %>% 
-  t() %>% 
-  as.data.frame() %>% 
-  rename(abundance = 'V1') %>% 
-  rownames_to_column('genome')
+  select(Axis.1,Axis.2) # keep the first 2 axes
 
-# Day 21
-met_d21 <- 
-  chicken_metadata %>% 
-  filter(sampling_time == 21) 
 
-abun_d21 <-  
-  hel %>% 
-  t() %>% 
-  as.data.frame() %>% 
-  filter(rownames(.) %in% met_d21$animal_code) %>% 
-  summarise(across(everything(), mean, na.rm = TRUE)) %>% 
-  t() %>% 
-  as.data.frame() %>% 
-  rename(abundance = 'V1') %>% 
-  rownames_to_column('genome')
-
-# Day 35
-met_d35 <- 
-  chicken_metadata %>% 
-  filter(sampling_time == 35)
-
-abun_d35 <-  
-  hel %>% 
-  t() %>% 
-  as.data.frame() %>% 
-  filter(rownames(.) %in% met_d35$animal_code) %>% 
-  summarise(across(everything(), mean, na.rm = TRUE)) %>% 
-  t() %>% 
-  as.data.frame() %>% 
-  rename(abundance = 'V1') %>% 
-  rownames_to_column('genome')
-```
-
-### Plot t-SNE
-
-```{r plot_tsne_by_day, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 12, fig.fullwidth = TRUE}
-# Day 7
-tsne_d7 <- 
-  tsne_df %>%
-  left_join(abun_d7, by = 'genome') %>% 
-  ggplot(aes(x = tsne1, y = tsne2, color = order, size = abundance)) +
-  geom_point(shape = 16, alpha = 0.8) +
-  scale_color_manual(values = order_colors) +
-  theme_minimal() +
-  theme(legend.position = 'none')
-
-# Day 21
-tsne_d21 <- 
-  tsne_df %>%
-  left_join(abun_d21, by = 'genome') %>%
-  ggplot(aes(x = tsne1, y = tsne2, color = order, size = abundance)) +
-  geom_point(shape = 16, alpha = 0.8) +
-  scale_color_manual(values = order_colors) +
-  theme_minimal() +
-  theme(legend.position = 'none')
-
-# Day 35
-tsne_d35 <- 
-  tsne_df %>%
-  left_join(abun_d35, by = 'genome') %>%
-  ggplot(aes(x = tsne1, y = tsne2, color = order, size = abundance)) +
-  geom_point(shape = 16, alpha = 0.8) +
-  scale_color_manual(values = order_colors) +
-  theme_minimal() +
-  theme(legend.position = 'none')
-
-grid.arrange(tsne_d7, tsne_d21, tsne_d35, ncol = 3)
+mag_weighted %>%
+  rownames_to_column(var = "genome") %>% 
+  mutate_at(vars(-genome),~./sum(.)) %>%
+  pivot_longer(-genome, names_to = "animal_code", values_to = "count") %>%
+  left_join(chicken_metadata, by = join_by(animal_code == animal_code)) %>% 
+  filter(!is.na(sampling_time)) %>% 
+  group_by(genome, trial, sampling_time) %>% 
+  summarise(count = mean(count)) %>% 
+  left_join(gift_pcoa_vectors %>% rownames_to_column(var = "genome"), by = "genome") %>%
+  left_join(genome_taxonomy %>% select(genome, phylum, order), by = "genome") %>%
+  ggplot() +
+      theme_minimal() +
+      #genome positions
+      geom_point(aes(x = Axis.1, y = Axis.2, color = order, size = count), 
+                 alpha = 0.8, shape = 16) +
+      # colors
+      scale_color_manual(values = order_colors) +    
+      # scale_color_manual(values=phylum_colors) +
+      scale_size_continuous(range = c(1,10)) +
+      # scale adjustments
+      scale_x_continuous(name = paste0("PCoA1 (",round(gift_pcoa_rel_eigen[1]*100, digits = 2), " %)")) +
+      scale_y_continuous(name = paste0("PCoA2 (",round(gift_pcoa_rel_eigen[2]*100, digits = 2), " %)")) +
+      facet_grid(trial ~ sampling_time) +
+      theme(legend.position = "none",
+            axis.line = element_line(color = "grey30"),
+            panel.border = element_rect(color = "grey80", fill = NA),
+            axis.ticks = element_line(color = "grey30"),
+            panel.grid = element_line(color = "grey80"),
+            strip.background = element_rect(fill = "grey80", color = NA))
 ```
 
 ## Compositional barplots 
-
-The resulting plot corresponds to Figure 2d.
 
 ### Compositional barplot at order level
 
@@ -143,56 +78,7 @@ phy_order_df <-
   separate_wider_delim(trial_age, "_", names = c("trial", "sampling_time"))
 ```
 
-```{r oplot_order, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 12, fig.fullwidth = TRUE}
-# separating by sampling time
-phy_order_df %>%
-  mutate(Sample = str_remove(Sample, "_.*")) %>% 
-  rename(Trial = 'Sample') %>% 
-  mutate(order = factor(order, levels =  c('Veillonellales','Acidaminococcales',
-                                           'Selenomonadales','UBA4068','UBA1212',
-                                           'Monoglobales','Peptostreptococcales',
-                                           'Monoglobales_A','Clostridiales',
-                                           'Lachnospirales','Christensenellales',
-                                           'TANB77','Oscillospirales','RFN20',
-                                           'Bacillales','Acholeplasmatales',
-                                           'Erysipelotrichales','ML615J-28',
-                                           'Lactobacillales','RF39',
-                                           'Deferribacterales','Actinomycetales',
-                                           'Coriobacteriales','Gastranaerophilales',
-                                           'Flavobacteriales','Bacteroidales',
-                                           'Rs-D84','Burkholderiales','RF32',
-                                           'Enterobacterales','Desulfovibrionales',
-                                           'Verrucomicrobiales','Opitutales',
-                                           'Victivallales','Methanomassiliicoccales',
-                                           'Synergistales','Campylobacterales',
-                                           'Saccharimonadales','Methanobacteriales',
-                                           'Methanomicrobiales'))) %>%
-  mutate(sampling_time = factor(sampling_time,
-                                levels = c("7", "21", "35"))) %>% 
-  filter(Abundance > 0) %>%
-  group_by(sampling_time) %>%
-  mutate(Trial = factor(Trial)) %>%
-  ungroup() %>%
-  ggplot() +
-  geom_bar(aes(x = Trial, y = Abundance, fill = order),
-           stat = "identity", position = "stack", color ="black", size = 0.08) +
-  facet_wrap(~sampling_time, scales = "free_x",
-             labeller = as_labeller(c('7' = 'Day 7',
-                                      '21' = 'Day 21',
-                                      '35' = 'Day 35'))) +
-  scale_color_manual('Order', values = order_colors) +
-  scale_fill_manual('Order', values = order_colors) +
-  ylab('Relative abundance') +
-  xlab('Trial') +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x =element_blank(),
-        axis.title.x = element_blank(),
-        panel.background = element_blank(),
-        legend.position = "none",
-        )
-```
-
-```{r plot_horizontal, comment = "", message = FALSE, warning = FALSE, fig.height = 3, fig.width = 12, fig.fullwidth = TRUE}
+```{r plot_vertical, comment = "", message = FALSE, warning = FALSE, fig.height = 18, fig.width = 10, fig.fullwidth = TRUE}
 # separating by sampling time and trial
 phy_order_df %>%
   mutate(order = factor(order, 
@@ -225,17 +111,17 @@ phy_order_df %>%
                                      replacement = "Day 35")) %>%
   mutate(sampling_time = factor(sampling_time,
                                 levels = c("Day 7", "Day 21", "Day 35"))) %>%
-  ggplot(aes(x = Sample, y = Abundance,
+  ggplot(aes(x = Abundance, y = Sample,
              fill = order, group = order)) +
-  geom_bar(stat = "identity", position = "stack", width = 1.1,
-         color ="black", size = 0.08) +
-  facet_nested(.~ sampling_time * trial, scales = "free_x") +
+  geom_bar(stat = "identity", position = "stack", width = 1,
+         color ="darkgrey", size = 0.005) +
+  facet_nested(sampling_time * trial ~., scales = "free_y") +
   scale_color_manual('Order', values = order_colors) +
   scale_fill_manual('Order', values = order_colors) +
   ylab('Relative abundance') +
-  theme(axis.text.x = element_blank(),
-        axis.title.x = element_blank(),
-        axis.ticks.x = element_blank(),
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
         panel.background = element_blank(),
         panel.border = element_blank(),
         panel.spacing.x = unit(0.1, "cm"),
@@ -244,7 +130,9 @@ phy_order_df %>%
         legend.text = element_text(size = 8),
         legend.title = element_text(size = 10),
         strip.text = element_text(size = 8),
-        legend.position = "none") 
+        legend.position = "right")  +
+  guides(fill = guide_legend(ncol = 1))
+
 ```
 
 ```{r clean_7, comment = "", message = FALSE, warning = FALSE}

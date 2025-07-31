@@ -134,7 +134,7 @@ trends <-
 
 ## Correlate bacterial MCI and response to time 
 
-The resulting plot corresponds to Figure 2f.
+The resulting plot corresponds to Figure 2e.
 
 ```{r load_data_mag, comment = "", message = FALSE, warning = FALSE}
 load("data/data_mg.Rdata")
@@ -149,17 +149,22 @@ mci_df <-
   select(avg_mci) %>% 
   rownames_to_column(var = 'genome')
 
+ 
 trends %>% 
   left_join(genome_taxonomy %>% select(genome, order), by = 'genome') %>% 
   left_join(mci_df, by = 'genome') %>% 
   ggplot() +
-  geom_point(aes(x = parameter, y = avg_mci, color = order)) +
+  geom_point(aes(x = parameter, y = avg_mci, color = order), size = 1) +
   scale_color_manual(values = order_colors) +
   geom_smooth(aes(x = parameter, y = avg_mci),
-              method = 'lm') +
+              method = 'lm', linewidth = 0.3) +
   theme_minimal() +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
+        axis.title.x = element_text(size = 8),
+        axis.title.y = element_text(size = 8),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8),
         legend.position = 'none')
 ```
 
@@ -174,7 +179,7 @@ plotVariancePartitioning(hM = m, VP = VP)
 
 ## Phylogenetic correlogram 
 
-The resulting plot corresponds to Figure 1e.
+The resulting plot corresponds to Figure 2d.
 
 ### Calcultate phylogenetic distance 
 

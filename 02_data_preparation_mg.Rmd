@@ -9,9 +9,8 @@ Load the original data files outputted by the bioinformatic pipeline.
 ```{r load_metadata, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
 chicken_metadata <- 
   read_tsv("data/metadata.tsv") %>%
-  mutate(sampling_time = factor(sampling_time, levels = c('7',
-                                                          '21',
-                                                          '35')))
+  mutate(sampling_time = factor(sampling_time,
+                                levels = c('7', '21', '35')))
 ```
 
 ### Taxonomy of metagenome-assembled genomes 
@@ -81,7 +80,6 @@ read_counts <-
   filter(genome %in% genome_taxonomy$genome) 
 ```
 
-
 ## Distilling Genome Inferred Functional Traits (GIFTs)
 
 ### Distilling DRAM annotations
@@ -119,7 +117,6 @@ gifts_functions <- to.functions(gifts_elements, GIFT_db2)
 # Aggregate into overall domain level
 gifts_domains <- to.domains(gifts_functions, GIFT_db2)
 ```
-
 
 ## Create working objects
 
@@ -254,7 +251,6 @@ order_colors <-
 ```{r get_sampling_colors, warning = FALSE, comments = "", message = FALSE}
 sampling_day_colors <- c('#E69F00', '#CC6677', '#56B4E9')
 ```
-
 
 ## Wrap working objects
 

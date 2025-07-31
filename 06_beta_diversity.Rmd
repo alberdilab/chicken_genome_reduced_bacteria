@@ -125,7 +125,7 @@ betadiv_f_dis_kegg %>%
 
 The resulting plot corresponds to Supplementary Figure S3.
 
-```{r plot_beta_diff, comment="", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 10, fig.fullwidth = TRUE}
+```{r plot_beta_diff, comment="", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 9, fig.fullwidth = TRUE}
 # Neutral
 p_n <- 
   betadiv_n_dis %>%
@@ -136,7 +136,7 @@ p_n <-
   ylim(0,0.5) +
   theme_minimal() +
   theme(legend.position = 'none') +
-  ggtitle('Neutral beta diversity')
+  ggtitle('Neutral')
 
 # Phylogenetic
 p_p <- 
@@ -148,7 +148,7 @@ p_p <-
   ylim(0,0.5) +
   theme_minimal() +
   theme(legend.position = 'none') +
-  ggtitle('Phylogenetic beta diversity')
+  ggtitle('Phylogenetic')
 
 # Functional KEGG
 p_f_kegg <-
@@ -160,7 +160,7 @@ p_f_kegg <-
   ylim(0,0.5) +
   theme_minimal() +
   theme(legend.position = 'none') +
-  ggtitle('Functional KEGG beta diversity')
+  ggtitle('Functional')
 
 
 grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
@@ -186,9 +186,10 @@ b1n_dis_table <-
   mutate(across(everything(), ~replace(., is.na(.), 0))) %>% 
   as.dist()
 
-adonis2(b1n_dis_table ~ trial + sex + breed + treatment * age,
+adonis2(b1n_dis_table ~ trial + sex + breed + treatment + trial + trial * age,
         permutations = perm,
-        data = chicken_metadata)
+        data = chicken_metadata,
+        by = "term")
 ```
 
 ```{r permanova_p_betadiv, comment = "", message = FALSE, warning = FALSE}
@@ -201,9 +202,10 @@ b1p_dis_table <-
   mutate(across(everything(), ~replace(., is.na(.), 0))) %>% 
   as.dist()
 
-adonis2(b1p_dis_table ~ trial + sex + breed + treatment * age,
+adonis2(b1p_dis_table ~ trial + sex + breed + treatment + trial + trial * age,
         permutations = perm,
-        data = chicken_metadata)
+        data = chicken_metadata,
+        by = "term")
 ```
 
 ```{r permanova_f_betadiv, comment = "", message = FALSE, warning = FALSE}
@@ -216,14 +218,15 @@ b1f_dis_table_kegg <-
   mutate(across(everything(), ~replace(., is.na(.), 0))) %>%
   as.dist()
 
-adonis2(b1f_dis_table_kegg ~ trial + sex + breed + treatment * age,
+adonis2(b1f_dis_table_kegg ~ trial + sex + breed + treatment + trial + trial * age,
         permutations = perm,
-        data = chicken_metadata)
+        data = chicken_metadata,
+        by = "term")
 ```
 
 ### Community composition
 
-```{r composition, comment = "", message = FALSE, warning = FALSE}
+```{r com_composition_permanova, comment = "", message = FALSE, warning = FALSE}
 perm <- how(nperm = 999)
 setBlocks(perm) <- with(chicken_metadata, pen)
 
@@ -237,18 +240,20 @@ adonis2(t_hel ~ trial * sampling_time +
               sex * sampling_time +
               treatment * sampling_time,
         permutations = perm,
-        data = chicken_metadata)
+        data = chicken_metadata,
+        by = "term")
 
 adonis2(t_hel ~ trial * sampling_time + breed + sex + treatment,
         permutations = perm,
-        data = chicken_metadata)
+        data = chicken_metadata,
+        by = "term")
 ```
 
 ## Community composition development
 
 ### Distance-based RDA 
 
-The resulting plot corresponds to Figure 1f in the manuscript.
+The resulting plot corresponds to Figure 2b in the manuscript.
 
 ```{r distance_rda_stats, comment = "", message = FALSE, warning = FALSE}
 set.seed(4)
@@ -265,7 +270,7 @@ anova(db_rda, by = 'term')
 RsquareAdj(db_rda)
 ```
 
-```{r distance_rda_plot, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
+```{r distance_rda_plot, comment = "", message = FALSE, warning = FALSE, fig.height = 6, fig.width = 9, fig.fullwidth = TRUE}
 db_rda_scores <-
   data.frame(
     scores(db_rda, display = 'wa'),
@@ -275,10 +280,17 @@ db_rda_scores <-
 
 db_rda_scores %>%
   ggplot(aes(x = RDA1, y = RDA2, colour = time)) +
-  geom_point() +
+  geom_point(size = 3) +
   scale_color_manual(values = c('#e6a024', '#cc6777', '#5bb4e5')) +
   theme_minimal() +
-  theme(legend.position = 'none')
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10),
+        axis.title = element_text(size = 8),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank())
 ```
 
 ```{r clean_6, comment = "", message = FALSE, warning = FALSE}

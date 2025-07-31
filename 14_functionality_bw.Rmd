@@ -33,6 +33,11 @@ gifts_funct$avg_mci_bio <- avg_mci_bio
 
 avg_mci_deg <- rowMeans(gifts[,grepl("D",names(gifts))])
 gifts_funct$avg_mci_deg <- avg_mci_deg
+
+
+gift_colors <- 
+  read_tsv("data/gift_colors.tsv") %>% 
+  mutate(legend = str_c(Code_function, " - ", Function))
 ```
 
 ## Taxonomy of positively and negatively associated MAGs
@@ -380,10 +385,12 @@ grid.arrange(p_Mci_mg, p_B04_mg, p_B08_mg, ncol = 3)
 ### All
 
 ```{r combined_plots_bio, , comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
-grid.arrange(p_Mci_bio_mg, p_B01_mg, p_B02_mg,
+sup_s4 <- grid.arrange(p_Mci_bio_mg, p_B01_mg, p_B02_mg,
              p_B03_mg, p_B04_mg, p_B06_mg, 
              p_B07_mg, p_B08_mg, p_B09_mg,
              p_B10_mg, ncol = 3)
+
+ggsave("sup_s4.pdf", plot = sup_s4, width = 20, height = 22, units = "cm", dpi = 600)
 ```
 
 #### MCI comparisons of degradation pathways
@@ -617,20 +624,27 @@ gifts_bw_df_long <-
   mutate(Function = substr(Element, start = 1, stop = 3)) %>%
   relocate(Function, .after = Element)
 
+# Heatmap
 gifts_bw_df_long %>%
-  group_by(Element) %>%
+  rename(Code_element = "Element") %>% 
+  rename(Code_function = "Function") %>% 
+  left_join(gift_colors, by = "Code_function") %>% 
+  group_by(Code_element) %>%
   filter(sum(mci) > 0) %>%
   ungroup() %>%
-  ggplot(., aes(x = Element, y = genome, fill = bw_association, group = Function, alpha = mci)) +
-  geom_tile(color = "#ffffff") +
-  scale_y_discrete(guide = guide_axis(check.overlap = TRUE)) +
-  scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
-  scale_fill_manual(values = c("red3",
-                               "blue3"),
-                    na.value = "#f4f4f4") +
-  facet_grid(bw_association ~ Function, scales = "free", space = "free") +
-  theme_void(base_size = 8) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.position = "none")
+  ggplot(., aes(x = genome, y = Code_element, fill = bw_association, group = legend, alpha = mci)) +
+    geom_tile(color = "#ffffff") +
+    scale_y_discrete(guide = guide_axis(check.overlap = TRUE)) +
+    scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
+    scale_fill_manual(values = c("red3",
+                                 "blue3"),
+                      na.value = "#f4f4f4") +
+    facet_grid(legend ~ bw_association, scales = "free", space = "free") +
+    theme_void(base_size = 8) +
+    theme(axis.text.y = element_blank(),
+          strip.text.y = element_blank(),
+          axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size =  6),
+          legend.position = "none")
 ```
 
 ```{r clean_14, comment = "", message = FALSE, warning = FALSE}
