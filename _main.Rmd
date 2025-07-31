@@ -103,9 +103,8 @@ Load the original data files outputted by the bioinformatic pipeline.
 ```{r load_metadata, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
 chicken_metadata <- 
   read_tsv("data/metadata.tsv") %>%
-  mutate(sampling_time = factor(sampling_time, levels = c('7',
-                                                          '21',
-                                                          '35')))
+  mutate(sampling_time = factor(sampling_time,
+                                levels = c('7', '21', '35')))
 ```
 
 ### Taxonomy of metagenome-assembled genomes 
@@ -175,7 +174,6 @@ read_counts <-
   filter(genome %in% genome_taxonomy$genome) 
 ```
 
-
 ## Distilling Genome Inferred Functional Traits (GIFTs)
 
 ### Distilling DRAM annotations
@@ -213,7 +211,6 @@ gifts_functions <- to.functions(gifts_elements, GIFT_db2)
 # Aggregate into overall domain level
 gifts_domains <- to.domains(gifts_functions, GIFT_db2)
 ```
-
 
 ## Create working objects
 
@@ -348,7 +345,6 @@ order_colors <-
 ```{r get_sampling_colors, warning = FALSE, comments = "", message = FALSE}
 sampling_day_colors <- c('#E69F00', '#CC6677', '#56B4E9')
 ```
-
 
 ## Wrap working objects
 
@@ -567,44 +563,7 @@ rm(list = ls())
 load("data/data_mg.Rdata")
 ```
 
-## Taxonomy legend 
-
-### Phylum level
-```{r plot_phylum_legend, message = FALSE, warning = FALSE}
-phylum_table <- 
-  taxonomy_colors %>% 
-  distinct(phylum, .keep_all = TRUE) %>% 
-  ggplot(aes(x = 2, y = factor(phylum, levels = phylum), fill = color_phylum)) +
-  geom_tile(color = "white", size = 0.5) +  
-  geom_text(aes(label = phylum), vjust = 0.5, size = 5, color = "black") +  
-  scale_fill_identity() +  
-  theme_void() +  
-  theme(
-    aspect.ratio = 2/1,
-    plot.margin = margin(10, 10, 10, 10)
-  )
-```
-
-### Order level
-```{r plot_order_legend, message = FALSE, warning = FALSE, fig.height = 7, fig.width = 10, fig.fullwidth = TRUE}
-order_table <- 
-  taxonomy_colors %>% 
-  ggplot(aes(x = 2, y = factor(order, levels = order), fill = color_order)) +
-  geom_tile(color = "white", size = 0.5) +  
-  geom_text(aes(label = order), vjust = 0.5, size = 4,  color = "black") +  
-  scale_fill_identity() +  
-  theme_void() +  
-  theme(
-    aspect.ratio = 2/1,
-    plot.margin = margin(10, 10, 10, 10)
-  )
-
-grid.arrange(phylum_table, order_table, ncol = 2)
-```
-
 ## Densities of overall relative abundances by phylum 
-
-The resulting plot corresponds to Figure 1a.
 
 ### Calculate densities
 
@@ -641,7 +600,9 @@ count_taxa <-
 
 ### Plot curves 
 
-```{r density_histogram, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 6, fig.fullwidth = TRUE}
+The resulting plot corresponds to Figure 1a.
+
+```{r density_histogram_fig_1a, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 7, fig.fullwidth = TRUE}
 ggplot(count_taxa, aes(x = total_ind, colour = phylum, fill = phylum)) +
   geom_density(alpha = 0.5) +
   scale_fill_manual(values = phylum_colors) +
@@ -655,173 +616,189 @@ ggplot(count_taxa, aes(x = total_ind, colour = phylum, fill = phylum)) +
     panel.grid.minor.x = element_blank(),
     panel.grid.minor.y = element_blank(),
     panel.grid.major.y = element_blank(),
-    # axis.text.y = element_blank(),
-    legend.position = "none") 
+    axis.text.y = element_blank(),
+    axis.title.x = element_text(size = 8),
+    axis.title.y = element_text(size = 8),
+    axis.text.x = element_text(size = 8),
+    legend.position = "bottom") 
+
 ```
 
-## Functional landscape of the catalogue
+## Functional ordination - PCoA with PCA loadings 
 
-### Caltulate t-SNE based on GIFTs
-
-```{r tsne, warning = FALSE, comments = "", message = FALSE}
-set.seed(100)
-tsne_func <- Rtsne(X = gifts_elements, dims = 2, check_duplicates = FALSE)
-
-genome_taxonomy <- 
-  genome_taxonomy %>% 
-  mutate(avg_mci = rowMeans(gifts_elements)) %>% 
-  mutate(length = genome_stats$mag_length)
-
-tsne_df <-
-  tsne_func$Y %>%
+``` {r pcoa_ordination, comment = "", message = FALSE, warning = FALSE}
+gift_pcoa <- 
+  gifts_elements %>% 
   as.data.frame() %>%
-  mutate(genome = rownames(gifts_elements)) %>%
-  left_join(genome_taxonomy, by = 'genome') %>%
-  mutate_at(vars(phylum, class, order, family), factor) %>%
-  mutate(order = factor(order, levels = names(order_colors))) %>%
-  mutate(phylum = factor(phylum, levels = names(phylum_colors))) %>%
-  rename(tsne1 = 'V1', tsne2 = 'V2')
+  vegdist(method="euclidean") %>%
+  pcoa()
+
+gift_pcoa_rel_eigen <- gift_pcoa$values$Relative_eig[1:10]
+
+# Get genome positions
+gift_pcoa_vectors <- 
+  gift_pcoa$vectors %>%  # extract vectors
+  as.data.frame() %>% 
+  select(Axis.1,Axis.2)  # keep the first 2 axes
+
+gift_pcoa_eigenvalues <- gift_pcoa$values$Eigenvalues[c(1,2)]
+
+gift_pcoa_gifts <- 
+  cov(gifts_elements, scale(gift_pcoa_vectors)) %*% diag((gift_pcoa_eigenvalues/(nrow(gifts_elements)-1))^(-0.5)) %>%
+  as.data.frame() %>% 
+  rename(Axis.1 = 1, Axis.2 = 2) %>% 
+  rownames_to_column(var = "label") %>% 
+  mutate(func = substr(label,1,3)) %>% 
+  group_by(func) %>% 
+  summarise(Axis.1 = mean(Axis.1),
+            Axis.2 = mean(Axis.2)) %>% 
+  rename(label = func) %>% 
+  filter(!label %in% c("S01","S02","S03"))
 ```
 
-### Paint t-SNE by order and Overall Metabolic Capacity Index
+The resulting plot corresponds to Figure 1b.
 
-The resulting plots correspond to Figures 1b and 1c. 
+``` {r pcoa_fig_1b, comment = "", message = FALSE, warning = FALSE, fig.height = 9, fig.width = 10, fig.fullwidth = TRUE}
+scale <- 20 # scale for vector loadings
 
-```{r tsne_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 10, fig.fullwidth = TRUE}
-tsne_taxonomy <- 
-  tsne_df %>%
-  ggplot(aes(x = tsne1, y = tsne2, color = order)) +
-  geom_point(size = 2, shape = 16, alpha = 0.8) +
-  scale_color_manual(values = order_colors) +
+gift_pcoa_vectors %>% 
+  rownames_to_column(var = "genome") %>% 
+  left_join(genome_stats, by = "genome") %>%
+  left_join(genome_taxonomy, by = "genome") %>%
+  ggplot() +
+      # genome positions
+      scale_color_manual(values = order_colors)+
+      geom_point(aes(x = Axis.1, y = Axis.2, color = order, size = mag_length), 
+                 alpha = 0.9, shape = 16) +
+      # scale_color_manual(values=phylum_colors) +
+      scale_size_continuous(range = c(0.05, 4)) +
+      # loading positions
+      geom_segment(data = gift_pcoa_gifts, 
+                   aes(x = 0, y = 0, xend = Axis.1 * scale, yend = Axis.2 * scale),
+                    arrow = arrow(length = unit(0.2, "cm"), 
+                    type = "open", 
+                    angle = 25),
+                    linewidth = 0.2, 
+                    color = "black") +
+     # primary and secondary scale adjustments
+     scale_x_continuous(name = paste0("PCoA1 (",round(gift_pcoa_rel_eigen[1]*100, digits = 2), " %)"),
+                        sec.axis = sec_axis(~ . / scale, name = "Loadings on PCoA1")) +
+     scale_y_continuous(name = paste0("PCoA2 (",round(gift_pcoa_rel_eigen[2]*100, digits = 2), " %)"), 
+                        sec.axis = sec_axis(~ . / scale, name = "Loadings on PCoA2")) +
+     geom_label_repel(data = gift_pcoa_gifts,
+                      aes(label = label, x = Axis.1 * scale, y = Axis.2 * scale),
+                      segment.color = 'transparent',
+                      size = 3) +
+    theme_minimal() + 
+    theme(legend.position = "bottom",
+          axis.title.x = element_text(size = 12),
+          axis.title.y = element_text(size = 12),
+          axis.text.x = element_text(size = 10),
+          axis.text.y = element_text(size = 10),
+          text = element_text(size = 8))
+```
+
+### Plot genome length and average MCI gradients
+
+``` {r axis_gradients_1, comment = "", message = FALSE, warning = FALSE, fig.height = 3, fig.width = 10, fig.fullwidth = TRUE}
+# Preparing data for ploting gradients
+overall_mci <-
+  gifts_elements %>%
+  as.data.frame() %>% 
+  rownames_to_column(var = "genome") %>%
+  rowwise() %>%
+  mutate(overall = mean(c_across(B0101:S0301))) %>%
+  select(genome, overall)
+
+gift_pcoa_vectors_with_metadata <- 
+  gift_pcoa_vectors %>% 
+  rownames_to_column(var = "genome") %>% 
+  left_join(overall_mci, by = "genome") %>%
+  left_join(genome_stats %>%
+              select(genome, mag_length), by = "genome") %>% 
+  left_join(gifts_functions %>% 
+              as.data.frame %>% 
+              rownames_to_column(var = "genome") %>%
+              select(genome, B04, B07))
+  
+scale_factor <- max(gift_pcoa_vectors_with_metadata$mag_length, na.rm = TRUE) /
+                max(gift_pcoa_vectors_with_metadata$overall, na.rm = TRUE)
+
+
+# Axis 1 gradients
+gift_pcoa_vectors_with_metadata %>% 
+  ggplot(aes(x = Axis.1)) +
+    geom_smooth(aes(y = mag_length), color = "darkblue") +
+    geom_smooth(aes(y = overall * scale_factor), color = "darkgreen") +
+    scale_y_continuous(name = "MAG length",
+                       sec.axis = sec_axis(~ . / scale_factor, name = "Overall MCI")) +
   theme_minimal() +
-  theme(legend.position = 'none')
-
-tsne_mci <- 
-  tsne_df %>%
-  ggplot(aes(x = tsne1, y = tsne2, color = avg_mci)) +
-  geom_point(size = 2, shape = 16, alpha = 0.8) +
-  scale_colour_gradientn(colours = rev(terrain.colors(10))) +
-  theme_minimal()+
-  theme(legend.position = 'none')
-
-grid.arrange(tsne_taxonomy, tsne_mci, nrow = 1)
+    theme(
+      axis.title.y.left = element_text(color = "darkblue"),
+      axis.title.y.right = element_text(color = "darkgreen"),
+      axis.title.x = element_text(size = 12),
+      axis.title.y = element_text(size = 12),
+      axis.text.x = element_text(size = 10),
+      axis.text.y = element_text(size = 10),
+      text = element_text(size = 8),
+      legend.position = "none")
 ```
 
-### Interactive plot  
+### Plot SCFA and vitamin biosynthesis gradients
 
-The resulting interactive plot is not included in the article but enables exploring each MAG in detail.
+``` {r axis_gradients_2, comment = "", message = FALSE, warning = FALSE, fig.height = 3, fig.width = 10, fig.fullwidth = TRUE}
+# Axis 2 gradients
+scale_factor <- max(gift_pcoa_vectors_with_metadata$B04, na.rm = TRUE) /
+                max(gift_pcoa_vectors_with_metadata$B07, na.rm = TRUE)
 
-```{r interactive_dotplot, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 6, fig.fullwidth = TRUE}
-library(plotly)
-
-p <-
-  tsne_df %>%
-  mutate(tooltip = paste(family, "//", genome)) %>% 
-  ggplot(aes(x = tsne1, y = tsne2, colour = order, text = tooltip)) +
-  geom_point(size = 2, stroke = 1, alpha = 0.8, shape = 16) + 
-  scale_colour_manual(values = order_colors) +
-  theme_bw()
-
-ggplotly(p, tooltip = "text")
+gift_pcoa_vectors_with_metadata %>% 
+  ggplot(aes(x = Axis.2)) +
+    geom_smooth(aes(y = B04), color = "#ee3237") +
+    geom_smooth(aes(y = B07 * scale_factor), color = "#a61f5e") +
+    scale_y_continuous(name = "SCFA biosynthesis",
+                       sec.axis = sec_axis(~ . / scale_factor, name = "Vitamin biosynthesis")) +
+  theme_minimal() +
+    theme(
+      axis.title.y.left = element_text(color = "#ee3237"),
+      axis.title.y.right = element_text(color = "#a61f5e"),
+      axis.title.x = element_text(size = 12),
+      axis.title.y = element_text(size = 12),
+      axis.text.x = element_text(size = 10),
+      axis.text.y = element_text(size = 10),
+      text = element_text(size = 8),
+      legend.position = "none")
 ```
 
-### t-SNE coloring 4 most important phylums
+## Functional ordination - interactive
+
+``` {r pcoa_interactive, comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
+library("plotly")
+scale <- 20 # scale for vector loadings
+
+pcoa_interactive <- 
+  gift_pcoa_vectors %>% 
+  rownames_to_column(var = "genome") %>% 
+  left_join(genome_stats, by = "genome") %>%
+  left_join(genome_taxonomy, by = "genome") %>%
+  mutate(tooltip = paste(family, "//", genome)) %>%
+  ggplot() +
+      # genome positions
+      scale_color_manual(values = order_colors)+
+      geom_point(aes(x = Axis.1, y = Axis.2, color = order, size = mag_length, text = tooltip), 
+                 alpha = 0.9, shape = 16) +
+      scale_size_continuous(range = c(0.05,4)) +
+     # primary and secondary scale adjustments
+     scale_x_continuous(name = paste0("PCoA1 (",round(gift_pcoa_rel_eigen[1]*100, digits = 2), " %)")) +
+     scale_y_continuous(name = paste0("PCoA2 (",round(gift_pcoa_rel_eigen[2]*100, digits = 2), " %)")) +
+    theme_minimal() + 
+    theme(legend.position = "none")
+
+ggplotly(pcoa_interactive, tooltip = "text")
+```
+
+## Compare MCI and genome length between taxonomic groups 
 
 The resulting plot corresponds to Supplementary Figure S1.
-
-```{r tsne_by_phylum, comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
-# Bacillota_A
-tsne_a <- 
-  tsne_df %>%
-  ggplot(aes(x = tsne1, y = tsne2, colour = ifelse(phylum == 'Bacillota_A', as.character(order), 'other'))) +
-  geom_point(size = 2, stroke = 1, alpha = 0.8, shape = 16) + 
-  scale_colour_manual(values = c(
-    Oscillospirales = "#fd8854",
-    TANB77 = "#f4814d",
-    Christensenellales = "#c26340",
-    Lachnospirales = "#c28c5c",
-    Clostridiales = "#ce9360",
-    Monoglobales_A = "#ce734f",
-    Peptostreptococcales = "#c65631",
-    Monoglobales = "#b93725",
-    UBA1212 = "#b10f19",
-    other = "grey")) +
-  theme_minimal() +
-  labs(colour = "Bacillota_A") +
-  theme(legend.position = 'bottom',
-        legend.text = element_text(size = 6),
-        legend.title = element_text(size = 8),
-        legend.key.height = unit(0.01, "cm"),  
-        legend.spacing.y = unit(0.01, "cm"))+
-  guides(color = guide_legend(byrow = TRUE, title.position = "top"))
-
-# Bacillota
-tsne_b <- 
-  tsne_df %>%
-  ggplot(aes(x = tsne1, y = tsne2, colour = ifelse(phylum == 'Bacillota', as.character(order), 'other'))) +
-  geom_point(size = 2, stroke = 1, alpha = 0.8, shape = 16) + 
-  scale_colour_manual(values = c(
-    RF39 = "#ecf76d",
-    Lactobacillales = "#feef68",
-    'ML615J-28' = "#fde671",
-    Erysipelotrichales = "#ffd366",
-    Acholeplasmatales = "#fdc151",
-    Bacillales = "#fc953d",
-    RFN20 = "#fd8035",
-    other = "grey")) +
-  theme_minimal() +
-  labs(colour = "Bacillota") +
-  theme(legend.position = 'bottom',
-        legend.text = element_text(size = 6),
-        legend.title = element_text(size = 8),
-        legend.key.height = unit(0.01, "cm"),  
-        legend.spacing.y = unit(0.01, "cm"))+
-  guides(color = guide_legend(byrow = TRUE, title.position = "top"))
-
-# Bacteroidota
-tsne_c <- 
-  tsne_df %>%
-  ggplot(aes(x = tsne1, y = tsne2, colour = ifelse(phylum == 'Bacteroidota', as.character(order), 'other'))) +
-  geom_point(size = 2, stroke = 1, alpha = 0.8, shape = 16) + 
-  scale_colour_manual(values = c(
-    Bacteroidales = "#4dc87c",
-    Flavobacteriales = "#88c88b",
-    'other' = "grey")) +
-  theme_minimal() +
-  labs(colour = "Bacteroidota") +
-  theme(legend.position = 'bottom',
-        legend.text = element_text(size = 6),
-        legend.title = element_text(size = 8),
-        legend.key.height = unit(0.01, "cm"),  
-        legend.spacing.y = unit(0.01, "cm"))+
-  guides(color = guide_legend(byrow = TRUE, title.position = "top"))
-
-# Pseudomonadota
-tsne_d <- 
-  tsne_df %>%
-  ggplot(aes(x = tsne1, y = tsne2, colour = ifelse(phylum == 'Pseudomonadota', as.character(order), 'other'))) +
-  geom_point(size = 2, stroke = 1, alpha = 0.8, shape = 16) + 
-  scale_colour_manual(values = c(
-    Enterobacterales = "#60cfde",
-    RF32 = "#60dfd2",
-    Burkholderiales = "#5cdfb5",
-    'Rs-D84' = "#40df91",
-    'other' = "grey")) +
-  theme_minimal() +
-  labs(colour = "Pseudomonadota") +
-  theme(legend.position = 'bottom',
-        legend.text = element_text(size = 6),
-        legend.title = element_text(size = 8),
-        legend.key.height = unit(0.01, "cm"),  
-        legend.spacing.y = unit(0.01, "cm"))+
-  guides(color = guide_legend(byrow = TRUE, title.position = "top"))
-
-grid.arrange(tsne_a, tsne_b, tsne_c, tsne_d, nrow = 2)
-```
-
-## Compare MCI between taxonomic groups 
-
-The resulting plot corresponds to Supplementary Figure S2.
 
 ```{r tidy_taxonomy_and_colors, comment = "", message = FALSE, warning = FALSE}
 main_phylums <- c("Bacillota_A", "Bacillota", "Bacteroidota",
@@ -882,7 +859,7 @@ selected_groups <-
   arrange(order)
 ```  
 
-```{r tidy_data, comment = "", message = FALSE, warning = FALSE}
+```{r tidy_data_for_ordering_clades, comment = "", message = FALSE, warning = FALSE}
 genome_taxonomy <- 
   genome_taxonomy %>% 
   mutate(avg_mci = rowMeans(gifts_elements)) %>% 
@@ -904,7 +881,7 @@ border_groups <- c("Bacillota_A", "Bacillota", "Bacteroidota",
                    "Verrucomicrobiota", "Campylobacterota")
 ```
  
-### Overall MCI by taxonomic phylum and order 
+### Average MCI by taxonomic phylum and order 
  
 ```{r mci_boxplot, comment = "", message = FALSE, warning = FALSE, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
 table_two %>% 
@@ -914,7 +891,8 @@ table_two %>%
   geom_jitter(aes(x = group, y = avg_mci), 
               color = 'grey', alpha = 0.5, width = 0.1) +
   geom_violin(aes(x = group, y = avg_mci, fill = group),
-              color = "black", size = 0.01) +
+              color = NA,
+              size = 0.01) +
   theme_minimal() +
   xlab("Taxonomic group") +
   ylab("Genome average metabolic capacity") +
@@ -925,8 +903,6 @@ table_two %>%
 ```  
 
 ### Genome length by taxonomic phylum and order 
-
-The resulting plot is not included in the research article.
 
 ```{r length_boxplot, comment = "", message = FALSE, warning = FALSE, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
 table_three <- 
@@ -945,7 +921,9 @@ table_four %>%
   mutate(group = factor(group, levels = selected_groups$order)) %>% 
   ggplot() +
   geom_jitter(aes(x = group, y = length), color = 'grey', alpha = 0.5, width = 0.1) +
-  geom_violin(aes(x = group, y = length, fill = group), color = "black", size = 0.01) +
+  geom_violin(aes(x = group, y = length, fill = group),
+              color = NA,
+              size = 0.01) +
   theme_minimal() +
   xlab("Taxonomic group") +
   ylab("Mag length") +
@@ -957,6 +935,26 @@ table_four %>%
 ```{r clean_4, comment = "", message = FALSE, warning = FALSE}
 rm(list = ls())
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!--chapter:end:04_mag_catalogue.Rmd-->
 
@@ -1032,104 +1030,80 @@ save(alpha_div, file = "data/alpha_div.Rdata")
 
 The resulting plot corresponds to Figure 2a.
 
-```{r plot_div, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 12, fig.fullwidth = TRUE}
+```{r plot_div, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 9, fig.fullwidth = TRUE}
 load("data/alpha_div.Rdata")
 
 # Neutral
 p_n <- 
-  ggplot(alpha_div,
-         aes(x = sampling_time,
-         y = neutral,
-         group = sampling_time,
-         colour = sampling_time)) +
-  geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-               width = 0.2,
-               lwd = 2,
-               outlier.color = NA,
-               position = position_nudge(x = -.4)
-               ) +
-  geom_jitter(width = 0.1, alpha = 0.6) +
-  stat_summary(geom = 'crossbar',
-               width = 0.2,
-               fatten = 0,
-               color = 'white',
-               position = position_nudge(x = -.4),
-               fun.data = function(x){ return(c(y = median(x),
-                                                ymin = median(x),
-                                                ymax = median(x))
-               ) }) +
+  ggplot(alpha_div, 
+         aes(x = sampling_time, y = neutral, group = sampling_time)) +
+  geom_jitter(aes_string(color = 'sampling_time'),
+              size = 0.3, width = 0.25, alpha = 0.6) +
+  geom_boxplot(aes_string(fill = 'sampling_time'),
+               width = 0.5,
+               alpha = 0.5,
+               outlier.color = NA) +
   scale_fill_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   scale_color_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   theme_minimal() +
-  ylab("Effective number of strains") +
+  ylab(NULL) +
   xlab(NULL) +
-  ggtitle("Neutral diversity") +
+  ggtitle("Neutral") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
+        axis.title.x = element_text(size = 8),
+        axis.title.y = element_text(size = 8),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8),
+        plot.title =  element_text(size = 10),
         legend.position = "none")
 
 # Phylogenetic
 p_p <- 
-  ggplot(alpha_div,
-  aes(x = sampling_time,
-      y = phylogenetic,
-      group = sampling_time,
-      colour = sampling_time)) +
-  geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-               width = 0.2,
-               lwd = 2,
-               outlier.color = NA,
-               position = position_nudge(x = -.4)
-               ) +
-  geom_jitter(width = 0.1, alpha = 0.6) +
-  stat_summary(geom = "crossbar",
-               width = 0.2,
-               fatten = 0,
-               color = "white",
-               position = position_nudge(x = -.4),
-               fun.data = function(x){ return(c(y = median(x),
-                                                ymin = median(x),
-                                                ymax = median(x))
-               ) }) +
+  ggplot(alpha_div, 
+         aes(x = sampling_time, y = phylogenetic, group = sampling_time)) +
+  geom_jitter(aes_string(colour = 'sampling_time'), 
+              size = 0.3, width = 0.25, alpha = 0.6) +
+  geom_boxplot(aes_string(fill = 'sampling_time'),
+               width = 0.5,
+               alpha = 0.5,
+               outlier.color = NA) +
   scale_fill_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   scale_color_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   theme_minimal() +
-  labs(x =NULL, y = NULL) +
-  ggtitle("Phylogenetic diversity") +
+  labs(x = NULL, y = NULL) +
+  ggtitle("Phylogenetic") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
+        axis.title.x = element_text(size = 8),
+        axis.title.y = element_text(size = 8),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8),
+        plot.title =  element_text(size = 10),
         legend.position = 'none')
 
 # Functional KEGGs
 p_f_kegg <-
   ggplot(alpha_div,
-         aes(x = sampling_time,
-         y = functional_kegg,
-         group = sampling_time,
-         colour = sampling_time)) +
-  geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-               width = 0.2,
-               lwd = 2,
-               outlier.color = NA,
-               position = position_nudge(x = -.4)
-  ) +
-  geom_jitter(width = 0.1, alpha = 0.6) +
-  stat_summary(geom = "crossbar",
-               width = 0.2,
-               fatten = 0,
-               color = "white",
-               position = position_nudge(x = -.4),
-               fun.data = function(x){ return(c(y = median(x),
-                                                ymin = median(x),
-                                                ymax = median(x))
-               ) }) +
+         aes(x = sampling_time, y = functional_kegg, group = sampling_time)) +
+  geom_jitter(aes_string(colour = 'sampling_time'), 
+              size = 0.3, width = 0.25, alpha = 0.6) +
+  geom_boxplot(aes_string(fill = 'sampling_time'),
+               width = 0.5,
+               alpha = 0.5,
+               outlier.color = NA) +
   scale_fill_manual(values = c("#E69F00", "#CC6677", "#56B4E9")) +
   scale_color_manual(values = c("#E69F00", "#CC6677", "#56B4E9")) +
   theme_minimal() +
   labs(x =NULL, y = NULL) +
-  ggtitle("Functional diversity") +
+  ggtitle("Functional") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
+        axis.title.x = element_text(size = 8),
+        axis.title.y = element_text(size = 8),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8),
+        plot.title =  element_text(size = 10),
         legend.position = "none")
 
 grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
@@ -1146,7 +1120,8 @@ m_div_n <-
   lme(neutral ~ seq_depth + sex + breed + treatment + trial * age,
       random = ~1|pen,
       data = alpha_div)
-summary(m_div_n)
+
+anova(m_div_n)
 ```
 
 ### Phylogenetic
@@ -1156,7 +1131,8 @@ m_div_p <-
   lme(phylogenetic ~ seq_depth + sex + breed + treatment + trial * age,
       random = ~ 1|pen,
       data = alpha_div)
-summary(m_div_p)
+
+anova(m_div_p)
 ```
 
 ### Functional KEGG
@@ -1166,7 +1142,8 @@ m_div_f_kegg <-
   lme(functional_kegg ~ seq_depth + sex + breed + treatment + trial * age,
       random = ~ 1|pen,
       data = alpha_div)
-summary(m_div_f_kegg)
+
+anova(m_div_f_kegg)
 ```
 
 ```{r clean_5, comment = "", message = FALSE, warning = FALSE}
@@ -1302,7 +1279,7 @@ betadiv_f_dis_kegg %>%
 
 The resulting plot corresponds to Supplementary Figure S3.
 
-```{r plot_beta_diff, comment="", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 10, fig.fullwidth = TRUE}
+```{r plot_beta_diff, comment="", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 9, fig.fullwidth = TRUE}
 # Neutral
 p_n <- 
   betadiv_n_dis %>%
@@ -1313,7 +1290,7 @@ p_n <-
   ylim(0,0.5) +
   theme_minimal() +
   theme(legend.position = 'none') +
-  ggtitle('Neutral beta diversity')
+  ggtitle('Neutral')
 
 # Phylogenetic
 p_p <- 
@@ -1325,7 +1302,7 @@ p_p <-
   ylim(0,0.5) +
   theme_minimal() +
   theme(legend.position = 'none') +
-  ggtitle('Phylogenetic beta diversity')
+  ggtitle('Phylogenetic')
 
 # Functional KEGG
 p_f_kegg <-
@@ -1337,7 +1314,7 @@ p_f_kegg <-
   ylim(0,0.5) +
   theme_minimal() +
   theme(legend.position = 'none') +
-  ggtitle('Functional KEGG beta diversity')
+  ggtitle('Functional')
 
 
 grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
@@ -1363,9 +1340,10 @@ b1n_dis_table <-
   mutate(across(everything(), ~replace(., is.na(.), 0))) %>% 
   as.dist()
 
-adonis2(b1n_dis_table ~ trial + sex + breed + treatment * age,
+adonis2(b1n_dis_table ~ trial + sex + breed + treatment + trial + trial * age,
         permutations = perm,
-        data = chicken_metadata)
+        data = chicken_metadata,
+        by = "term")
 ```
 
 ```{r permanova_p_betadiv, comment = "", message = FALSE, warning = FALSE}
@@ -1378,9 +1356,10 @@ b1p_dis_table <-
   mutate(across(everything(), ~replace(., is.na(.), 0))) %>% 
   as.dist()
 
-adonis2(b1p_dis_table ~ trial + sex + breed + treatment * age,
+adonis2(b1p_dis_table ~ trial + sex + breed + treatment + trial + trial * age,
         permutations = perm,
-        data = chicken_metadata)
+        data = chicken_metadata,
+        by = "term")
 ```
 
 ```{r permanova_f_betadiv, comment = "", message = FALSE, warning = FALSE}
@@ -1393,14 +1372,15 @@ b1f_dis_table_kegg <-
   mutate(across(everything(), ~replace(., is.na(.), 0))) %>%
   as.dist()
 
-adonis2(b1f_dis_table_kegg ~ trial + sex + breed + treatment * age,
+adonis2(b1f_dis_table_kegg ~ trial + sex + breed + treatment + trial + trial * age,
         permutations = perm,
-        data = chicken_metadata)
+        data = chicken_metadata,
+        by = "term")
 ```
 
 ### Community composition
 
-```{r composition, comment = "", message = FALSE, warning = FALSE}
+```{r com_composition_permanova, comment = "", message = FALSE, warning = FALSE}
 perm <- how(nperm = 999)
 setBlocks(perm) <- with(chicken_metadata, pen)
 
@@ -1414,18 +1394,20 @@ adonis2(t_hel ~ trial * sampling_time +
               sex * sampling_time +
               treatment * sampling_time,
         permutations = perm,
-        data = chicken_metadata)
+        data = chicken_metadata,
+        by = "term")
 
 adonis2(t_hel ~ trial * sampling_time + breed + sex + treatment,
         permutations = perm,
-        data = chicken_metadata)
+        data = chicken_metadata,
+        by = "term")
 ```
 
 ## Community composition development
 
 ### Distance-based RDA 
 
-The resulting plot corresponds to Figure 1f in the manuscript.
+The resulting plot corresponds to Figure 2b in the manuscript.
 
 ```{r distance_rda_stats, comment = "", message = FALSE, warning = FALSE}
 set.seed(4)
@@ -1442,7 +1424,7 @@ anova(db_rda, by = 'term')
 RsquareAdj(db_rda)
 ```
 
-```{r distance_rda_plot, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
+```{r distance_rda_plot, comment = "", message = FALSE, warning = FALSE, fig.height = 6, fig.width = 9, fig.fullwidth = TRUE}
 db_rda_scores <-
   data.frame(
     scores(db_rda, display = 'wa'),
@@ -1452,10 +1434,17 @@ db_rda_scores <-
 
 db_rda_scores %>%
   ggplot(aes(x = RDA1, y = RDA2, colour = time)) +
-  geom_point() +
+  geom_point(size = 3) +
   scale_color_manual(values = c('#e6a024', '#cc6777', '#5bb4e5')) +
   theme_minimal() +
-  theme(legend.position = 'none')
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10),
+        axis.title = element_text(size = 8),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank())
 ```
 
 ```{r clean_6, comment = "", message = FALSE, warning = FALSE}
@@ -1472,123 +1461,58 @@ rm(list = ls())
 load("data/data_mg.Rdata")
 ```
 
-## Temporal trends related to MCI 
+## Functional ordination - Temporal PCoA with PCA loadings 
 
 The resulting plot corresponds to Figure 2c.
 
-### Calculate t-SNE based on GIFTs
-
-```{r tsne_temp, comment = "", message = FALSE, warning = FALSE}
-set.seed(100)
-tsne_func <- Rtsne(X = gifts_elements, dims = 2, check_duplicates = FALSE)
-
-genome_taxonomy <- 
-  genome_taxonomy %>% 
-  mutate(avg_mci = rowMeans(gifts_elements)) %>% 
-  mutate(length = genome_stats$mag_length)
-
-tsne_df <-
-  tsne_func$Y %>%
+``` {r temp_pcoa_ordination, comment = "", message = FALSE, warning = FALSE, fig.height = 7, fig.width = 9, fig.fullwidth = TRUE}
+gift_pcoa <- 
+  gifts_elements %>% 
   as.data.frame() %>%
-  mutate(genome = rownames(gifts_elements)) %>%
-  left_join(genome_taxonomy, by = 'genome') %>%
-  mutate_at(vars(phylum, class, order, family), factor) %>%
-  mutate(order = factor(order, levels = names(order_colors))) %>%
-  mutate(phylum = factor(phylum, levels = names(phylum_colors))) %>%
-  rename(tsne1 = 'V1', tsne2 = 'V2')
-```
+  vegdist(method="euclidean") %>%
+  pcoa()
 
-### Divide relative abundances by sampling time 
+gift_pcoa_rel_eigen <- gift_pcoa$values$Relative_eig[1:10]
 
-```{r filter_data_by_day, comment = "", message = FALSE, warning = FALSE}
-# Day 7
-met_d7 <- 
-  chicken_metadata %>% 
-  filter(sampling_time == 7) 
-
-abun_d7 <-  
-  hel %>% 
-  t() %>% 
+# Get genome positions
+gift_pcoa_vectors <- 
+  gift_pcoa$vectors %>% #extract vectors
   as.data.frame() %>% 
-  filter(rownames(.) %in% met_d7$animal_code) %>% 
-  summarise(across(everything(), mean, na.rm = TRUE)) %>% 
-  t() %>% 
-  as.data.frame() %>% 
-  rename(abundance = 'V1') %>% 
-  rownames_to_column('genome')
+  select(Axis.1,Axis.2) # keep the first 2 axes
 
-# Day 21
-met_d21 <- 
-  chicken_metadata %>% 
-  filter(sampling_time == 21) 
 
-abun_d21 <-  
-  hel %>% 
-  t() %>% 
-  as.data.frame() %>% 
-  filter(rownames(.) %in% met_d21$animal_code) %>% 
-  summarise(across(everything(), mean, na.rm = TRUE)) %>% 
-  t() %>% 
-  as.data.frame() %>% 
-  rename(abundance = 'V1') %>% 
-  rownames_to_column('genome')
-
-# Day 35
-met_d35 <- 
-  chicken_metadata %>% 
-  filter(sampling_time == 35)
-
-abun_d35 <-  
-  hel %>% 
-  t() %>% 
-  as.data.frame() %>% 
-  filter(rownames(.) %in% met_d35$animal_code) %>% 
-  summarise(across(everything(), mean, na.rm = TRUE)) %>% 
-  t() %>% 
-  as.data.frame() %>% 
-  rename(abundance = 'V1') %>% 
-  rownames_to_column('genome')
-```
-
-### Plot t-SNE
-
-```{r plot_tsne_by_day, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 12, fig.fullwidth = TRUE}
-# Day 7
-tsne_d7 <- 
-  tsne_df %>%
-  left_join(abun_d7, by = 'genome') %>% 
-  ggplot(aes(x = tsne1, y = tsne2, color = order, size = abundance)) +
-  geom_point(shape = 16, alpha = 0.8) +
-  scale_color_manual(values = order_colors) +
-  theme_minimal() +
-  theme(legend.position = 'none')
-
-# Day 21
-tsne_d21 <- 
-  tsne_df %>%
-  left_join(abun_d21, by = 'genome') %>%
-  ggplot(aes(x = tsne1, y = tsne2, color = order, size = abundance)) +
-  geom_point(shape = 16, alpha = 0.8) +
-  scale_color_manual(values = order_colors) +
-  theme_minimal() +
-  theme(legend.position = 'none')
-
-# Day 35
-tsne_d35 <- 
-  tsne_df %>%
-  left_join(abun_d35, by = 'genome') %>%
-  ggplot(aes(x = tsne1, y = tsne2, color = order, size = abundance)) +
-  geom_point(shape = 16, alpha = 0.8) +
-  scale_color_manual(values = order_colors) +
-  theme_minimal() +
-  theme(legend.position = 'none')
-
-grid.arrange(tsne_d7, tsne_d21, tsne_d35, ncol = 3)
+mag_weighted %>%
+  rownames_to_column(var = "genome") %>% 
+  mutate_at(vars(-genome),~./sum(.)) %>%
+  pivot_longer(-genome, names_to = "animal_code", values_to = "count") %>%
+  left_join(chicken_metadata, by = join_by(animal_code == animal_code)) %>% 
+  filter(!is.na(sampling_time)) %>% 
+  group_by(genome, trial, sampling_time) %>% 
+  summarise(count = mean(count)) %>% 
+  left_join(gift_pcoa_vectors %>% rownames_to_column(var = "genome"), by = "genome") %>%
+  left_join(genome_taxonomy %>% select(genome, phylum, order), by = "genome") %>%
+  ggplot() +
+      theme_minimal() +
+      #genome positions
+      geom_point(aes(x = Axis.1, y = Axis.2, color = order, size = count), 
+                 alpha = 0.8, shape = 16) +
+      # colors
+      scale_color_manual(values = order_colors) +    
+      # scale_color_manual(values=phylum_colors) +
+      scale_size_continuous(range = c(1,10)) +
+      # scale adjustments
+      scale_x_continuous(name = paste0("PCoA1 (",round(gift_pcoa_rel_eigen[1]*100, digits = 2), " %)")) +
+      scale_y_continuous(name = paste0("PCoA2 (",round(gift_pcoa_rel_eigen[2]*100, digits = 2), " %)")) +
+      facet_grid(trial ~ sampling_time) +
+      theme(legend.position = "none",
+            axis.line = element_line(color = "grey30"),
+            panel.border = element_rect(color = "grey80", fill = NA),
+            axis.ticks = element_line(color = "grey30"),
+            panel.grid = element_line(color = "grey80"),
+            strip.background = element_rect(fill = "grey80", color = NA))
 ```
 
 ## Compositional barplots 
-
-The resulting plot corresponds to Figure 2d.
 
 ### Compositional barplot at order level
 
@@ -1609,56 +1533,7 @@ phy_order_df <-
   separate_wider_delim(trial_age, "_", names = c("trial", "sampling_time"))
 ```
 
-```{r oplot_order, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 12, fig.fullwidth = TRUE}
-# separating by sampling time
-phy_order_df %>%
-  mutate(Sample = str_remove(Sample, "_.*")) %>% 
-  rename(Trial = 'Sample') %>% 
-  mutate(order = factor(order, levels =  c('Veillonellales','Acidaminococcales',
-                                           'Selenomonadales','UBA4068','UBA1212',
-                                           'Monoglobales','Peptostreptococcales',
-                                           'Monoglobales_A','Clostridiales',
-                                           'Lachnospirales','Christensenellales',
-                                           'TANB77','Oscillospirales','RFN20',
-                                           'Bacillales','Acholeplasmatales',
-                                           'Erysipelotrichales','ML615J-28',
-                                           'Lactobacillales','RF39',
-                                           'Deferribacterales','Actinomycetales',
-                                           'Coriobacteriales','Gastranaerophilales',
-                                           'Flavobacteriales','Bacteroidales',
-                                           'Rs-D84','Burkholderiales','RF32',
-                                           'Enterobacterales','Desulfovibrionales',
-                                           'Verrucomicrobiales','Opitutales',
-                                           'Victivallales','Methanomassiliicoccales',
-                                           'Synergistales','Campylobacterales',
-                                           'Saccharimonadales','Methanobacteriales',
-                                           'Methanomicrobiales'))) %>%
-  mutate(sampling_time = factor(sampling_time,
-                                levels = c("7", "21", "35"))) %>% 
-  filter(Abundance > 0) %>%
-  group_by(sampling_time) %>%
-  mutate(Trial = factor(Trial)) %>%
-  ungroup() %>%
-  ggplot() +
-  geom_bar(aes(x = Trial, y = Abundance, fill = order),
-           stat = "identity", position = "stack", color ="black", size = 0.08) +
-  facet_wrap(~sampling_time, scales = "free_x",
-             labeller = as_labeller(c('7' = 'Day 7',
-                                      '21' = 'Day 21',
-                                      '35' = 'Day 35'))) +
-  scale_color_manual('Order', values = order_colors) +
-  scale_fill_manual('Order', values = order_colors) +
-  ylab('Relative abundance') +
-  xlab('Trial') +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x =element_blank(),
-        axis.title.x = element_blank(),
-        panel.background = element_blank(),
-        legend.position = "none",
-        )
-```
-
-```{r plot_horizontal, comment = "", message = FALSE, warning = FALSE, fig.height = 6, fig.width = 12, fig.fullwidth = TRUE}
+```{r plot_vertical, comment = "", message = FALSE, warning = FALSE, fig.height = 18, fig.width = 10, fig.fullwidth = TRUE}
 # separating by sampling time and trial
 phy_order_df %>%
   mutate(order = factor(order, 
@@ -1691,17 +1566,17 @@ phy_order_df %>%
                                      replacement = "Day 35")) %>%
   mutate(sampling_time = factor(sampling_time,
                                 levels = c("Day 7", "Day 21", "Day 35"))) %>%
-  ggplot(aes(x = Sample, y = Abundance,
+  ggplot(aes(x = Abundance, y = Sample,
              fill = order, group = order)) +
-  geom_bar(stat = "identity", position = "stack", width = 1.1,
-         color ="black", size = 0.08) +
-  facet_nested(.~ sampling_time * trial, scales = "free_x") +
+  geom_bar(stat = "identity", position = "stack", width = 1,
+         color ="darkgrey", size = 0.005) +
+  facet_nested(sampling_time * trial ~., scales = "free_y") +
   scale_color_manual('Order', values = order_colors) +
   scale_fill_manual('Order', values = order_colors) +
   ylab('Relative abundance') +
-  theme(axis.text.x = element_blank(),
-        axis.title.x = element_blank(),
-        axis.ticks.x = element_blank(),
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
         panel.background = element_blank(),
         panel.border = element_blank(),
         panel.spacing.x = unit(0.1, "cm"),
@@ -1710,7 +1585,9 @@ phy_order_df %>%
         legend.text = element_text(size = 8),
         legend.title = element_text(size = 10),
         strip.text = element_text(size = 8),
-        legend.position = "none") 
+        legend.position = "right")  +
+  guides(fill = guide_legend(ncol = 1))
+
 ```
 
 ```{r clean_7, comment = "", message = FALSE, warning = FALSE}
@@ -2084,7 +1961,7 @@ trends <-
 
 ## Correlate bacterial MCI and response to time 
 
-The resulting plot corresponds to Figure 2f.
+The resulting plot corresponds to Figure 2e.
 
 ```{r load_data_mag, comment = "", message = FALSE, warning = FALSE}
 load("data/data_mg.Rdata")
@@ -2099,17 +1976,22 @@ mci_df <-
   select(avg_mci) %>% 
   rownames_to_column(var = 'genome')
 
+ 
 trends %>% 
   left_join(genome_taxonomy %>% select(genome, order), by = 'genome') %>% 
   left_join(mci_df, by = 'genome') %>% 
   ggplot() +
-  geom_point(aes(x = parameter, y = avg_mci, color = order)) +
+  geom_point(aes(x = parameter, y = avg_mci, color = order), size = 1) +
   scale_color_manual(values = order_colors) +
   geom_smooth(aes(x = parameter, y = avg_mci),
-              method = 'lm') +
+              method = 'lm', linewidth = 0.3) +
   theme_minimal() +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
+        axis.title.x = element_text(size = 8),
+        axis.title.y = element_text(size = 8),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8),
         legend.position = 'none')
 ```
 
@@ -2124,7 +2006,7 @@ plotVariancePartitioning(hM = m, VP = VP)
 
 ## Phylogenetic correlogram 
 
-The resulting plot corresponds to Figure 1e.
+The resulting plot corresponds to Figure 2d.
 
 ### Calcultate phylogenetic distance 
 
@@ -2247,7 +2129,7 @@ gifts_elements %>%
   as.data.frame() %>% 
   rownames_to_column(var = 'genome') %>% 
   pivot_longer(!genome, names_to = 'Code_element', values_to = 'mci') %>%
-  inner_join(GIFT_db1, by = 'Code_element') %>%
+  inner_join(GIFT_db2, by = 'Code_element') %>%
   ggplot(aes(x = genome,
              y = Code_element,
              fill = mci)) +
@@ -2282,7 +2164,7 @@ save(elements_com,
 
 ### Plot community MCI 
 
-The resulting plot corresponds to Figure 2g in the manuscript.
+The resulting plot corresponds to Figure 2f in the manuscript.
 
 ```{r plot_com_mci, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
 load("data/mci_com.Rdata")
@@ -2298,28 +2180,19 @@ funcs_com %>%
             by = 'animal_code') %>%
   ggplot(aes(x = sampling_time,
              y = overall,
-             group = sampling_time,
-             colour = sampling_time)) +
-  geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-               width = 0.3,
-               lwd = 3,
-               outlier.color = NA,
-               position = position_nudge(x = -.4)) +
-  geom_jitter(width = 0.15, alpha = 0.6) +
-  stat_summary(geom = 'crossbar',
-               width = 0.3,
-               fatten = 0,
-               color = 'white',
-               position = position_nudge(x = -.4),
-               fun.data = function(x){ return(c(y = median(x),
-                                                ymin = median(x),
-                                                ymax = median(x)))
-               }) +
+             group = sampling_time)) +
+  geom_jitter(aes_string(colour = 'sampling_time'), size = 0.3, width = 0.2, alpha = 0.6) +
+  geom_boxplot(aes_string(fill = 'sampling_time'), width = 0.4, alpha = 0.5, outlier.color = NA) +
   scale_fill_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   scale_color_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   theme_minimal() +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
+        axis.title.x = element_text(size = 8),
+        axis.title.y = element_text(size = 8),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8),
+        plot.title =  element_text(size = 10),
         legend.position = 'none')
 ```
 
@@ -2380,8 +2253,8 @@ The resulting plot corresponds to Figure 3a.
 div_all_day_35 <-
   alpha_div %>%
   filter(sampling_time == '35') %>%
-  filter(trial != 'CC') %>% 
-  filter(!animal_code %in% c("CB12.17", "CA04.16", "CA03.17")) # ¿? double check if we are OK filtering some samples, they show out of place diversity
+  filter(trial != 'CC') #%>% 
+  # filter(!animal_code %in% c("CB12.17", "CA04.16", "CA03.17")) # ¿? double check if we are OK filtering some samples, they show out of place diversity
 
 N <- lme(chicken_body_weight ~ age + trial + neutral,
          random = ~1|pen,
@@ -2867,6 +2740,11 @@ gifts_funct$avg_mci_bio <- avg_mci_bio
 
 avg_mci_deg <- rowMeans(gifts[,grepl("D",names(gifts))])
 gifts_funct$avg_mci_deg <- avg_mci_deg
+
+
+gift_colors <- 
+  read_tsv("data/gift_colors.tsv") %>% 
+  mutate(legend = str_c(Code_function, " - ", Function))
 ```
 
 ## Taxonomy of positively and negatively associated MAGs
@@ -3214,10 +3092,12 @@ grid.arrange(p_Mci_mg, p_B04_mg, p_B08_mg, ncol = 3)
 ### All
 
 ```{r combined_plots_bio, , comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
-grid.arrange(p_Mci_bio_mg, p_B01_mg, p_B02_mg,
+sup_s4 <- grid.arrange(p_Mci_bio_mg, p_B01_mg, p_B02_mg,
              p_B03_mg, p_B04_mg, p_B06_mg, 
              p_B07_mg, p_B08_mg, p_B09_mg,
              p_B10_mg, ncol = 3)
+
+ggsave("sup_s4.pdf", plot = sup_s4, width = 20, height = 22, units = "cm", dpi = 600)
 ```
 
 #### MCI comparisons of degradation pathways
@@ -3451,20 +3331,27 @@ gifts_bw_df_long <-
   mutate(Function = substr(Element, start = 1, stop = 3)) %>%
   relocate(Function, .after = Element)
 
+# Heatmap
 gifts_bw_df_long %>%
-  group_by(Element) %>%
+  rename(Code_element = "Element") %>% 
+  rename(Code_function = "Function") %>% 
+  left_join(gift_colors, by = "Code_function") %>% 
+  group_by(Code_element) %>%
   filter(sum(mci) > 0) %>%
   ungroup() %>%
-  ggplot(., aes(x = Element, y = genome, fill = bw_association, group = Function, alpha = mci)) +
-  geom_tile(color = "#ffffff") +
-  scale_y_discrete(guide = guide_axis(check.overlap = TRUE)) +
-  scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
-  scale_fill_manual(values = c("red3",
-                               "blue3"),
-                    na.value = "#f4f4f4") +
-  facet_grid(bw_association ~ Function, scales = "free", space = "free") +
-  theme_void(base_size = 8) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.position = "none")
+  ggplot(., aes(x = genome, y = Code_element, fill = bw_association, group = legend, alpha = mci)) +
+    geom_tile(color = "#ffffff") +
+    scale_y_discrete(guide = guide_axis(check.overlap = TRUE)) +
+    scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
+    scale_fill_manual(values = c("red3",
+                                 "blue3"),
+                      na.value = "#f4f4f4") +
+    facet_grid(legend ~ bw_association, scales = "free", space = "free") +
+    theme_void(base_size = 8) +
+    theme(axis.text.y = element_blank(),
+          strip.text.y = element_blank(),
+          axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size =  6),
+          legend.position = "none")
 ```
 
 ```{r clean_14, comment = "", message = FALSE, warning = FALSE}
@@ -3489,6 +3376,10 @@ trends_bw <-
   mutate(trend_09 = case_when(bw_support > 0.95 ~ 'positive',
                            bw_support < 0.05 ~ 'negative',
                            TRUE ~ 'non-significant'))
+
+
+gift_colors <- read_tsv("data/gift_colors.tsv") %>% 
+  mutate(legend = str_c(Code_function, " - ", Function))
 ```
 
 
@@ -3641,23 +3532,22 @@ mag_subset_elements_3 <-
 
 ### Plot 
 
-```{r plot_heatmap, comment = "", message = FALSE, warning = FALSE}
+```{r plot_heatmap, comment = "", message = FALSE, warning = FALSE, fig.height = 8, fig.width = 12, fig.fullwidth = TRUE}
 mag_subset_elements_2 %>%
-  ggplot(aes(x = Element,
-             y = genome,
-             fill = bw_association,
-             group = Function,
-             alpha = log(avg_expr_million, 2))) +
+  rename(Code_function = "Function") %>% 
+  left_join(gift_colors, by = "Code_function") %>%
+  ggplot(aes(x = genome, y = Element, fill = bw_association, group = legend, alpha = log(avg_expr_million, 2))) +
   geom_tile(color = "#ffffff") +
   scale_y_discrete(guide = guide_axis(check.overlap = TRUE)) +
   scale_x_discrete(guide = guide_axis(check.overlap = TRUE)) +
   scale_fill_manual(values = c("red3",
                                "blue3"),
                     na.value = "#f4f4f4") +
-  facet_grid(bw_association ~ Function, scales = "free", space = "free") +
+  facet_grid(legend ~ bw_association, scales = "free", space = "free") +
   theme_void(base_size = 8) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-        strip.text.y = element_text(size = 12, angle = -90),
+  theme(axis.text.x = element_text(size = 5, angle = 90),
+        axis.text.y = element_text(size = 5),
+        strip.text.y = element_blank(),
         legend.position = "none")
 ```
 
@@ -3814,10 +3704,10 @@ mci_df %>%
   xlab("Body-weight association")+
   theme_minimal()+
   theme(legend.position = 'none',
-        axis.title.x = element_text(size = 14),
-        axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12),
-        axis.title.y = element_text(size = 14)) 
+        axis.title.x = element_text(size = 12),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10),
+        axis.title.y = element_text(size = 12)) 
 ```
 
 ### Genome length of genome reduced MAGss 
@@ -3846,8 +3736,7 @@ boot_length_df[2, "ci_975"] <- bw_neg_red_mag_length_boot_ci$bca[,5]
 ```
 
 ```{r plot_length, fig.height = 7, fig.width = 6, fig.fullwidth = TRUE}
-length_red_genomes <-
-  length_df %>%
+length_df %>%
   ggplot() +
   geom_jitter(aes(x = bw_association, y = mag_length, color = bw_association),
               alpha = 0.5, width = 0.25) +
@@ -3862,13 +3751,10 @@ length_red_genomes <-
   xlab("Body-weight association") +
   theme_minimal() +
   theme(legend.position = 'none',
-        axis.title.x = element_text(size = 14),
-        axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12),
-        axis.title.y = element_text(size = 14)) 
-ggsave("length_red_genomes_plot.png", length_red_genomes, width = 5, height = 5)
-ggsave("length_red_genomes_plot.pdf", length_red_genomes, width = 5, height = 5)
-
+        axis.title.x = element_text(size = 12),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10),
+        axis.title.y = element_text(size = 12)) 
 ```
 
 ### Expression profiles of genome reduced MAGs 
@@ -3902,7 +3788,7 @@ envfit_gifts_df <-
   select(gift_id, PCOA1, PCOA2)
 ```
 
-```{r pcoa, warning = FALSE, comments = "", message = FALSE, fig.height = 12, fig.width = 12, fig.fullwidth = TRUE}
+```{r pcoa, warning = FALSE, comments = "", message = FALSE, fig.height = 9, fig.width = 9, fig.fullwidth = TRUE}
 ggplot() +
   geom_point(data = pcoa_reduced_mags_df, 
              aes(x = PCOA1, y = PCOA2, color = bw_association), 
@@ -3911,18 +3797,27 @@ ggplot() +
              alpha = 0.8) +
   scale_color_manual(values = c("red3","blue3")) +
   geom_segment(data = envfit_gifts_df, 
-               aes(x = 0, xend = PCOA1, y = 0 , yend = PCOA2),
-               arrow = arrow(length = unit(0.10, "cm")),
-               color="gray20") +
-  geom_label_repel(data = envfit_gifts_df, aes(x = PCOA1, y = PCOA2, label = gift_id), size = 3) +
+               aes(x = 0, xend = PCOA1*0.5, y = 0 , yend = PCOA2*0.5),
+               arrow = arrow(length = unit(0.25, "cm")),
+               color="gray20",
+               linewidth = 0.2) +
+  geom_label_repel(data = envfit_gifts_df, aes(x = PCOA1*0.5, y = PCOA2*0.5, label = gift_id), size = 1, max.overlaps = 10) +
   theme_minimal() +
-  theme(legend.position = 'none')
+  theme(legend.position = 'none',
+        axis.title.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12),
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10))
 ```
 
 ### Activity heatmap of genome reduced bacteria 
 
-```{r plot_heatmap_reduced, comment = "", message = FALSE, fig.width = 3, fig.height = 6, warning = FALSE}
+```{r plot_heatmap_reduced, comment = "", message = FALSE, fig.width = 9, fig.height = 9, warning = FALSE}
 mag_subset_elements_3 %>%
+  rename(Code_element = "Element") %>% 
+  rename(Code_function = "Function") %>% 
+  left_join(GIFT_db2 %>%  select (Code_element, Code_function, Element, Function)) %>%
+  left_join(gift_colors, by = "Code_function") %>% 
   left_join(genome_taxonomy, by = 'genome') %>%
   filter(family == "UBA1242" | family == "UBA660") %>%
   select(-domain:-species) %>% 
@@ -3933,9 +3828,9 @@ mag_subset_elements_3 %>%
   filter(sum(avg_expr_million) > 0) %>%
   ungroup() %>%
   ggplot(aes(x = genome,
-             y = Element,
+             y = Code_element,
              fill = bw_association,
-             group = Function,
+             group = legend,
              alpha = log(avg_expr_million, 2))) +
   geom_tile(color = "#ffffff") +
   scale_y_discrete(guide = guide_axis(check.overlap = TRUE)) +
@@ -3943,9 +3838,11 @@ mag_subset_elements_3 %>%
   scale_fill_manual(values = c("red3",
                                "blue3"),
                     na.value = "#f4f4f4") +
-  facet_grid(Function ~ bw_association, scales = "free", space = "free") +
+  facet_grid(legend ~ bw_association, scales = "free", space = "free") +
   theme_void(base_size = 8) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+  theme(axis.text.x = element_text(angle = 90, vjust = 0, hjust = 1),
+        axis.text.y = element_text(size = 5, vjust = 0, hjust = 1),
+        strip.text.y = element_blank(),
         legend.position = "none")
 ```
 

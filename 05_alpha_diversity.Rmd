@@ -70,104 +70,80 @@ save(alpha_div, file = "data/alpha_div.Rdata")
 
 The resulting plot corresponds to Figure 2a.
 
-```{r plot_div, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 12, fig.fullwidth = TRUE}
+```{r plot_div, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 9, fig.fullwidth = TRUE}
 load("data/alpha_div.Rdata")
 
 # Neutral
 p_n <- 
-  ggplot(alpha_div,
-         aes(x = sampling_time,
-         y = neutral,
-         group = sampling_time,
-         colour = sampling_time)) +
-  geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-               width = 0.2,
-               lwd = 2,
-               outlier.color = NA,
-               position = position_nudge(x = -.4)
-               ) +
-  geom_jitter(width = 0.1, alpha = 0.6) +
-  stat_summary(geom = 'crossbar',
-               width = 0.2,
-               fatten = 0,
-               color = 'white',
-               position = position_nudge(x = -.4),
-               fun.data = function(x){ return(c(y = median(x),
-                                                ymin = median(x),
-                                                ymax = median(x))
-               ) }) +
+  ggplot(alpha_div, 
+         aes(x = sampling_time, y = neutral, group = sampling_time)) +
+  geom_jitter(aes_string(color = 'sampling_time'),
+              size = 0.3, width = 0.25, alpha = 0.6) +
+  geom_boxplot(aes_string(fill = 'sampling_time'),
+               width = 0.5,
+               alpha = 0.5,
+               outlier.color = NA) +
   scale_fill_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   scale_color_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   theme_minimal() +
-  ylab("Effective number of strains") +
+  ylab(NULL) +
   xlab(NULL) +
-  ggtitle("Neutral diversity") +
+  ggtitle("Neutral") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
+        axis.title.x = element_text(size = 8),
+        axis.title.y = element_text(size = 8),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8),
+        plot.title =  element_text(size = 10),
         legend.position = "none")
 
 # Phylogenetic
 p_p <- 
-  ggplot(alpha_div,
-  aes(x = sampling_time,
-      y = phylogenetic,
-      group = sampling_time,
-      colour = sampling_time)) +
-  geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-               width = 0.2,
-               lwd = 2,
-               outlier.color = NA,
-               position = position_nudge(x = -.4)
-               ) +
-  geom_jitter(width = 0.1, alpha = 0.6) +
-  stat_summary(geom = "crossbar",
-               width = 0.2,
-               fatten = 0,
-               color = "white",
-               position = position_nudge(x = -.4),
-               fun.data = function(x){ return(c(y = median(x),
-                                                ymin = median(x),
-                                                ymax = median(x))
-               ) }) +
+  ggplot(alpha_div, 
+         aes(x = sampling_time, y = phylogenetic, group = sampling_time)) +
+  geom_jitter(aes_string(colour = 'sampling_time'), 
+              size = 0.3, width = 0.25, alpha = 0.6) +
+  geom_boxplot(aes_string(fill = 'sampling_time'),
+               width = 0.5,
+               alpha = 0.5,
+               outlier.color = NA) +
   scale_fill_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   scale_color_manual(values = c('#E69F00', '#CC6677', '#56B4E9')) +
   theme_minimal() +
-  labs(x =NULL, y = NULL) +
-  ggtitle("Phylogenetic diversity") +
+  labs(x = NULL, y = NULL) +
+  ggtitle("Phylogenetic") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
+        axis.title.x = element_text(size = 8),
+        axis.title.y = element_text(size = 8),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8),
+        plot.title =  element_text(size = 10),
         legend.position = 'none')
 
 # Functional KEGGs
 p_f_kegg <-
   ggplot(alpha_div,
-         aes(x = sampling_time,
-         y = functional_kegg,
-         group = sampling_time,
-         colour = sampling_time)) +
-  geom_boxplot(aes_string(colour = 'sampling_time', fill = 'sampling_time'),
-               width = 0.2,
-               lwd = 2,
-               outlier.color = NA,
-               position = position_nudge(x = -.4)
-  ) +
-  geom_jitter(width = 0.1, alpha = 0.6) +
-  stat_summary(geom = "crossbar",
-               width = 0.2,
-               fatten = 0,
-               color = "white",
-               position = position_nudge(x = -.4),
-               fun.data = function(x){ return(c(y = median(x),
-                                                ymin = median(x),
-                                                ymax = median(x))
-               ) }) +
+         aes(x = sampling_time, y = functional_kegg, group = sampling_time)) +
+  geom_jitter(aes_string(colour = 'sampling_time'), 
+              size = 0.3, width = 0.25, alpha = 0.6) +
+  geom_boxplot(aes_string(fill = 'sampling_time'),
+               width = 0.5,
+               alpha = 0.5,
+               outlier.color = NA) +
   scale_fill_manual(values = c("#E69F00", "#CC6677", "#56B4E9")) +
   scale_color_manual(values = c("#E69F00", "#CC6677", "#56B4E9")) +
   theme_minimal() +
   labs(x =NULL, y = NULL) +
-  ggtitle("Functional diversity") +
+  ggtitle("Functional") +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
+        axis.title.x = element_text(size = 8),
+        axis.title.y = element_text(size = 8),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 8),
+        plot.title =  element_text(size = 10),
         legend.position = "none")
 
 grid.arrange(p_n, p_p, p_f_kegg, ncol = 3)
@@ -184,7 +160,8 @@ m_div_n <-
   lme(neutral ~ seq_depth + sex + breed + treatment + trial * age,
       random = ~1|pen,
       data = alpha_div)
-summary(m_div_n)
+
+anova(m_div_n)
 ```
 
 ### Phylogenetic
@@ -194,7 +171,8 @@ m_div_p <-
   lme(phylogenetic ~ seq_depth + sex + breed + treatment + trial * age,
       random = ~ 1|pen,
       data = alpha_div)
-summary(m_div_p)
+
+anova(m_div_p)
 ```
 
 ### Functional KEGG
@@ -204,7 +182,8 @@ m_div_f_kegg <-
   lme(functional_kegg ~ seq_depth + sex + breed + treatment + trial * age,
       random = ~ 1|pen,
       data = alpha_div)
-summary(m_div_f_kegg)
+
+anova(m_div_f_kegg)
 ```
 
 ```{r clean_5, comment = "", message = FALSE, warning = FALSE}
