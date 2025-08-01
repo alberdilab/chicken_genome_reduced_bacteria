@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | AlberdiLab | Marcos et al. 2025</title>
+  <title>Chapter 13 Bacteria vs Chicken BW HMSC analysis | AlberdiLab | Marcos et al. 2025</title>
   <meta name="description" content="&lt;p&gt;Data analysis code developed to study early-life caecal microbiome development and its association with chicken body weight&lt;/p&gt;" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | AlberdiLab | Marcos et al. 2025" />
+  <meta property="og:title" content="Chapter 13 Bacteria vs Chicken BW HMSC analysis | AlberdiLab | Marcos et al. 2025" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="&lt;p&gt;Data analysis code developed to study early-life caecal microbiome development and its association with chicken body weight&lt;/p&gt;" />
   <meta name="github-repo" content="alberdilab/chicken_genome_reduced_bacteria" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | AlberdiLab | Marcos et al. 2025" />
+  <meta name="twitter:title" content="Chapter 13 Bacteria vs Chicken BW HMSC analysis | AlberdiLab | Marcos et al. 2025" />
   
   <meta name="twitter:description" content="&lt;p&gt;Data analysis code developed to study early-life caecal microbiome development and its association with chicken body weight&lt;/p&gt;" />
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-
+<link rel="prev" href="bacteria-vs-chicken-bw-hmsc-setup.html"/>
+<link rel="next" href="comparing-metabolic-capacity-of-positively-and-negatively-associated-bacteria.html"/>
 
 
 
@@ -2246,19 +2246,145 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="page-not-found" class="section level1">
-<h1>Page not found</h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div id="bacteria-vs-chicken-bw-hmsc-analysis" class="section level1 hasAnchor" number="13">
+<h1><span class="header-section-number">Chapter 13</span> Bacteria vs Chicken BW HMSC analysis<a href="bacteria-vs-chicken-bw-hmsc-analysis.html#bacteria-vs-chicken-bw-hmsc-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="load-model-1" class="section level2 hasAnchor" number="13.1">
+<h2><span class="header-section-number">13.1</span> Load model<a href="bacteria-vs-chicken-bw-hmsc-analysis.html#load-model-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="define-directories-2" class="section level3 hasAnchor" number="13.1.1">
+<h3><span class="header-section-number">13.1.1</span> Define directories<a href="bacteria-vs-chicken-bw-hmsc-analysis.html#define-directories-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb142-1"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb142-1" tabindex="-1"></a><span class="co"># Directory</span></span>
+<span id="cb142-2"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb142-2" tabindex="-1"></a>localDir <span class="ot">=</span> <span class="st">&quot;.&quot;</span></span>
+<span id="cb142-3"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb142-3" tabindex="-1"></a>ModelDir <span class="ot">=</span> <span class="fu">file.path</span>(localDir, <span class="st">&quot;hmsc_bw/models&quot;</span>)</span>
+<span id="cb142-4"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb142-4" tabindex="-1"></a>PanelDir <span class="ot">=</span> <span class="fu">file.path</span>(localDir, <span class="st">&quot;hmsc_bw/panels&quot;</span>)</span>
+<span id="cb142-5"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb142-5" tabindex="-1"></a>MFDir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(localDir, <span class="st">&quot;hmsc_bw/model_fit&quot;</span>)</span></code></pre></div>
+</div>
+<div id="load-model-2" class="section level3 hasAnchor" number="13.1.2">
+<h3><span class="header-section-number">13.1.2</span> Load model<a href="bacteria-vs-chicken-bw-hmsc-analysis.html#load-model-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb143-1"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb143-1" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(<span class="st">&quot;hmsc_bw/models/bw_model_thin_10_samples_250_chains_4.Rdata&quot;</span>)){</span>
+<span id="cb143-2"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb143-2" tabindex="-1"></a>  <span class="fu">download.file</span>(</span>
+<span id="cb143-3"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb143-3" tabindex="-1"></a>    <span class="at">url =</span> <span class="st">&#39;https://sid.erda.dk/share_redirect/Bd8UfDO2D6/bw_model_thin_10_samples_250_chains_4.Rdata&#39;</span>,</span>
+<span id="cb143-4"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb143-4" tabindex="-1"></a>    <span class="at">destfile =</span> <span class="st">&#39;hmsc_bw/models/bw_model_thin_10_samples_250_chains_4.Rdata&#39;</span>, <span class="at">method =</span> <span class="st">&#39;curl&#39;</span>)</span>
+<span id="cb143-5"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb143-5" tabindex="-1"></a>}</span>
+<span id="cb143-6"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb143-6" tabindex="-1"></a></span>
+<span id="cb143-7"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb143-7" tabindex="-1"></a><span class="fu">load</span>(<span class="at">file =</span> <span class="fu">file.path</span>(ModelDir,<span class="st">&quot;bw_model_thin_10_samples_250_chains_4.Rdata&quot;</span>))</span></code></pre></div>
+</div>
+</div>
+<div id="evaluate-model" class="section level2 hasAnchor" number="13.2">
+<h2><span class="header-section-number">13.2</span> Evaluate model<a href="bacteria-vs-chicken-bw-hmsc-analysis.html#evaluate-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb144-1"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb144-1" tabindex="-1"></a>partition <span class="ot">&lt;-</span> <span class="fu">createPartition</span>(m, <span class="at">nfolds =</span> <span class="dv">4</span>)</span>
+<span id="cb144-2"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb144-2" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">computePredictedValues</span>(m, <span class="at">partition =</span> partition, <span class="at">nChains =</span> <span class="dv">1</span>) <span class="co"># nParallel = nChains</span></span>
+<span id="cb144-3"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb144-3" tabindex="-1"></a>MFCV <span class="ot">&lt;-</span> <span class="fu">evaluateModelFit</span>(<span class="at">hM =</span> m, <span class="at">predY =</span> preds)</span>
+<span id="cb144-4"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb144-4" tabindex="-1"></a></span>
+<span id="cb144-5"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb144-5" tabindex="-1"></a><span class="fu">save</span>(MFCV,<span class="at">file =</span> <span class="fu">file.path</span>(MFDir, <span class="st">&quot;hmsc_bw/model_fit/MF_thin_10_samples_250_chains_4.Rdata&quot;</span>))</span></code></pre></div>
+</div>
+<div id="examine-species-responses" class="section level2 hasAnchor" number="13.3">
+<h2><span class="header-section-number">13.3</span> Examine species responses<a href="bacteria-vs-chicken-bw-hmsc-analysis.html#examine-species-responses" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Plot not included in Supplementary</p>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb145-1"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb145-1" tabindex="-1"></a>beta_post <span class="ot">&lt;-</span> <span class="fu">getPostEstimate</span>(m, <span class="at">parName =</span> <span class="st">&quot;Beta&quot;</span>)</span>
+<span id="cb145-2"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb145-2" tabindex="-1"></a></span>
+<span id="cb145-3"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb145-3" tabindex="-1"></a><span class="fu">plotBeta</span>(m, beta_post,<span class="at">supportLevel =</span> <span class="fl">0.9</span>, <span class="at">plotTree =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="examine-variance-partition" class="section level2 hasAnchor" number="13.4">
+<h2><span class="header-section-number">13.4</span> Examine variance partition<a href="bacteria-vs-chicken-bw-hmsc-analysis.html#examine-variance-partition" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Plot not included in Supplementary</p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb146-1"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb146-1" tabindex="-1"></a>varpartition <span class="ot">&lt;-</span> <span class="fu">computeVariancePartitioning</span>(m)</span>
+<span id="cb146-2"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb146-2" tabindex="-1"></a></span>
+<span id="cb146-3"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb146-3" tabindex="-1"></a><span class="fu">plotVariancePartitioning</span>(m, <span class="at">VP =</span> varpartition)</span>
+<span id="cb146-4"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb146-4" tabindex="-1"></a></span>
+<span id="cb146-5"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb146-5" tabindex="-1"></a>bw_var <span class="ot">&lt;-</span> varpartition<span class="sc">$</span>vals[<span class="dv">3</span>,]</span>
+<span id="cb146-6"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb146-6" tabindex="-1"></a>bw_param <span class="ot">&lt;-</span> beta_post<span class="sc">$</span>mean[<span class="dv">4</span>,]</span>
+<span id="cb146-7"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb146-7" tabindex="-1"></a>bw_support <span class="ot">&lt;-</span> beta_post<span class="sc">$</span>support[<span class="dv">4</span>,]</span></code></pre></div>
+</div>
+<div id="create-a-data-table" class="section level2 hasAnchor" number="13.5">
+<h2><span class="header-section-number">13.5</span> Create a data table<a href="bacteria-vs-chicken-bw-hmsc-analysis.html#create-a-data-table" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb147-1"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-1" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;hmsc_bw/model_fit/MF_thin_10_samples_250_chains_4.Rdata&quot;</span>)</span>
+<span id="cb147-2"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-2" tabindex="-1"></a></span>
+<span id="cb147-3"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-3" tabindex="-1"></a>rel_abu <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(vegan<span class="sc">::</span><span class="fu">decostand</span>(<span class="fu">exp</span>(m<span class="sc">$</span>Y), <span class="at">method =</span> <span class="st">&quot;total&quot;</span>)) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb147-4"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-4" tabindex="-1"></a></span>
+<span id="cb147-5"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-5" tabindex="-1"></a>toplot <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">parameter =</span> bw_param,</span>
+<span id="cb147-6"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-6" tabindex="-1"></a>                     <span class="at">bw_support =</span> bw_support,</span>
+<span id="cb147-7"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-7" tabindex="-1"></a>                     <span class="at">var =</span> bw_var,</span>
+<span id="cb147-8"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-8" tabindex="-1"></a>                     <span class="at">pred =</span> MFCV<span class="sc">$</span>R2,</span>
+<span id="cb147-9"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-9" tabindex="-1"></a>                     <span class="at">var_pred =</span> bw_var <span class="sc">*</span> MFCV<span class="sc">$</span>R2)</span>
+<span id="cb147-10"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-10" tabindex="-1"></a></span>
+<span id="cb147-11"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-11" tabindex="-1"></a>toplot<span class="sc">$</span>MAG <span class="ot">&lt;-</span> <span class="fu">rownames</span>(toplot)</span>
+<span id="cb147-12"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-12" tabindex="-1"></a>toplot<span class="sc">$</span>rel_abu <span class="ot">&lt;-</span> rel_abu</span>
+<span id="cb147-13"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-13" tabindex="-1"></a><span class="fu">rownames</span>(toplot) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb147-14"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-14" tabindex="-1"></a></span>
+<span id="cb147-15"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb147-15" tabindex="-1"></a><span class="fu">write.table</span>(toplot, <span class="at">file =</span> <span class="st">&quot;data/data.txt&quot;</span>, <span class="at">row.names =</span> F)</span></code></pre></div>
+<div id="associate-bacteria-response-with-chicken-bw" class="section level3 hasAnchor" number="13.5.1">
+<h3><span class="header-section-number">13.5.1</span> Associate bacteria response with chicken BW<a href="bacteria-vs-chicken-bw-hmsc-analysis.html#associate-bacteria-response-with-chicken-bw" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>not included in Supplementary</p>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb148-1"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-1" tabindex="-1"></a>toplot <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;data/data.txt&quot;</span>, , <span class="at">row.names =</span> F)</span>
+<span id="cb148-2"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-2" tabindex="-1"></a></span>
+<span id="cb148-3"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-3" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb148-4"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> toplot, <span class="fu">aes</span>(<span class="at">x =</span> parameter, <span class="at">y =</span> Pred), <span class="at">alpha =</span> <span class="fl">0.7</span>, <span class="at">shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb148-5"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-5" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> toplot[toplot<span class="sc">$</span>bw_support <span class="sc">&gt;</span> <span class="fl">0.975</span>,],</span>
+<span id="cb148-6"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-6" tabindex="-1"></a>             <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> parameter, <span class="at">y =</span> Pred),</span>
+<span id="cb148-7"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-7" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb148-8"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-8" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> toplot[toplot<span class="sc">$</span>bw_support <span class="sc">&lt;</span> <span class="fl">0.025</span>,],</span>
+<span id="cb148-9"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-9" tabindex="-1"></a>             <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> parameter, <span class="at">y =</span> Pred),</span>
+<span id="cb148-10"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-10" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb148-11"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-11" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb148-12"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-12" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">mean</span>(toplot<span class="sc">$</span>Pred, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
+<span id="cb148-13"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-13" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Parameter estimate&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Body weight&#39;s importance&quot;</span>) <span class="sc">+</span></span>
+<span id="cb148-14"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb148-14" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+</div>
+</div>
+<div id="create-table-with-hmsc-results" class="section level2 hasAnchor" number="13.6">
+<h2><span class="header-section-number">13.6</span> Create table with HMSC results<a href="bacteria-vs-chicken-bw-hmsc-analysis.html#create-table-with-hmsc-results" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb149-1"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-1" tabindex="-1"></a><span class="co"># Total relative abundance of species associated positively and negatively with body weight (~9%)</span></span>
+<span id="cb149-2"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-2" tabindex="-1"></a><span class="fu">sum</span>(toplot<span class="sc">$</span>rel_abu[(toplot<span class="sc">$</span>bw_support <span class="sc">&gt;</span> <span class="fl">0.975</span> <span class="sc">|</span> toplot<span class="sc">$</span>bw_support <span class="sc">&lt;</span> <span class="fl">0.025</span>) <span class="sc">&amp;</span> (toplot<span class="sc">$</span>var_pred <span class="sc">&gt;</span> <span class="fu">mean</span>(toplot<span class="sc">$</span>var_pred))])</span>
+<span id="cb149-3"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-3" tabindex="-1"></a></span>
+<span id="cb149-4"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-4" tabindex="-1"></a><span class="co"># Total relative abundance of species associated positively with body weight (&lt;1%)</span></span>
+<span id="cb149-5"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-5" tabindex="-1"></a><span class="fu">sum</span>(toplot<span class="sc">$</span>rel_abu[(toplot<span class="sc">$</span>bw_support <span class="sc">&gt;</span> <span class="fl">0.975</span>) <span class="sc">&amp;</span> (toplot<span class="sc">$</span>var_pred <span class="sc">&gt;</span> <span class="fu">mean</span>(toplot<span class="sc">$</span>var_pred))])</span>
+<span id="cb149-6"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-6" tabindex="-1"></a></span>
+<span id="cb149-7"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-7" tabindex="-1"></a><span class="co"># Total relative abundance of species associated negatively with body weight (&gt;8%)</span></span>
+<span id="cb149-8"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-8" tabindex="-1"></a><span class="fu">sum</span>(toplot<span class="sc">$</span>rel_abu[(toplot<span class="sc">$</span>bw_support <span class="sc">&lt;</span> <span class="fl">0.025</span> <span class="sc">|</span> toplot<span class="sc">$</span>bw_support <span class="sc">&lt;</span> <span class="fl">0.025</span>) <span class="sc">&amp;</span> (toplot<span class="sc">$</span>var_pred <span class="sc">&gt;</span> <span class="fu">mean</span>(toplot<span class="sc">$</span>var_pred))])</span>
+<span id="cb149-9"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-9" tabindex="-1"></a></span>
+<span id="cb149-10"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-10" tabindex="-1"></a><span class="co"># Phylogenetic signal</span></span>
+<span id="cb149-11"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-11" tabindex="-1"></a>mpost <span class="ot">&lt;-</span> <span class="fu">convertToCodaObject</span>(m)</span>
+<span id="cb149-12"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-12" tabindex="-1"></a><span class="fu">quantile</span>(<span class="fu">unlist</span>(mpost<span class="sc">$</span>Rho), <span class="at">probs =</span> <span class="fu">c</span>(.<span class="dv">05</span>,.<span class="dv">5</span>,.<span class="dv">95</span>))</span>
+<span id="cb149-13"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-13" tabindex="-1"></a></span>
+<span id="cb149-14"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-14" tabindex="-1"></a>bw_parameter <span class="ot">&lt;-</span> beta_post<span class="sc">$</span>mean[<span class="dv">4</span>,]</span>
+<span id="cb149-15"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-15" tabindex="-1"></a></span>
+<span id="cb149-16"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-16" tabindex="-1"></a>bw_parameter_phyloSorted <span class="ot">&lt;-</span></span>
+<span id="cb149-17"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-17" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">bw_parameter =</span> bw_parameter[</span>
+<span id="cb149-18"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-18" tabindex="-1"></a>    <span class="fu">match</span>(m<span class="sc">$</span>phyloTree<span class="sc">$</span>tip.label,</span>
+<span id="cb149-19"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-19" tabindex="-1"></a>          <span class="fu">names</span>(bw_parameter))])</span>
+<span id="cb149-20"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-20" tabindex="-1"></a></span>
+<span id="cb149-21"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-21" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">rownames</span>(bw_parameter_phyloSorted) <span class="sc">==</span> m<span class="sc">$</span>phyloTree<span class="sc">$</span>tip.label)</span>
+<span id="cb149-22"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-22" tabindex="-1"></a></span>
+<span id="cb149-23"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-23" tabindex="-1"></a>new_tree <span class="ot">&lt;-</span> m<span class="sc">$</span>phyloTree</span>
+<span id="cb149-24"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-24" tabindex="-1"></a>new_tree<span class="sc">$</span>node.label <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb149-25"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-25" tabindex="-1"></a></span>
+<span id="cb149-26"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-26" tabindex="-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">phylo4d</span>(new_tree, <span class="at">tip.data =</span> bw_parameter_phyloSorted)</span>
+<span id="cb149-27"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-27" tabindex="-1"></a><span class="fu">barplot.phylo4d</span>(obj)</span>
+<span id="cb149-28"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-28" tabindex="-1"></a></span>
+<span id="cb149-29"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-29" tabindex="-1"></a>bw.cg <span class="ot">&lt;-</span> <span class="fu">phyloCorrelogram</span>(obj, <span class="at">trait =</span> <span class="st">&quot;bw_parameter&quot;</span>)</span>
+<span id="cb149-30"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-30" tabindex="-1"></a><span class="fu">saveRDS</span>(bw.cg,<span class="at">file =</span> <span class="fu">file.path</span>(PanelDir,<span class="st">&quot;bw.cg.rds&quot;</span>))</span>
+<span id="cb149-31"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-31" tabindex="-1"></a>bw.cg <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> <span class="fu">file.path</span>(PanelDir,<span class="st">&quot;bw.cg.rds&quot;</span>))</span>
+<span id="cb149-32"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-32" tabindex="-1"></a></span>
+<span id="cb149-33"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-33" tabindex="-1"></a><span class="fu">plot</span>(bw.cg)</span>
+<span id="cb149-34"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-34" tabindex="-1"></a></span>
+<span id="cb149-35"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-35" tabindex="-1"></a>bw_parameter_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">genome =</span> <span class="fu">names</span>(bw_parameter), <span class="at">bw_response =</span> bw_parameter)</span>
+<span id="cb149-36"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-36" tabindex="-1"></a>bw_parameter_df<span class="sc">$</span>bw_trend <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb149-37"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-37" tabindex="-1"></a>bw_parameter_df<span class="sc">$</span>bw_trend[beta_post<span class="sc">$</span>support[<span class="dv">4</span>,] <span class="sc">&gt;</span> <span class="fl">0.95</span>] <span class="ot">&lt;-</span> <span class="st">&quot;positive&quot;</span></span>
+<span id="cb149-38"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-38" tabindex="-1"></a>bw_parameter_df<span class="sc">$</span>bw_trend[beta_post<span class="sc">$</span>support[<span class="dv">4</span>,] <span class="sc">&lt;</span> <span class="fl">0.05</span>] <span class="ot">&lt;-</span> <span class="st">&quot;negative&quot;</span></span>
+<span id="cb149-39"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-39" tabindex="-1"></a>bw_parameter_df<span class="sc">$</span>bw_trend[<span class="fu">is.na</span>(bw_parameter_df<span class="sc">$</span>bw_trend)] <span class="ot">&lt;-</span> <span class="st">&quot;neutral&quot;</span></span>
+<span id="cb149-40"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-40" tabindex="-1"></a></span>
+<span id="cb149-41"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb149-41" tabindex="-1"></a><span class="fu">write_tsv</span>(bw_parameter_df,<span class="at">file =</span> <span class="st">&quot;data/hmsc_bw_trend.tsv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb150-1"><a href="bacteria-vs-chicken-bw-hmsc-analysis.html#cb150-1" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code></pre></div>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-
+<a href="bacteria-vs-chicken-bw-hmsc-setup.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="comparing-metabolic-capacity-of-positively-and-negatively-associated-bacteria.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script>/*! jQuery v3.6.0 | (c) OpenJS Foundation and other contributors | jquery.org/license */
