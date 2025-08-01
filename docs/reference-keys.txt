@@ -85,7 +85,7 @@ variance-partitioning
 phylogenetic-correlogram
 calcultate-phylogenetic-distance
 phylogenetic-signal
-bacterial-community-composition-1
+metabolic-capacity-index
 load-mg-data-5
 gifts-per-mag
 plot-gifts-of-all-bacteria-by-element

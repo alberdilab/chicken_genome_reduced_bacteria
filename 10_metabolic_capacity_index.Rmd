@@ -1,4 +1,4 @@
-# Bacterial community composition
+# Metabolic capacity index
 
 ## Load MG data
 
