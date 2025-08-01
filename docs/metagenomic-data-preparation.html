@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | AlberdiLab | Marcos et al. 2025</title>
+  <title>Chapter 2 Metagenomic data preparation | AlberdiLab | Marcos et al. 2025</title>
   <meta name="description" content="&lt;p&gt;Data analysis code developed to study early-life caecal microbiome development and its association with chicken body weight&lt;/p&gt;" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | AlberdiLab | Marcos et al. 2025" />
+  <meta property="og:title" content="Chapter 2 Metagenomic data preparation | AlberdiLab | Marcos et al. 2025" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="&lt;p&gt;Data analysis code developed to study early-life caecal microbiome development and its association with chicken body weight&lt;/p&gt;" />
   <meta name="github-repo" content="alberdilab/chicken_genome_reduced_bacteria" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | AlberdiLab | Marcos et al. 2025" />
+  <meta name="twitter:title" content="Chapter 2 Metagenomic data preparation | AlberdiLab | Marcos et al. 2025" />
   
   <meta name="twitter:description" content="&lt;p&gt;Data analysis code developed to study early-life caecal microbiome development and its association with chicken body weight&lt;/p&gt;" />
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-
+<link rel="prev" href="index.html"/>
+<link rel="next" href="metatranscriptomic-data-preparation.html"/>
 
 
 
@@ -2246,19 +2246,278 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="page-not-found" class="section level1">
-<h1>Page not found</h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div id="metagenomic-data-preparation" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Metagenomic data preparation<a href="metagenomic-data-preparation.html#metagenomic-data-preparation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="load-data" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Load data<a href="metagenomic-data-preparation.html#load-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Load the original data files outputted by the bioinformatic pipeline.</p>
+<div id="chicken-sample-metadata" class="section level3 hasAnchor" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Chicken sample metadata<a href="metagenomic-data-preparation.html#chicken-sample-metadata" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb3-1"><a href="metagenomic-data-preparation.html#cb3-1" tabindex="-1"></a>chicken_metadata <span class="ot">&lt;-</span> </span>
+<span id="cb3-2"><a href="metagenomic-data-preparation.html#cb3-2" tabindex="-1"></a>  <span class="fu">read_tsv</span>(<span class="st">&quot;data/metadata.tsv&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="metagenomic-data-preparation.html#cb3-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sampling_time =</span> <span class="fu">factor</span>(sampling_time,</span>
+<span id="cb3-4"><a href="metagenomic-data-preparation.html#cb3-4" tabindex="-1"></a>                                <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&#39;7&#39;</span>, <span class="st">&#39;21&#39;</span>, <span class="st">&#39;35&#39;</span>)))</span></code></pre></div>
+</div>
+<div id="taxonomy-of-metagenome-assembled-genomes" class="section level3 hasAnchor" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> Taxonomy of metagenome-assembled genomes<a href="metagenomic-data-preparation.html#taxonomy-of-metagenome-assembled-genomes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb4-1"><a href="metagenomic-data-preparation.html#cb4-1" tabindex="-1"></a>genome_taxonomy <span class="ot">&lt;-</span> </span>
+<span id="cb4-2"><a href="metagenomic-data-preparation.html#cb4-2" tabindex="-1"></a>  <span class="fu">read_tsv</span>(<span class="st">&quot;data/taxonomy.tsv&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="metagenomic-data-preparation.html#cb4-3" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">genome =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="metagenomic-data-preparation.html#cb4-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">phylum =</span> <span class="fu">case_when</span>(</span>
+<span id="cb4-5"><a href="metagenomic-data-preparation.html#cb4-5" tabindex="-1"></a>        phylum <span class="sc">==</span> <span class="st">&quot;Actinobacteriota&quot;</span> <span class="sc">~</span> <span class="st">&quot;Actinomycetota&quot;</span>,</span>
+<span id="cb4-6"><a href="metagenomic-data-preparation.html#cb4-6" tabindex="-1"></a>        phylum <span class="sc">==</span> <span class="st">&quot;Firmicutes&quot;</span> <span class="sc">~</span> <span class="st">&quot;Bacillota&quot;</span>,</span>
+<span id="cb4-7"><a href="metagenomic-data-preparation.html#cb4-7" tabindex="-1"></a>        phylum <span class="sc">==</span> <span class="st">&quot;Firmicutes_A&quot;</span> <span class="sc">~</span> <span class="st">&quot;Bacillota_A&quot;</span>,</span>
+<span id="cb4-8"><a href="metagenomic-data-preparation.html#cb4-8" tabindex="-1"></a>        phylum <span class="sc">==</span> <span class="st">&quot;Firmicutes_B&quot;</span> <span class="sc">~</span> <span class="st">&quot;Bacillota_B&quot;</span>,</span>
+<span id="cb4-9"><a href="metagenomic-data-preparation.html#cb4-9" tabindex="-1"></a>        phylum <span class="sc">==</span> <span class="st">&quot;Firmicutes_C&quot;</span> <span class="sc">~</span> <span class="st">&quot;Bacillota_C&quot;</span>,</span>
+<span id="cb4-10"><a href="metagenomic-data-preparation.html#cb4-10" tabindex="-1"></a>        phylum <span class="sc">==</span> <span class="st">&quot;Cyanobacteria&quot;</span> <span class="sc">~</span> <span class="st">&quot;Cyanobacteriota&quot;</span>,</span>
+<span id="cb4-11"><a href="metagenomic-data-preparation.html#cb4-11" tabindex="-1"></a>        phylum <span class="sc">==</span> <span class="st">&quot;Proteobacteria&quot;</span> <span class="sc">~</span> <span class="st">&quot;Pseudomonadota&quot;</span>,</span>
+<span id="cb4-12"><a href="metagenomic-data-preparation.html#cb4-12" tabindex="-1"></a>        <span class="cn">TRUE</span> <span class="sc">~</span> phylum)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-13"><a href="metagenomic-data-preparation.html#cb4-13" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>domain <span class="sc">==</span> <span class="st">&quot;Archaea&quot;</span>)</span></code></pre></div>
+</div>
+<div id="genome-statistics" class="section level3 hasAnchor" number="2.1.3">
+<h3><span class="header-section-number">2.1.3</span> Genome statistics<a href="metagenomic-data-preparation.html#genome-statistics" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb5-1"><a href="metagenomic-data-preparation.html#cb5-1" tabindex="-1"></a>genome_stats <span class="ot">&lt;-</span> </span>
+<span id="cb5-2"><a href="metagenomic-data-preparation.html#cb5-2" tabindex="-1"></a>  <span class="fu">read_tsv</span>(<span class="st">&quot;data/stats.tsv&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="metagenomic-data-preparation.html#cb5-3" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">genome =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="metagenomic-data-preparation.html#cb5-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">correction_factor =</span> <span class="fu">median</span>(mag_length) <span class="sc">/</span> mag_length) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-5"><a href="metagenomic-data-preparation.html#cb5-5" tabindex="-1"></a>  <span class="fu">filter</span>(genome <span class="sc">%in%</span> genome_taxonomy<span class="sc">$</span>genome) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-6"><a href="metagenomic-data-preparation.html#cb5-6" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">match</span>(genome, genome_taxonomy<span class="sc">$</span>genome))</span></code></pre></div>
+</div>
+<div id="phylogenetic-tree" class="section level3 hasAnchor" number="2.1.4">
+<h3><span class="header-section-number">2.1.4</span> Phylogenetic tree<a href="metagenomic-data-preparation.html#phylogenetic-tree" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb6-1"><a href="metagenomic-data-preparation.html#cb6-1" tabindex="-1"></a>genome_tree <span class="ot">&lt;-</span> <span class="fu">read_tree</span>(<span class="st">&quot;data/tree.nwk&quot;</span>)</span></code></pre></div>
+</div>
+<div id="raw-gene-annotations" class="section level3 hasAnchor" number="2.1.5">
+<h3><span class="header-section-number">2.1.5</span> Raw gene annotations<a href="metagenomic-data-preparation.html#raw-gene-annotations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb7-1"><a href="metagenomic-data-preparation.html#cb7-1" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(<span class="st">&quot;data/gene_annotations.tsv.xz&quot;</span>)){</span>
+<span id="cb7-2"><a href="metagenomic-data-preparation.html#cb7-2" tabindex="-1"></a>  <span class="fu">download.file</span>(</span>
+<span id="cb7-3"><a href="metagenomic-data-preparation.html#cb7-3" tabindex="-1"></a>    <span class="at">url =</span> <span class="st">&#39;https://sid.erda.dk/share_redirect/Bd8UfDO2D6/gene_annotations.tsv.xz&#39;</span>,</span>
+<span id="cb7-4"><a href="metagenomic-data-preparation.html#cb7-4" tabindex="-1"></a>    <span class="at">destfile =</span> <span class="st">&#39;data/gene_annotations.tsv.xz&#39;</span>, <span class="at">method =</span> <span class="st">&#39;curl&#39;</span></span>
+<span id="cb7-5"><a href="metagenomic-data-preparation.html#cb7-5" tabindex="-1"></a>    )</span>
+<span id="cb7-6"><a href="metagenomic-data-preparation.html#cb7-6" tabindex="-1"></a>}</span>
+<span id="cb7-7"><a href="metagenomic-data-preparation.html#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="metagenomic-data-preparation.html#cb7-8" tabindex="-1"></a>genome_annotations <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;data/gene_annotations.tsv.xz&quot;</span>)</span></code></pre></div>
+</div>
+<div id="dram-functional-annotations" class="section level3 hasAnchor" number="2.1.6">
+<h3><span class="header-section-number">2.1.6</span> DRAM functional annotations<a href="metagenomic-data-preparation.html#dram-functional-annotations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb8-1"><a href="metagenomic-data-preparation.html#cb8-1" tabindex="-1"></a>genome_kegg_paths <span class="ot">&lt;-</span></span>
+<span id="cb8-2"><a href="metagenomic-data-preparation.html#cb8-2" tabindex="-1"></a>  <span class="fu">read_tsv</span>(<span class="st">&quot;data/dram.tsv&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="metagenomic-data-preparation.html#cb8-3" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">genome =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="metagenomic-data-preparation.html#cb8-4" tabindex="-1"></a>  <span class="fu">filter</span>(genome <span class="sc">%in%</span> genome_taxonomy<span class="sc">$</span>genome) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a href="metagenomic-data-preparation.html#cb8-5" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">400</span>)</span></code></pre></div>
+</div>
+<div id="metagenomic-read-counts" class="section level3 hasAnchor" number="2.1.7">
+<h3><span class="header-section-number">2.1.7</span> Metagenomic read counts<a href="metagenomic-data-preparation.html#metagenomic-read-counts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb9-1"><a href="metagenomic-data-preparation.html#cb9-1" tabindex="-1"></a>read_counts <span class="ot">&lt;-</span> </span>
+<span id="cb9-2"><a href="metagenomic-data-preparation.html#cb9-2" tabindex="-1"></a>  <span class="fu">read_tsv</span>(<span class="st">&quot;data/mag_counts.tsv&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="metagenomic-data-preparation.html#cb9-3" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">genome =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-4"><a href="metagenomic-data-preparation.html#cb9-4" tabindex="-1"></a>  <span class="fu">filter</span>(genome <span class="sc">%in%</span> genome_taxonomy<span class="sc">$</span>genome) </span></code></pre></div>
+</div>
+</div>
+<div id="distilling-genome-inferred-functional-traits-gifts" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Distilling Genome Inferred Functional Traits (GIFTs)<a href="metagenomic-data-preparation.html#distilling-genome-inferred-functional-traits-gifts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="distilling-dram-annotations" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Distilling DRAM annotations<a href="metagenomic-data-preparation.html#distilling-dram-annotations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb10-1"><a href="metagenomic-data-preparation.html#cb10-1" tabindex="-1"></a>gifts_raw <span class="ot">&lt;-</span> <span class="fu">distill</span>(genome_annotations, GIFT_db2,</span>
+<span id="cb10-2"><a href="metagenomic-data-preparation.html#cb10-2" tabindex="-1"></a>                     <span class="at">genomecol =</span> <span class="dv">2</span>, <span class="at">annotcol =</span> <span class="fu">c</span>(<span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">19</span>), <span class="at">verbosity =</span> F)</span>
+<span id="cb10-3"><a href="metagenomic-data-preparation.html#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="metagenomic-data-preparation.html#cb10-4" tabindex="-1"></a><span class="co"># Load ENA to genome_id table</span></span>
+<span id="cb10-5"><a href="metagenomic-data-preparation.html#cb10-5" tabindex="-1"></a>ena_to_mag_id <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;data/ena_to_mag_id.tsv&quot;</span>)</span>
+<span id="cb10-6"><a href="metagenomic-data-preparation.html#cb10-6" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="metagenomic-data-preparation.html#cb10-7" tabindex="-1"></a>gifts_matrix <span class="ot">&lt;-</span></span>
+<span id="cb10-8"><a href="metagenomic-data-preparation.html#cb10-8" tabindex="-1"></a>  gifts_raw <span class="sc">%&gt;%</span></span>
+<span id="cb10-9"><a href="metagenomic-data-preparation.html#cb10-9" tabindex="-1"></a>  <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-10"><a href="metagenomic-data-preparation.html#cb10-10" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&#39;mag_name&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-11"><a href="metagenomic-data-preparation.html#cb10-11" tabindex="-1"></a>  <span class="fu">left_join</span>(ena_to_mag_id <span class="sc">%&gt;%</span></span>
+<span id="cb10-12"><a href="metagenomic-data-preparation.html#cb10-12" tabindex="-1"></a>              <span class="fu">select</span>(mag_name, mag_id),</span>
+<span id="cb10-13"><a href="metagenomic-data-preparation.html#cb10-13" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">&#39;mag_name&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-14"><a href="metagenomic-data-preparation.html#cb10-14" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>mag_name) <span class="sc">%&gt;%</span></span>
+<span id="cb10-15"><a href="metagenomic-data-preparation.html#cb10-15" tabindex="-1"></a>  <span class="fu">relocate</span>(mag_id) <span class="sc">%&gt;%</span></span>
+<span id="cb10-16"><a href="metagenomic-data-preparation.html#cb10-16" tabindex="-1"></a>  <span class="fu">filter</span>(mag_id <span class="sc">%in%</span> genome_taxonomy<span class="sc">$</span>genome) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-17"><a href="metagenomic-data-preparation.html#cb10-17" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&#39;mag_id&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-18"><a href="metagenomic-data-preparation.html#cb10-18" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span></code></pre></div>
+</div>
+<div id="perform-completeness-correction-for-gifts" class="section level3 hasAnchor" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Perform completeness correction for GIFTs<a href="metagenomic-data-preparation.html#perform-completeness-correction-for-gifts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb11-1"><a href="metagenomic-data-preparation.html#cb11-1" tabindex="-1"></a><span class="co"># Aggregate into compound level</span></span>
+<span id="cb11-2"><a href="metagenomic-data-preparation.html#cb11-2" tabindex="-1"></a>gifts_elements <span class="ot">&lt;-</span> <span class="fu">to.elements</span>(gifts_matrix, GIFT_db2)</span>
+<span id="cb11-3"><a href="metagenomic-data-preparation.html#cb11-3" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="metagenomic-data-preparation.html#cb11-4" tabindex="-1"></a><span class="co"># Aggregate into function level</span></span>
+<span id="cb11-5"><a href="metagenomic-data-preparation.html#cb11-5" tabindex="-1"></a>gifts_functions <span class="ot">&lt;-</span> <span class="fu">to.functions</span>(gifts_elements, GIFT_db2)</span>
+<span id="cb11-6"><a href="metagenomic-data-preparation.html#cb11-6" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="metagenomic-data-preparation.html#cb11-7" tabindex="-1"></a><span class="co"># Aggregate into overall domain level</span></span>
+<span id="cb11-8"><a href="metagenomic-data-preparation.html#cb11-8" tabindex="-1"></a>gifts_domains <span class="ot">&lt;-</span> <span class="fu">to.domains</span>(gifts_functions, GIFT_db2)</span></code></pre></div>
+</div>
+</div>
+<div id="create-working-objects" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Create working objects<a href="metagenomic-data-preparation.html#create-working-objects" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Transform the original data files into working objects for downstream analyses.</p>
+<div id="transform-reads-into-genome-counts" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Transform reads into genome counts<a href="metagenomic-data-preparation.html#transform-reads-into-genome-counts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb12-1"><a href="metagenomic-data-preparation.html#cb12-1" tabindex="-1"></a>mag_weighted <span class="ot">&lt;-</span></span>
+<span id="cb12-2"><a href="metagenomic-data-preparation.html#cb12-2" tabindex="-1"></a>  read_counts <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="metagenomic-data-preparation.html#cb12-3" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="at">var =</span> <span class="st">&#39;genome&#39;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-4"><a href="metagenomic-data-preparation.html#cb12-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> .<span class="sc">/</span> genome_stats<span class="sc">$</span>correction_factor)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-5"><a href="metagenomic-data-preparation.html#cb12-5" tabindex="-1"></a>  <span class="fu">t</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb12-6"><a href="metagenomic-data-preparation.html#cb12-6" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code></pre></div>
+</div>
+<div id="calculate-relative-abundances" class="section level3 hasAnchor" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Calculate relative abundances<a href="metagenomic-data-preparation.html#calculate-relative-abundances" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb13-1"><a href="metagenomic-data-preparation.html#cb13-1" tabindex="-1"></a><span class="co"># Relative abundances</span></span>
+<span id="cb13-2"><a href="metagenomic-data-preparation.html#cb13-2" tabindex="-1"></a>total <span class="ot">&lt;-</span></span>
+<span id="cb13-3"><a href="metagenomic-data-preparation.html#cb13-3" tabindex="-1"></a>  <span class="fu">decostand</span>(mag_weighted, <span class="st">&#39;total&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="metagenomic-data-preparation.html#cb13-4" tabindex="-1"></a>  <span class="fu">t</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb13-5"><a href="metagenomic-data-preparation.html#cb13-5" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()  </span>
+<span id="cb13-6"><a href="metagenomic-data-preparation.html#cb13-6" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="metagenomic-data-preparation.html#cb13-7" tabindex="-1"></a><span class="co"># Square root of relative abundances</span></span>
+<span id="cb13-8"><a href="metagenomic-data-preparation.html#cb13-8" tabindex="-1"></a>hel <span class="ot">&lt;-</span></span>
+<span id="cb13-9"><a href="metagenomic-data-preparation.html#cb13-9" tabindex="-1"></a>  <span class="fu">decostand</span>(mag_weighted, <span class="st">&#39;hellinger&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-10"><a href="metagenomic-data-preparation.html#cb13-10" tabindex="-1"></a>  <span class="fu">t</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb13-11"><a href="metagenomic-data-preparation.html#cb13-11" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() </span>
+<span id="cb13-12"><a href="metagenomic-data-preparation.html#cb13-12" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="metagenomic-data-preparation.html#cb13-13" tabindex="-1"></a><span class="co"># Transpose matrix</span></span>
+<span id="cb13-14"><a href="metagenomic-data-preparation.html#cb13-14" tabindex="-1"></a>mag_weighted <span class="ot">&lt;-</span></span>
+<span id="cb13-15"><a href="metagenomic-data-preparation.html#cb13-15" tabindex="-1"></a>  mag_weighted <span class="sc">%&gt;%</span> </span>
+<span id="cb13-16"><a href="metagenomic-data-preparation.html#cb13-16" tabindex="-1"></a>  <span class="fu">t</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-17"><a href="metagenomic-data-preparation.html#cb13-17" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code></pre></div>
+</div>
+<div id="prepare-a-phyloseq-object" class="section level3 hasAnchor" number="2.3.3">
+<h3><span class="header-section-number">2.3.3</span> Prepare a phyloseq object<a href="metagenomic-data-preparation.html#prepare-a-phyloseq-object" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb14-1"><a href="metagenomic-data-preparation.html#cb14-1" tabindex="-1"></a>phylo_samples <span class="ot">&lt;-</span> </span>
+<span id="cb14-2"><a href="metagenomic-data-preparation.html#cb14-2" tabindex="-1"></a>  chicken_metadata <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="metagenomic-data-preparation.html#cb14-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sampling_time =</span> <span class="fu">as.factor</span>(sampling_time),</span>
+<span id="cb14-4"><a href="metagenomic-data-preparation.html#cb14-4" tabindex="-1"></a>         <span class="at">trial_age =</span> <span class="fu">paste</span>(trial, sampling_time, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>),</span>
+<span id="cb14-5"><a href="metagenomic-data-preparation.html#cb14-5" tabindex="-1"></a>         <span class="at">trial_age =</span> <span class="fu">as.factor</span>(trial_age)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-6"><a href="metagenomic-data-preparation.html#cb14-6" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&quot;animal_code&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-7"><a href="metagenomic-data-preparation.html#cb14-7" tabindex="-1"></a>  <span class="fu">sample_data</span>() <span class="co"># Convert to phyloseq sample_data object</span></span>
+<span id="cb14-8"><a href="metagenomic-data-preparation.html#cb14-8" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="metagenomic-data-preparation.html#cb14-9" tabindex="-1"></a>phylo_genome <span class="ot">&lt;-</span> <span class="fu">otu_table</span>(total, <span class="at">taxa_are_rows =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb14-10"><a href="metagenomic-data-preparation.html#cb14-10" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="metagenomic-data-preparation.html#cb14-11" tabindex="-1"></a>phylo_taxonomy <span class="ot">&lt;-</span> </span>
+<span id="cb14-12"><a href="metagenomic-data-preparation.html#cb14-12" tabindex="-1"></a>  genome_taxonomy <span class="sc">%&gt;%</span></span>
+<span id="cb14-13"><a href="metagenomic-data-preparation.html#cb14-13" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&quot;genome&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-14"><a href="metagenomic-data-preparation.html#cb14-14" tabindex="-1"></a>  <span class="fu">as.matrix</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb14-15"><a href="metagenomic-data-preparation.html#cb14-15" tabindex="-1"></a>  <span class="fu">tax_table</span>() <span class="co"># Convert to phyloseq tax_table object</span></span>
+<span id="cb14-16"><a href="metagenomic-data-preparation.html#cb14-16" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="metagenomic-data-preparation.html#cb14-17" tabindex="-1"></a>phylo_tree <span class="ot">&lt;-</span> <span class="fu">phy_tree</span>(genome_tree) </span>
+<span id="cb14-18"><a href="metagenomic-data-preparation.html#cb14-18" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="metagenomic-data-preparation.html#cb14-19" tabindex="-1"></a>phylo_seq <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(phylo_genome, phylo_taxonomy, phylo_samples, phylo_tree)</span></code></pre></div>
+</div>
+</div>
+<div id="prepare-color-scheme" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Prepare color scheme<a href="metagenomic-data-preparation.html#prepare-color-scheme" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb15-1"><a href="metagenomic-data-preparation.html#cb15-1" tabindex="-1"></a><span class="co"># As dataframe</span></span>
+<span id="cb15-2"><a href="metagenomic-data-preparation.html#cb15-2" tabindex="-1"></a>taxonomy_colors <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;data/taxonomy_colours.tsv&quot;</span>) </span>
+<span id="cb15-3"><a href="metagenomic-data-preparation.html#cb15-3" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="metagenomic-data-preparation.html#cb15-4" tabindex="-1"></a><span class="co"># As vector</span></span>
+<span id="cb15-5"><a href="metagenomic-data-preparation.html#cb15-5" tabindex="-1"></a>phylum_colors <span class="ot">&lt;-</span> </span>
+<span id="cb15-6"><a href="metagenomic-data-preparation.html#cb15-6" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">Halobacteriota =</span> <span class="st">&quot;#f2f2f2&quot;</span>,</span>
+<span id="cb15-7"><a href="metagenomic-data-preparation.html#cb15-7" tabindex="-1"></a>    <span class="at">Methanobacteriota =</span> <span class="st">&quot;#bfbfbf&quot;</span>,</span>
+<span id="cb15-8"><a href="metagenomic-data-preparation.html#cb15-8" tabindex="-1"></a>    <span class="at">Patescibacteria =</span> <span class="st">&quot;#dacce3&quot;</span>,</span>
+<span id="cb15-9"><a href="metagenomic-data-preparation.html#cb15-9" tabindex="-1"></a>    <span class="at">Campylobacterota =</span> <span class="st">&quot;#cdadca&quot;</span>,</span>
+<span id="cb15-10"><a href="metagenomic-data-preparation.html#cb15-10" tabindex="-1"></a>    <span class="at">Synergistota =</span> <span class="st">&quot;#c08eb3&quot;</span>,</span>
+<span id="cb15-11"><a href="metagenomic-data-preparation.html#cb15-11" tabindex="-1"></a>    <span class="at">Thermoplasmatota =</span> <span class="st">&quot;#777dae&quot;</span>,</span>
+<span id="cb15-12"><a href="metagenomic-data-preparation.html#cb15-12" tabindex="-1"></a>    <span class="at">Verrucomicrobiota =</span> <span class="st">&quot;#0066ae&quot;</span>,</span>
+<span id="cb15-13"><a href="metagenomic-data-preparation.html#cb15-13" tabindex="-1"></a>    <span class="at">Desulfobacterota =</span> <span class="st">&quot;#68b0dc&quot;</span>,</span>
+<span id="cb15-14"><a href="metagenomic-data-preparation.html#cb15-14" tabindex="-1"></a>    <span class="at">Pseudomonadota =</span> <span class="st">&quot;#60cfde&quot;</span>,</span>
+<span id="cb15-15"><a href="metagenomic-data-preparation.html#cb15-15" tabindex="-1"></a>    <span class="at">Bacteroidota =</span> <span class="st">&quot;#4dc87c&quot;</span>,</span>
+<span id="cb15-16"><a href="metagenomic-data-preparation.html#cb15-16" tabindex="-1"></a>    <span class="at">Cyanobacteriota =</span> <span class="st">&quot;#92e09f&quot;</span>,</span>
+<span id="cb15-17"><a href="metagenomic-data-preparation.html#cb15-17" tabindex="-1"></a>    <span class="at">Actinomycetota =</span> <span class="st">&quot;#c9e0af&quot;</span>,</span>
+<span id="cb15-18"><a href="metagenomic-data-preparation.html#cb15-18" tabindex="-1"></a>    <span class="at">Deferribacterota =</span> <span class="st">&quot;#dff77e&quot;</span>,</span>
+<span id="cb15-19"><a href="metagenomic-data-preparation.html#cb15-19" tabindex="-1"></a>    <span class="at">Bacillota =</span> <span class="st">&quot;#ffd366&quot;</span>,</span>
+<span id="cb15-20"><a href="metagenomic-data-preparation.html#cb15-20" tabindex="-1"></a>    <span class="at">Bacillota_A =</span> <span class="st">&quot;#fd8854&quot;</span>,</span>
+<span id="cb15-21"><a href="metagenomic-data-preparation.html#cb15-21" tabindex="-1"></a>    <span class="at">Bacillota_B =</span> <span class="st">&quot;#8b1222&quot;</span>,</span>
+<span id="cb15-22"><a href="metagenomic-data-preparation.html#cb15-22" tabindex="-1"></a>    <span class="at">Bacillota_C =</span> <span class="st">&quot;#5a0c37&quot;</span>)</span>
+<span id="cb15-23"><a href="metagenomic-data-preparation.html#cb15-23" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="metagenomic-data-preparation.html#cb15-24" tabindex="-1"></a>order_colors <span class="ot">&lt;-</span> </span>
+<span id="cb15-25"><a href="metagenomic-data-preparation.html#cb15-25" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">Methanomicrobiales =</span> <span class="st">&quot;#f2f2f2&quot;</span>,</span>
+<span id="cb15-26"><a href="metagenomic-data-preparation.html#cb15-26" tabindex="-1"></a>    <span class="at">Methanobacteriales =</span> <span class="st">&quot;#bfbfbf&quot;</span>,</span>
+<span id="cb15-27"><a href="metagenomic-data-preparation.html#cb15-27" tabindex="-1"></a>    <span class="at">Saccharimonadales =</span> <span class="st">&quot;#dacce3&quot;</span>,</span>
+<span id="cb15-28"><a href="metagenomic-data-preparation.html#cb15-28" tabindex="-1"></a>    <span class="at">Campylobacterales =</span> <span class="st">&quot;#cdadca&quot;</span>,</span>
+<span id="cb15-29"><a href="metagenomic-data-preparation.html#cb15-29" tabindex="-1"></a>    <span class="at">Synergistales =</span> <span class="st">&quot;#c08eb3&quot;</span>,</span>
+<span id="cb15-30"><a href="metagenomic-data-preparation.html#cb15-30" tabindex="-1"></a>    <span class="at">Methanomassiliicoccales =</span> <span class="st">&quot;#777dae&quot;</span>,</span>
+<span id="cb15-31"><a href="metagenomic-data-preparation.html#cb15-31" tabindex="-1"></a>    <span class="at">Victivallales =</span> <span class="st">&quot;#0066ae&quot;</span>,</span>
+<span id="cb15-32"><a href="metagenomic-data-preparation.html#cb15-32" tabindex="-1"></a>    <span class="at">Opitutales =</span> <span class="st">&quot;#1c7ebc&quot;</span>,</span>
+<span id="cb15-33"><a href="metagenomic-data-preparation.html#cb15-33" tabindex="-1"></a>    <span class="at">Verrucomicrobiales =</span> <span class="st">&quot;#4a96cc&quot;</span>,</span>
+<span id="cb15-34"><a href="metagenomic-data-preparation.html#cb15-34" tabindex="-1"></a>    <span class="at">Desulfovibrionales =</span> <span class="st">&quot;#68b0dc&quot;</span>,</span>
+<span id="cb15-35"><a href="metagenomic-data-preparation.html#cb15-35" tabindex="-1"></a>    <span class="at">Enterobacterales =</span> <span class="st">&quot;#60cfde&quot;</span>,</span>
+<span id="cb15-36"><a href="metagenomic-data-preparation.html#cb15-36" tabindex="-1"></a>    <span class="at">RF32 =</span> <span class="st">&quot;#60dfd2&quot;</span>,</span>
+<span id="cb15-37"><a href="metagenomic-data-preparation.html#cb15-37" tabindex="-1"></a>    <span class="at">Burkholderiales =</span> <span class="st">&quot;#5cdfb5&quot;</span>,</span>
+<span id="cb15-38"><a href="metagenomic-data-preparation.html#cb15-38" tabindex="-1"></a>    <span class="st">&#39;Rs-D84&#39;</span> <span class="ot">=</span> <span class="st">&quot;#40df91&quot;</span>,</span>
+<span id="cb15-39"><a href="metagenomic-data-preparation.html#cb15-39" tabindex="-1"></a>    <span class="at">Bacteroidales =</span> <span class="st">&quot;#4dc87c&quot;</span>,</span>
+<span id="cb15-40"><a href="metagenomic-data-preparation.html#cb15-40" tabindex="-1"></a>    <span class="at">Flavobacteriales =</span> <span class="st">&quot;#88c88b&quot;</span>,</span>
+<span id="cb15-41"><a href="metagenomic-data-preparation.html#cb15-41" tabindex="-1"></a>    <span class="at">Gastranaerophilales =</span> <span class="st">&quot;#92e09f&quot;</span>,</span>
+<span id="cb15-42"><a href="metagenomic-data-preparation.html#cb15-42" tabindex="-1"></a>    <span class="at">Coriobacteriales =</span> <span class="st">&quot;#c9e0af&quot;</span>,</span>
+<span id="cb15-43"><a href="metagenomic-data-preparation.html#cb15-43" tabindex="-1"></a>    <span class="at">Actinomycetales =</span> <span class="st">&quot;#d8e093&quot;</span>,</span>
+<span id="cb15-44"><a href="metagenomic-data-preparation.html#cb15-44" tabindex="-1"></a>    <span class="at">Deferribacterales =</span> <span class="st">&quot;#dff77e&quot;</span>,</span>
+<span id="cb15-45"><a href="metagenomic-data-preparation.html#cb15-45" tabindex="-1"></a>    <span class="at">RF39 =</span> <span class="st">&quot;#ecf76d&quot;</span>,</span>
+<span id="cb15-46"><a href="metagenomic-data-preparation.html#cb15-46" tabindex="-1"></a>    <span class="at">Lactobacillales =</span> <span class="st">&quot;#feef68&quot;</span>,</span>
+<span id="cb15-47"><a href="metagenomic-data-preparation.html#cb15-47" tabindex="-1"></a>    <span class="st">&#39;ML615J-28&#39;</span> <span class="ot">=</span> <span class="st">&quot;#fde671&quot;</span>,</span>
+<span id="cb15-48"><a href="metagenomic-data-preparation.html#cb15-48" tabindex="-1"></a>    <span class="at">Erysipelotrichales =</span> <span class="st">&quot;#ffd366&quot;</span>,</span>
+<span id="cb15-49"><a href="metagenomic-data-preparation.html#cb15-49" tabindex="-1"></a>    <span class="at">Acholeplasmatales =</span> <span class="st">&quot;#fdc151&quot;</span>,</span>
+<span id="cb15-50"><a href="metagenomic-data-preparation.html#cb15-50" tabindex="-1"></a>    <span class="at">Bacillales =</span> <span class="st">&quot;#fc953d&quot;</span>,</span>
+<span id="cb15-51"><a href="metagenomic-data-preparation.html#cb15-51" tabindex="-1"></a>    <span class="at">RFN20 =</span> <span class="st">&quot;#fd8035&quot;</span>,</span>
+<span id="cb15-52"><a href="metagenomic-data-preparation.html#cb15-52" tabindex="-1"></a>    <span class="at">Oscillospirales =</span> <span class="st">&quot;#fd8854&quot;</span>,</span>
+<span id="cb15-53"><a href="metagenomic-data-preparation.html#cb15-53" tabindex="-1"></a>    <span class="at">TANB77 =</span> <span class="st">&quot;#f4814d&quot;</span>,</span>
+<span id="cb15-54"><a href="metagenomic-data-preparation.html#cb15-54" tabindex="-1"></a>    <span class="at">Christensenellales =</span> <span class="st">&quot;#c26340&quot;</span>,</span>
+<span id="cb15-55"><a href="metagenomic-data-preparation.html#cb15-55" tabindex="-1"></a>    <span class="at">Lachnospirales =</span> <span class="st">&quot;#c28c5c&quot;</span>,</span>
+<span id="cb15-56"><a href="metagenomic-data-preparation.html#cb15-56" tabindex="-1"></a>    <span class="at">Clostridiales =</span> <span class="st">&quot;#ce9360&quot;</span>,</span>
+<span id="cb15-57"><a href="metagenomic-data-preparation.html#cb15-57" tabindex="-1"></a>    <span class="at">Monoglobales_A =</span> <span class="st">&quot;#ce734f&quot;</span>,</span>
+<span id="cb15-58"><a href="metagenomic-data-preparation.html#cb15-58" tabindex="-1"></a>    <span class="at">Peptostreptococcales =</span> <span class="st">&quot;#c65631&quot;</span>,</span>
+<span id="cb15-59"><a href="metagenomic-data-preparation.html#cb15-59" tabindex="-1"></a>    <span class="at">Monoglobales =</span> <span class="st">&quot;#b93725&quot;</span>,</span>
+<span id="cb15-60"><a href="metagenomic-data-preparation.html#cb15-60" tabindex="-1"></a>    <span class="at">UBA1212 =</span> <span class="st">&quot;#b10f19&quot;</span>,</span>
+<span id="cb15-61"><a href="metagenomic-data-preparation.html#cb15-61" tabindex="-1"></a>    <span class="at">UBA4068 =</span> <span class="st">&quot;#8b1222&quot;</span>,</span>
+<span id="cb15-62"><a href="metagenomic-data-preparation.html#cb15-62" tabindex="-1"></a>    <span class="at">Selenomonadales =</span> <span class="st">&quot;#7a1a12&quot;</span>,</span>
+<span id="cb15-63"><a href="metagenomic-data-preparation.html#cb15-63" tabindex="-1"></a>    <span class="at">Acidaminococcales =</span> <span class="st">&quot;#64121f&quot;</span>,</span>
+<span id="cb15-64"><a href="metagenomic-data-preparation.html#cb15-64" tabindex="-1"></a>    <span class="at">Veillonellales =</span> <span class="st">&quot;#5a0c37&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb16-1"><a href="metagenomic-data-preparation.html#cb16-1" tabindex="-1"></a>sampling_day_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;#E69F00&#39;</span>, <span class="st">&#39;#CC6677&#39;</span>, <span class="st">&#39;#56B4E9&#39;</span>)</span></code></pre></div>
+</div>
+<div id="wrap-working-objects" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Wrap working objects<a href="metagenomic-data-preparation.html#wrap-working-objects" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>All working objects are wrapped into a single Rdata object to facilitate downstream usage.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb17-1"><a href="metagenomic-data-preparation.html#cb17-1" tabindex="-1"></a><span class="fu">save</span>(</span>
+<span id="cb17-2"><a href="metagenomic-data-preparation.html#cb17-2" tabindex="-1"></a>  <span class="co"># Chicken data</span></span>
+<span id="cb17-3"><a href="metagenomic-data-preparation.html#cb17-3" tabindex="-1"></a>  chicken_metadata,</span>
+<span id="cb17-4"><a href="metagenomic-data-preparation.html#cb17-4" tabindex="-1"></a>  </span>
+<span id="cb17-5"><a href="metagenomic-data-preparation.html#cb17-5" tabindex="-1"></a>  <span class="co"># Bacterial genome data</span></span>
+<span id="cb17-6"><a href="metagenomic-data-preparation.html#cb17-6" tabindex="-1"></a>  genome_taxonomy, </span>
+<span id="cb17-7"><a href="metagenomic-data-preparation.html#cb17-7" tabindex="-1"></a>  genome_stats, </span>
+<span id="cb17-8"><a href="metagenomic-data-preparation.html#cb17-8" tabindex="-1"></a>  genome_tree, </span>
+<span id="cb17-9"><a href="metagenomic-data-preparation.html#cb17-9" tabindex="-1"></a>  genome_kegg_paths,</span>
+<span id="cb17-10"><a href="metagenomic-data-preparation.html#cb17-10" tabindex="-1"></a>  read_counts,</span>
+<span id="cb17-11"><a href="metagenomic-data-preparation.html#cb17-11" tabindex="-1"></a>  </span>
+<span id="cb17-12"><a href="metagenomic-data-preparation.html#cb17-12" tabindex="-1"></a>  <span class="co"># Transformed data</span></span>
+<span id="cb17-13"><a href="metagenomic-data-preparation.html#cb17-13" tabindex="-1"></a>  mag_weighted,</span>
+<span id="cb17-14"><a href="metagenomic-data-preparation.html#cb17-14" tabindex="-1"></a>  total,</span>
+<span id="cb17-15"><a href="metagenomic-data-preparation.html#cb17-15" tabindex="-1"></a>  hel, </span>
+<span id="cb17-16"><a href="metagenomic-data-preparation.html#cb17-16" tabindex="-1"></a>  </span>
+<span id="cb17-17"><a href="metagenomic-data-preparation.html#cb17-17" tabindex="-1"></a>  <span class="co"># Phyloseq objects</span></span>
+<span id="cb17-18"><a href="metagenomic-data-preparation.html#cb17-18" tabindex="-1"></a>  phylo_seq,</span>
+<span id="cb17-19"><a href="metagenomic-data-preparation.html#cb17-19" tabindex="-1"></a></span>
+<span id="cb17-20"><a href="metagenomic-data-preparation.html#cb17-20" tabindex="-1"></a>  <span class="co"># Functions</span></span>
+<span id="cb17-21"><a href="metagenomic-data-preparation.html#cb17-21" tabindex="-1"></a>  gifts_elements,</span>
+<span id="cb17-22"><a href="metagenomic-data-preparation.html#cb17-22" tabindex="-1"></a>  gifts_functions,</span>
+<span id="cb17-23"><a href="metagenomic-data-preparation.html#cb17-23" tabindex="-1"></a>  gifts_domains,</span>
+<span id="cb17-24"><a href="metagenomic-data-preparation.html#cb17-24" tabindex="-1"></a>  </span>
+<span id="cb17-25"><a href="metagenomic-data-preparation.html#cb17-25" tabindex="-1"></a>  <span class="co"># Colors</span></span>
+<span id="cb17-26"><a href="metagenomic-data-preparation.html#cb17-26" tabindex="-1"></a>  taxonomy_colors,</span>
+<span id="cb17-27"><a href="metagenomic-data-preparation.html#cb17-27" tabindex="-1"></a>  phylum_colors,</span>
+<span id="cb17-28"><a href="metagenomic-data-preparation.html#cb17-28" tabindex="-1"></a>  order_colors,</span>
+<span id="cb17-29"><a href="metagenomic-data-preparation.html#cb17-29" tabindex="-1"></a>  sampling_day_colors,</span>
+<span id="cb17-30"><a href="metagenomic-data-preparation.html#cb17-30" tabindex="-1"></a>  </span>
+<span id="cb17-31"><a href="metagenomic-data-preparation.html#cb17-31" tabindex="-1"></a>  <span class="co"># Define file path</span></span>
+<span id="cb17-32"><a href="metagenomic-data-preparation.html#cb17-32" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;data/data_mg.Rdata&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb18-1"><a href="metagenomic-data-preparation.html#cb18-1" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code></pre></div>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="metatranscriptomic-data-preparation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script>/*! jQuery v3.6.0 | (c) OpenJS Foundation and other contributors | jquery.org/license */

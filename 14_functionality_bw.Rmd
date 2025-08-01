@@ -385,12 +385,10 @@ grid.arrange(p_Mci_mg, p_B04_mg, p_B08_mg, ncol = 3)
 ### All
 
 ```{r combined_plots_bio, , comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
-sup_s4 <- grid.arrange(p_Mci_bio_mg, p_B01_mg, p_B02_mg,
+grid.arrange(p_Mci_bio_mg, p_B01_mg, p_B02_mg,
              p_B03_mg, p_B04_mg, p_B06_mg, 
              p_B07_mg, p_B08_mg, p_B09_mg,
              p_B10_mg, ncol = 3)
-
-ggsave("sup_s4.pdf", plot = sup_s4, width = 20, height = 22, units = "cm", dpi = 600)
 ```
 
 #### MCI comparisons of degradation pathways

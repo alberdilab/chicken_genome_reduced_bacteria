@@ -132,7 +132,6 @@ phy_order_df %>%
         strip.text = element_text(size = 8),
         legend.position = "right")  +
   guides(fill = guide_legend(ncol = 1))
-
 ```
 
 ```{r clean_7, comment = "", message = FALSE, warning = FALSE}

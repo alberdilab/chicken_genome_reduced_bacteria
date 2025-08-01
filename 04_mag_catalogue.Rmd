@@ -1,4 +1,4 @@
-# MAG catalogue richness
+# Catalogue richness
 
 ## Load MG data
 
@@ -43,7 +43,7 @@ count_taxa <-
 
 ### Plot curves 
 
-The resulting plot corresponds to Figure 1a.
+The resulting plot corresponds to Figure 1a
 
 ```{r density_histogram_fig_1a, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 7, fig.fullwidth = TRUE}
 ggplot(count_taxa, aes(x = total_ind, colour = phylum, fill = phylum)) +
@@ -64,10 +64,9 @@ ggplot(count_taxa, aes(x = total_ind, colour = phylum, fill = phylum)) +
     axis.title.y = element_text(size = 8),
     axis.text.x = element_text(size = 8),
     legend.position = "bottom") 
-
 ```
 
-## Functional ordination - PCoA with PCA loadings 
+## Functional ordination 
 
 ``` {r pcoa_ordination, comment = "", message = FALSE, warning = FALSE}
 gift_pcoa <- 
@@ -212,36 +211,9 @@ gift_pcoa_vectors_with_metadata %>%
       legend.position = "none")
 ```
 
-## Functional ordination - interactive
-
-``` {r pcoa_interactive, comment = "", message = FALSE, warning = FALSE, fig.height = 10, fig.width = 10, fig.fullwidth = TRUE}
-library("plotly")
-scale <- 20 # scale for vector loadings
-
-pcoa_interactive <- 
-  gift_pcoa_vectors %>% 
-  rownames_to_column(var = "genome") %>% 
-  left_join(genome_stats, by = "genome") %>%
-  left_join(genome_taxonomy, by = "genome") %>%
-  mutate(tooltip = paste(family, "//", genome)) %>%
-  ggplot() +
-      # genome positions
-      scale_color_manual(values = order_colors)+
-      geom_point(aes(x = Axis.1, y = Axis.2, color = order, size = mag_length, text = tooltip), 
-                 alpha = 0.9, shape = 16) +
-      scale_size_continuous(range = c(0.05,4)) +
-     # primary and secondary scale adjustments
-     scale_x_continuous(name = paste0("PCoA1 (",round(gift_pcoa_rel_eigen[1]*100, digits = 2), " %)")) +
-     scale_y_continuous(name = paste0("PCoA2 (",round(gift_pcoa_rel_eigen[2]*100, digits = 2), " %)")) +
-    theme_minimal() + 
-    theme(legend.position = "none")
-
-ggplotly(pcoa_interactive, tooltip = "text")
-```
-
 ## Compare MCI and genome length between taxonomic groups 
 
-The resulting plot corresponds to Supplementary Figure S1.
+The resulting plot corresponds to Supplementary Figure S1
 
 ```{r tidy_taxonomy_and_colors, comment = "", message = FALSE, warning = FALSE}
 main_phylums <- c("Bacillota_A", "Bacillota", "Bacteroidota",
