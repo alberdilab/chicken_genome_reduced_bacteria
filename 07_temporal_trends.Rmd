@@ -68,8 +68,7 @@ physeq_comp_rare_order <-
     level = "order",
     detection = 0.01 / 100,
     prevalence = 50 / 100,
-    include.lowest = TRUE
-    )
+    include.lowest = TRUE)
   
 phy_order_df <- 
   psmelt(physeq_comp_rare_order) %>%

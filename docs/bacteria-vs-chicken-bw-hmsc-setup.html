@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 12 Bacteria vs Chicken BW HMSC setup | AlberdiLab | Marcos et al. 2025</title>
+  <title>Chapter 12 Bacteria vs Chicken BW HMSC setup | AlberdiLab | Marcos et al. 2026</title>
   <meta name="description" content="&lt;p&gt;Data analysis code developed to study early-life caecal microbiome development and its association with chicken body weight&lt;/p&gt;" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 12 Bacteria vs Chicken BW HMSC setup | AlberdiLab | Marcos et al. 2025" />
+  <meta property="og:title" content="Chapter 12 Bacteria vs Chicken BW HMSC setup | AlberdiLab | Marcos et al. 2026" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="&lt;p&gt;Data analysis code developed to study early-life caecal microbiome development and its association with chicken body weight&lt;/p&gt;" />
   <meta name="github-repo" content="alberdilab/chicken_genome_reduced_bacteria" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 12 Bacteria vs Chicken BW HMSC setup | AlberdiLab | Marcos et al. 2025" />
+  <meta name="twitter:title" content="Chapter 12 Bacteria vs Chicken BW HMSC setup | AlberdiLab | Marcos et al. 2026" />
   
   <meta name="twitter:description" content="&lt;p&gt;Data analysis code developed to study early-life caecal microbiome development and its association with chicken body weight&lt;/p&gt;" />
   
@@ -2004,7 +2004,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 <li class="chapter" data-level="2.2" data-path="metagenomic-data-preparation.html"><a href="metagenomic-data-preparation.html#distilling-genome-inferred-functional-traits-gifts"><i class="fa fa-check"></i><b>2.2</b> Distilling Genome Inferred Functional Traits (GIFTs)</a>
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="metagenomic-data-preparation.html"><a href="metagenomic-data-preparation.html#distilling-dram-annotations"><i class="fa fa-check"></i><b>2.2.1</b> Distilling DRAM annotations</a></li>
-<li class="chapter" data-level="2.2.2" data-path="metagenomic-data-preparation.html"><a href="metagenomic-data-preparation.html#perform-completeness-correction-for-gifts"><i class="fa fa-check"></i><b>2.2.2</b> Perform completeness correction for GIFTs</a></li>
+<li class="chapter" data-level="2.2.2" data-path="metagenomic-data-preparation.html"><a href="metagenomic-data-preparation.html#aggregate-gifts"><i class="fa fa-check"></i><b>2.2.2</b> Aggregate GIFTs</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="metagenomic-data-preparation.html"><a href="metagenomic-data-preparation.html#create-working-objects"><i class="fa fa-check"></i><b>2.3</b> Create working objects</a>
 <ul>
@@ -2029,21 +2029,15 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 <li class="chapter" data-level="4" data-path="catalogue-richness.html"><a href="catalogue-richness.html"><i class="fa fa-check"></i><b>4</b> Catalogue richness</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="catalogue-richness.html"><a href="catalogue-richness.html#load-mg-data"><i class="fa fa-check"></i><b>4.1</b> Load MG data</a></li>
-<li class="chapter" data-level="4.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#densities-of-overall-relative-abundances-by-phylum"><i class="fa fa-check"></i><b>4.2</b> Densities of overall relative abundances by phylum</a>
+<li class="chapter" data-level="4.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#functional-ordination"><i class="fa fa-check"></i><b>4.2</b> Functional ordination</a>
 <ul>
-<li class="chapter" data-level="4.2.1" data-path="catalogue-richness.html"><a href="catalogue-richness.html#calculate-densities"><i class="fa fa-check"></i><b>4.2.1</b> Calculate densities</a></li>
-<li class="chapter" data-level="4.2.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#filter-rare-phylums"><i class="fa fa-check"></i><b>4.2.2</b> Filter rare phylums</a></li>
-<li class="chapter" data-level="4.2.3" data-path="catalogue-richness.html"><a href="catalogue-richness.html#plot-curves"><i class="fa fa-check"></i><b>4.2.3</b> Plot curves</a></li>
+<li class="chapter" data-level="4.2.1" data-path="catalogue-richness.html"><a href="catalogue-richness.html#plot-genome-length-and-average-mci-gradients"><i class="fa fa-check"></i><b>4.2.1</b> Plot genome length and average MCI gradients</a></li>
+<li class="chapter" data-level="4.2.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#plot-scfa-and-vitamin-biosynthesis-gradients"><i class="fa fa-check"></i><b>4.2.2</b> Plot SCFA and vitamin biosynthesis gradients</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="catalogue-richness.html"><a href="catalogue-richness.html#functional-ordination"><i class="fa fa-check"></i><b>4.3</b> Functional ordination</a>
+<li class="chapter" data-level="4.3" data-path="catalogue-richness.html"><a href="catalogue-richness.html#compare-mci-and-genome-length-between-taxonomic-groups"><i class="fa fa-check"></i><b>4.3</b> Compare MCI and genome length between taxonomic groups</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="catalogue-richness.html"><a href="catalogue-richness.html#plot-genome-length-and-average-mci-gradients"><i class="fa fa-check"></i><b>4.3.1</b> Plot genome length and average MCI gradients</a></li>
-<li class="chapter" data-level="4.3.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#plot-scfa-and-vitamin-biosynthesis-gradients"><i class="fa fa-check"></i><b>4.3.2</b> Plot SCFA and vitamin biosynthesis gradients</a></li>
-</ul></li>
-<li class="chapter" data-level="4.4" data-path="catalogue-richness.html"><a href="catalogue-richness.html#compare-mci-and-genome-length-between-taxonomic-groups"><i class="fa fa-check"></i><b>4.4</b> Compare MCI and genome length between taxonomic groups</a>
-<ul>
-<li class="chapter" data-level="4.4.1" data-path="catalogue-richness.html"><a href="catalogue-richness.html#average-mci-by-taxonomic-phylum-and-order"><i class="fa fa-check"></i><b>4.4.1</b> Average MCI by taxonomic phylum and order</a></li>
-<li class="chapter" data-level="4.4.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#genome-length-by-taxonomic-phylum-and-order"><i class="fa fa-check"></i><b>4.4.2</b> Genome length by taxonomic phylum and order</a></li>
+<li class="chapter" data-level="4.3.1" data-path="catalogue-richness.html"><a href="catalogue-richness.html#average-mci-by-taxonomic-phylum-and-order"><i class="fa fa-check"></i><b>4.3.1</b> Average MCI by taxonomic phylum and order</a></li>
+<li class="chapter" data-level="4.3.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#genome-length-by-taxonomic-phylum-and-order"><i class="fa fa-check"></i><b>4.3.2</b> Genome length by taxonomic phylum and order</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="alpha-diversity.html"><a href="alpha-diversity.html"><i class="fa fa-check"></i><b>5</b> Alpha diversity</a>
@@ -2238,7 +2232,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">AlberdiLab | Marcos et al. 2025</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">AlberdiLab | Marcos et al. 2026</a>
           </h1>
         </div>
 
@@ -2253,157 +2247,157 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 <h2><span class="header-section-number">12.1</span> Load MG and MT data<a href="bacteria-vs-chicken-bw-hmsc-setup.html#load-mg-and-mt-data-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="define-directories-1" class="section level3 hasAnchor" number="12.1.1">
 <h3><span class="header-section-number">12.1.1</span> Define directories<a href="bacteria-vs-chicken-bw-hmsc-setup.html#define-directories-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb134"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb134-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb134-1" tabindex="-1"></a><span class="co"># Create directories</span></span>
-<span id="cb134-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb134-2" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;hmsc_bw&quot;</span>)</span>
-<span id="cb134-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb134-3" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;hmsc_bw/model_fit&quot;</span>)</span>
-<span id="cb134-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb134-4" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;hmsc_bw/models&quot;</span>)</span>
-<span id="cb134-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb134-5" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;hmsc_bw/panels&quot;</span>)</span>
-<span id="cb134-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb134-6" tabindex="-1"></a></span>
-<span id="cb134-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb134-7" tabindex="-1"></a><span class="co"># Define paths</span></span>
-<span id="cb134-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb134-8" tabindex="-1"></a>localDir <span class="ot">=</span> <span class="st">&quot;.&quot;</span></span>
-<span id="cb134-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb134-9" tabindex="-1"></a>ModelDir <span class="ot">=</span> <span class="fu">file.path</span>(localDir, <span class="st">&quot;hmsc_bw/models&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb145-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb145-1" tabindex="-1"></a><span class="co"># Create directories</span></span>
+<span id="cb145-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb145-2" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;hmsc_bw&quot;</span>)</span>
+<span id="cb145-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb145-3" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;hmsc_bw/model_fit&quot;</span>)</span>
+<span id="cb145-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb145-4" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;hmsc_bw/models&quot;</span>)</span>
+<span id="cb145-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb145-5" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;hmsc_bw/panels&quot;</span>)</span>
+<span id="cb145-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb145-6" tabindex="-1"></a></span>
+<span id="cb145-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb145-7" tabindex="-1"></a><span class="co"># Define paths</span></span>
+<span id="cb145-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb145-8" tabindex="-1"></a>localDir <span class="ot">=</span> <span class="st">&quot;.&quot;</span></span>
+<span id="cb145-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb145-9" tabindex="-1"></a>ModelDir <span class="ot">=</span> <span class="fu">file.path</span>(localDir, <span class="st">&quot;hmsc_bw/models&quot;</span>)</span></code></pre></div>
 </div>
 <div id="generate-input-objects-1" class="section level3 hasAnchor" number="12.1.2">
 <h3><span class="header-section-number">12.1.2</span> Generate input objects<a href="bacteria-vs-chicken-bw-hmsc-setup.html#generate-input-objects-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb135"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb135-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-1" tabindex="-1"></a><span class="co"># Load data</span></span>
-<span id="cb135-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-2" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/data_mg.Rdata&quot;</span>)</span>
-<span id="cb135-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-3" tabindex="-1"></a></span>
-<span id="cb135-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-4" tabindex="-1"></a><span class="co"># Metadata summary</span></span>
-<span id="cb135-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-5" tabindex="-1"></a>design <span class="ot">&lt;-</span> </span>
-<span id="cb135-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-6" tabindex="-1"></a>  chicken_metadata[, <span class="fu">c</span>(<span class="st">&#39;animal_code&#39;</span>, <span class="st">&#39;trial&#39;</span>, <span class="st">&#39;pen&#39;</span>, <span class="st">&#39;age&#39;</span>,<span class="st">&#39;breed&#39;</span>,</span>
-<span id="cb135-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-7" tabindex="-1"></a>               <span class="st">&#39;sex&#39;</span>, <span class="st">&#39;treatment&#39;</span>, <span class="st">&#39;chicken_body_weight&#39;</span>)] <span class="sc">%&gt;%</span> </span>
-<span id="cb135-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-8" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&quot;animal_code&quot;</span>)</span>
-<span id="cb135-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-9" tabindex="-1"></a></span>
-<span id="cb135-10"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-10" tabindex="-1"></a>design<span class="sc">$</span>log_seq_depth <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">colSums</span>(read_counts <span class="sc">%&gt;%</span> <span class="fu">column_to_rownames</span>(<span class="st">&quot;genome&quot;</span>)))</span>
-<span id="cb135-11"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-11" tabindex="-1"></a>design<span class="sc">$</span>animal_code <span class="ot">&lt;-</span> <span class="fu">rownames</span>(design)</span>
-<span id="cb135-12"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-12" tabindex="-1"></a></span>
-<span id="cb135-13"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-13" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(design)) {</span>
-<span id="cb135-14"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-14" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.character</span>(design[,i])) {</span>
-<span id="cb135-15"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-15" tabindex="-1"></a>    design[,i] <span class="ot">&lt;-</span> <span class="fu">factor</span>(design[,i])</span>
-<span id="cb135-16"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-16" tabindex="-1"></a>  }</span>
-<span id="cb135-17"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-17" tabindex="-1"></a>}</span>
-<span id="cb135-18"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-18" tabindex="-1"></a></span>
-<span id="cb135-19"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-19" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">rownames</span>(design) <span class="sc">==</span> <span class="fu">rownames</span>(mag_weighted))</span>
-<span id="cb135-20"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-20" tabindex="-1"></a></span>
-<span id="cb135-21"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-21" tabindex="-1"></a><span class="co"># Filter day 35</span></span>
-<span id="cb135-22"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-22" tabindex="-1"></a>design_day35 <span class="ot">&lt;-</span> </span>
-<span id="cb135-23"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-23" tabindex="-1"></a>  design <span class="sc">%&gt;%</span></span>
-<span id="cb135-24"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-24" tabindex="-1"></a>  <span class="fu">filter</span>(age <span class="sc">&gt;</span> <span class="dv">25</span>)</span>
-<span id="cb135-25"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-25" tabindex="-1"></a></span>
-<span id="cb135-26"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-26" tabindex="-1"></a>mag_weighted_day35 <span class="ot">&lt;-</span> </span>
-<span id="cb135-27"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-27" tabindex="-1"></a>  mag_weighted <span class="sc">%&gt;%</span></span>
-<span id="cb135-28"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-28" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&#39;genome&#39;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb135-29"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-29" tabindex="-1"></a>  <span class="fu">filter</span>(genome <span class="sc">%in%</span> <span class="fu">rownames</span>(design_day35)) <span class="sc">%&gt;%</span> </span>
-<span id="cb135-30"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-30" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="at">var =</span> <span class="st">&#39;genome&#39;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb135-31"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-31" tabindex="-1"></a>  <span class="fu">t</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb135-32"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-32" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
-<span id="cb135-33"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-33" tabindex="-1"></a></span>
-<span id="cb135-34"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-34" tabindex="-1"></a><span class="fu">dim</span>(mag_weighted_day35)</span>
-<span id="cb135-35"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-35" tabindex="-1"></a><span class="fu">dim</span>(design_day35)</span>
-<span id="cb135-36"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-36" tabindex="-1"></a> </span>
-<span id="cb135-37"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb135-37" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">rownames</span>(design_day35) <span class="sc">==</span> <span class="fu">rownames</span>(mag_weighted_day35))</span></code></pre></div>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb146-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-1" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb146-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-2" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/data_mg.Rdata&quot;</span>)</span>
+<span id="cb146-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-3" tabindex="-1"></a></span>
+<span id="cb146-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-4" tabindex="-1"></a><span class="co"># Metadata summary</span></span>
+<span id="cb146-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-5" tabindex="-1"></a>design <span class="ot">&lt;-</span> </span>
+<span id="cb146-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-6" tabindex="-1"></a>  chicken_metadata[, <span class="fu">c</span>(<span class="st">&#39;animal_code&#39;</span>, <span class="st">&#39;trial&#39;</span>, <span class="st">&#39;pen&#39;</span>, <span class="st">&#39;age&#39;</span>,<span class="st">&#39;breed&#39;</span>,</span>
+<span id="cb146-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-7" tabindex="-1"></a>               <span class="st">&#39;sex&#39;</span>, <span class="st">&#39;treatment&#39;</span>, <span class="st">&#39;chicken_body_weight&#39;</span>)] <span class="sc">%&gt;%</span> </span>
+<span id="cb146-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-8" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&quot;animal_code&quot;</span>)</span>
+<span id="cb146-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-9" tabindex="-1"></a></span>
+<span id="cb146-10"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-10" tabindex="-1"></a>design<span class="sc">$</span>log_seq_depth <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">colSums</span>(read_counts <span class="sc">%&gt;%</span> <span class="fu">column_to_rownames</span>(<span class="st">&quot;genome&quot;</span>)))</span>
+<span id="cb146-11"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-11" tabindex="-1"></a>design<span class="sc">$</span>animal_code <span class="ot">&lt;-</span> <span class="fu">rownames</span>(design)</span>
+<span id="cb146-12"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-12" tabindex="-1"></a></span>
+<span id="cb146-13"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-13" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(design)) {</span>
+<span id="cb146-14"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-14" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.character</span>(design[,i])) {</span>
+<span id="cb146-15"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-15" tabindex="-1"></a>    design[,i] <span class="ot">&lt;-</span> <span class="fu">factor</span>(design[,i])</span>
+<span id="cb146-16"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-16" tabindex="-1"></a>  }</span>
+<span id="cb146-17"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-17" tabindex="-1"></a>}</span>
+<span id="cb146-18"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-18" tabindex="-1"></a></span>
+<span id="cb146-19"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-19" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">rownames</span>(design) <span class="sc">==</span> <span class="fu">rownames</span>(mag_weighted))</span>
+<span id="cb146-20"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-20" tabindex="-1"></a></span>
+<span id="cb146-21"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-21" tabindex="-1"></a><span class="co"># Filter day 35</span></span>
+<span id="cb146-22"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-22" tabindex="-1"></a>design_day35 <span class="ot">&lt;-</span> </span>
+<span id="cb146-23"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-23" tabindex="-1"></a>  design <span class="sc">%&gt;%</span></span>
+<span id="cb146-24"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-24" tabindex="-1"></a>  <span class="fu">filter</span>(age <span class="sc">&gt;</span> <span class="dv">25</span>)</span>
+<span id="cb146-25"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-25" tabindex="-1"></a></span>
+<span id="cb146-26"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-26" tabindex="-1"></a>mag_weighted_day35 <span class="ot">&lt;-</span> </span>
+<span id="cb146-27"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-27" tabindex="-1"></a>  mag_weighted <span class="sc">%&gt;%</span></span>
+<span id="cb146-28"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-28" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&#39;genome&#39;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb146-29"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-29" tabindex="-1"></a>  <span class="fu">filter</span>(genome <span class="sc">%in%</span> <span class="fu">rownames</span>(design_day35)) <span class="sc">%&gt;%</span> </span>
+<span id="cb146-30"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-30" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="at">var =</span> <span class="st">&#39;genome&#39;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb146-31"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-31" tabindex="-1"></a>  <span class="fu">t</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb146-32"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-32" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb146-33"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-33" tabindex="-1"></a></span>
+<span id="cb146-34"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-34" tabindex="-1"></a><span class="fu">dim</span>(mag_weighted_day35)</span>
+<span id="cb146-35"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-35" tabindex="-1"></a><span class="fu">dim</span>(design_day35)</span>
+<span id="cb146-36"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-36" tabindex="-1"></a> </span>
+<span id="cb146-37"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb146-37" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">rownames</span>(design_day35) <span class="sc">==</span> <span class="fu">rownames</span>(mag_weighted_day35))</span></code></pre></div>
 </div>
 </div>
 <div id="prepate-data-for-hmsc-1" class="section level2 hasAnchor" number="12.2">
 <h2><span class="header-section-number">12.2</span> Prepate data for HMSC<a href="bacteria-vs-chicken-bw-hmsc-setup.html#prepate-data-for-hmsc-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="define-tables-1" class="section level3 hasAnchor" number="12.2.1">
 <h3><span class="header-section-number">12.2.1</span> Define tables<a href="bacteria-vs-chicken-bw-hmsc-setup.html#define-tables-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb136"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb136-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-1" tabindex="-1"></a><span class="co"># Genome count table (quantitative community data)</span></span>
-<span id="cb136-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-2" tabindex="-1"></a>YData <span class="ot">&lt;-</span> <span class="fu">log1p</span>(mag_weighted_day35)</span>
-<span id="cb136-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-3" tabindex="-1"></a></span>
-<span id="cb136-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-4" tabindex="-1"></a><span class="co"># Fixed effects data (explanatory variables)</span></span>
-<span id="cb136-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-5" tabindex="-1"></a>XData <span class="ot">&lt;-</span> design_day35</span>
-<span id="cb136-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-6" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">rownames</span>(YData) <span class="sc">==</span> <span class="fu">rownames</span>(XData))  <span class="co"># Ydata and XData in the same order</span></span>
-<span id="cb136-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-7" tabindex="-1"></a></span>
-<span id="cb136-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-8" tabindex="-1"></a><span class="co"># Genome phylogeny</span></span>
-<span id="cb136-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-9" tabindex="-1"></a>PData <span class="ot">&lt;-</span> genome_tree</span>
-<span id="cb136-10"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-10" tabindex="-1"></a></span>
-<span id="cb136-11"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-11" tabindex="-1"></a>YData <span class="ot">&lt;-</span> YData[,<span class="fu">colnames</span>(YData) <span class="sc">%in%</span> genome_tree<span class="sc">$</span>tip.label]  <span class="co"># Filter missing MAGs in tree</span></span>
-<span id="cb136-12"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-12" tabindex="-1"></a></span>
-<span id="cb136-13"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-13" tabindex="-1"></a><span class="co"># Traits </span></span>
-<span id="cb136-14"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-14" tabindex="-1"></a>gifts_functions <span class="ot">&lt;-</span> </span>
-<span id="cb136-15"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-15" tabindex="-1"></a>  gifts_elements <span class="sc">%&gt;%</span></span>
-<span id="cb136-16"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-16" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb136-17"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-17" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&#39;genome&#39;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb136-18"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-18" tabindex="-1"></a>  <span class="fu">filter</span>(genome <span class="sc">%in%</span> <span class="fu">colnames</span>(YData)) <span class="sc">%&gt;%</span> </span>
-<span id="cb136-19"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-19" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="at">var =</span> <span class="st">&#39;genome&#39;</span>)</span>
-<span id="cb136-20"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-20" tabindex="-1"></a></span>
-<span id="cb136-21"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-21" tabindex="-1"></a><span class="fu">mean</span>(gifts_functions<span class="sc">$</span>mag_id <span class="sc">==</span> <span class="fu">colnames</span>(YData))</span>
-<span id="cb136-22"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-22" tabindex="-1"></a></span>
-<span id="cb136-23"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-23" tabindex="-1"></a>TrData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">MCI =</span> TrData)</span>
-<span id="cb136-24"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb136-24" tabindex="-1"></a><span class="fu">rownames</span>(TrData) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(YData)</span></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb147-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-1" tabindex="-1"></a><span class="co"># Genome count table (quantitative community data)</span></span>
+<span id="cb147-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-2" tabindex="-1"></a>YData <span class="ot">&lt;-</span> <span class="fu">log1p</span>(mag_weighted_day35)</span>
+<span id="cb147-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-3" tabindex="-1"></a></span>
+<span id="cb147-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-4" tabindex="-1"></a><span class="co"># Fixed effects data (explanatory variables)</span></span>
+<span id="cb147-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-5" tabindex="-1"></a>XData <span class="ot">&lt;-</span> design_day35</span>
+<span id="cb147-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-6" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">rownames</span>(YData) <span class="sc">==</span> <span class="fu">rownames</span>(XData))  <span class="co"># Ydata and XData in the same order</span></span>
+<span id="cb147-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-7" tabindex="-1"></a></span>
+<span id="cb147-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-8" tabindex="-1"></a><span class="co"># Genome phylogeny</span></span>
+<span id="cb147-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-9" tabindex="-1"></a>PData <span class="ot">&lt;-</span> genome_tree</span>
+<span id="cb147-10"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-10" tabindex="-1"></a></span>
+<span id="cb147-11"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-11" tabindex="-1"></a>YData <span class="ot">&lt;-</span> YData[,<span class="fu">colnames</span>(YData) <span class="sc">%in%</span> genome_tree<span class="sc">$</span>tip.label]  <span class="co"># Filter missing MAGs in tree</span></span>
+<span id="cb147-12"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-12" tabindex="-1"></a></span>
+<span id="cb147-13"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-13" tabindex="-1"></a><span class="co"># Traits </span></span>
+<span id="cb147-14"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-14" tabindex="-1"></a>gifts_functions <span class="ot">&lt;-</span> </span>
+<span id="cb147-15"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-15" tabindex="-1"></a>  gifts_elements <span class="sc">%&gt;%</span></span>
+<span id="cb147-16"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-16" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb147-17"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-17" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&#39;genome&#39;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb147-18"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-18" tabindex="-1"></a>  <span class="fu">filter</span>(genome <span class="sc">%in%</span> <span class="fu">colnames</span>(YData)) <span class="sc">%&gt;%</span> </span>
+<span id="cb147-19"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-19" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="at">var =</span> <span class="st">&#39;genome&#39;</span>)</span>
+<span id="cb147-20"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-20" tabindex="-1"></a></span>
+<span id="cb147-21"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-21" tabindex="-1"></a><span class="fu">mean</span>(gifts_functions<span class="sc">$</span>mag_id <span class="sc">==</span> <span class="fu">colnames</span>(YData))</span>
+<span id="cb147-22"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-22" tabindex="-1"></a></span>
+<span id="cb147-23"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-23" tabindex="-1"></a>TrData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">MCI =</span> TrData)</span>
+<span id="cb147-24"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb147-24" tabindex="-1"></a><span class="fu">rownames</span>(TrData) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(YData)</span></code></pre></div>
 </div>
 <div id="define-formulas" class="section level3 hasAnchor" number="12.2.2">
 <h3><span class="header-section-number">12.2.2</span> Define formulas<a href="bacteria-vs-chicken-bw-hmsc-setup.html#define-formulas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb137"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb137-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb137-1" tabindex="-1"></a><span class="co"># Define TrFormula</span></span>
-<span id="cb137-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb137-2" tabindex="-1"></a>TrFormula <span class="ot">&lt;-</span> <span class="er">~</span>MCI</span>
-<span id="cb137-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb137-3" tabindex="-1"></a></span>
-<span id="cb137-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb137-4" tabindex="-1"></a><span class="co"># Define XFormula</span></span>
-<span id="cb137-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb137-5" tabindex="-1"></a>XFormula <span class="ot">&lt;-</span> <span class="er">~</span>trial <span class="sc">+</span> age <span class="sc">+</span> chicken_body_weight <span class="sc">+</span> log_seq_depth</span>
-<span id="cb137-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb137-6" tabindex="-1"></a></span>
-<span id="cb137-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb137-7" tabindex="-1"></a><span class="co"># Study Design</span></span>
-<span id="cb137-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb137-8" tabindex="-1"></a>StudyDesign <span class="ot">&lt;-</span> design[,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">9</span>)]</span>
-<span id="cb137-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb137-9" tabindex="-1"></a>rL.Pen <span class="ot">&lt;-</span> <span class="fu">HmscRandomLevel</span>(<span class="at">units =</span> <span class="fu">levels</span>(StudyDesign<span class="sc">$</span>pen))</span></code></pre></div>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb148-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb148-1" tabindex="-1"></a><span class="co"># Define TrFormula</span></span>
+<span id="cb148-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb148-2" tabindex="-1"></a>TrFormula <span class="ot">&lt;-</span> <span class="er">~</span>MCI</span>
+<span id="cb148-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb148-3" tabindex="-1"></a></span>
+<span id="cb148-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb148-4" tabindex="-1"></a><span class="co"># Define XFormula</span></span>
+<span id="cb148-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb148-5" tabindex="-1"></a>XFormula <span class="ot">&lt;-</span> <span class="er">~</span>trial <span class="sc">+</span> age <span class="sc">+</span> chicken_body_weight <span class="sc">+</span> log_seq_depth</span>
+<span id="cb148-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb148-6" tabindex="-1"></a></span>
+<span id="cb148-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb148-7" tabindex="-1"></a><span class="co"># Study Design</span></span>
+<span id="cb148-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb148-8" tabindex="-1"></a>StudyDesign <span class="ot">&lt;-</span> design[,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">9</span>)]</span>
+<span id="cb148-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb148-9" tabindex="-1"></a>rL.Pen <span class="ot">&lt;-</span> <span class="fu">HmscRandomLevel</span>(<span class="at">units =</span> <span class="fu">levels</span>(StudyDesign<span class="sc">$</span>pen))</span></code></pre></div>
 </div>
 <div id="define-hmsc-model-1" class="section level3 hasAnchor" number="12.2.3">
 <h3><span class="header-section-number">12.2.3</span> Define HMSC model<a href="bacteria-vs-chicken-bw-hmsc-setup.html#define-hmsc-model-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb138"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb138-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb138-1" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">Hmsc</span>(<span class="at">Y =</span> YData,</span>
-<span id="cb138-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb138-2" tabindex="-1"></a>                <span class="at">XData =</span> XData,</span>
-<span id="cb138-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb138-3" tabindex="-1"></a>                <span class="at">XFormula =</span> XFormula,</span>
-<span id="cb138-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb138-4" tabindex="-1"></a>                <span class="at">studyDesign =</span> StudyDesign,</span>
-<span id="cb138-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb138-5" tabindex="-1"></a>                <span class="at">ranLevels =</span> <span class="fu">list</span>(<span class="st">&quot;pen&quot;</span> <span class="ot">=</span> rL.Pen),</span>
-<span id="cb138-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb138-6" tabindex="-1"></a>                <span class="at">phyloTree =</span> tree,</span>
-<span id="cb138-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb138-7" tabindex="-1"></a>                <span class="at">TrData =</span> TrData,</span>
-<span id="cb138-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb138-8" tabindex="-1"></a>                <span class="at">TrFormula =</span> TrFormula,</span>
-<span id="cb138-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb138-9" tabindex="-1"></a>                <span class="at">distr =</span> <span class="st">&quot;normal&quot;</span>,</span>
-<span id="cb138-10"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb138-10" tabindex="-1"></a>                <span class="at">YScale =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb138-11"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb138-11" tabindex="-1"></a></span>
-<span id="cb138-12"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb138-12" tabindex="-1"></a><span class="fu">save</span>(m, <span class="at">file =</span> <span class="fu">file.path</span>(ModelDir,<span class="st">&quot;unfitted_model.Rdata&quot;</span>))</span>
-<span id="cb138-13"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb138-13" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb149-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb149-1" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">Hmsc</span>(<span class="at">Y =</span> YData,</span>
+<span id="cb149-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb149-2" tabindex="-1"></a>                <span class="at">XData =</span> XData,</span>
+<span id="cb149-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb149-3" tabindex="-1"></a>                <span class="at">XFormula =</span> XFormula,</span>
+<span id="cb149-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb149-4" tabindex="-1"></a>                <span class="at">studyDesign =</span> StudyDesign,</span>
+<span id="cb149-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb149-5" tabindex="-1"></a>                <span class="at">ranLevels =</span> <span class="fu">list</span>(<span class="st">&quot;pen&quot;</span> <span class="ot">=</span> rL.Pen),</span>
+<span id="cb149-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb149-6" tabindex="-1"></a>                <span class="at">phyloTree =</span> tree,</span>
+<span id="cb149-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb149-7" tabindex="-1"></a>                <span class="at">TrData =</span> TrData,</span>
+<span id="cb149-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb149-8" tabindex="-1"></a>                <span class="at">TrFormula =</span> TrFormula,</span>
+<span id="cb149-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb149-9" tabindex="-1"></a>                <span class="at">distr =</span> <span class="st">&quot;normal&quot;</span>,</span>
+<span id="cb149-10"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb149-10" tabindex="-1"></a>                <span class="at">YScale =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb149-11"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb149-11" tabindex="-1"></a></span>
+<span id="cb149-12"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb149-12" tabindex="-1"></a><span class="fu">save</span>(m, <span class="at">file =</span> <span class="fu">file.path</span>(ModelDir,<span class="st">&quot;unfitted_model.Rdata&quot;</span>))</span>
+<span id="cb149-13"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb149-13" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code></pre></div>
 </div>
 <div id="define-mcmc" class="section level3 hasAnchor" number="12.2.4">
 <h3><span class="header-section-number">12.2.4</span> Define MCMC<a href="bacteria-vs-chicken-bw-hmsc-setup.html#define-mcmc" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb139"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb139-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-1" tabindex="-1"></a><span class="co"># Chain characteristics</span></span>
-<span id="cb139-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-2" tabindex="-1"></a><span class="do">## How often to sample the MCM</span></span>
-<span id="cb139-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-3" tabindex="-1"></a>samples_list <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">250</span>, <span class="dv">250</span>)</span>
-<span id="cb139-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-4" tabindex="-1"></a></span>
-<span id="cb139-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-5" tabindex="-1"></a><span class="co"># The number of MCMC steps between each recording sample</span></span>
-<span id="cb139-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-6" tabindex="-1"></a>thin_list <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">10</span>)</span>
-<span id="cb139-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-7" tabindex="-1"></a></span>
-<span id="cb139-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-8" tabindex="-1"></a><span class="co"># The number of MCMC chains ot use</span></span>
-<span id="cb139-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-9" tabindex="-1"></a>nChains <span class="ot">=</span> <span class="dv">4</span></span>
-<span id="cb139-10"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-10" tabindex="-1"></a></span>
-<span id="cb139-11"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-11" tabindex="-1"></a><span class="co"># Load only the unfitted models</span></span>
-<span id="cb139-12"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-12" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">file.path</span>(ModelDir,<span class="st">&quot;unfitted_model.Rdata&quot;</span>))</span>
-<span id="cb139-13"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-13" tabindex="-1"></a></span>
-<span id="cb139-14"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb139-14" tabindex="-1"></a>unf_model <span class="ot">&lt;-</span> m</span></code></pre></div>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb150-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-1" tabindex="-1"></a><span class="co"># Chain characteristics</span></span>
+<span id="cb150-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-2" tabindex="-1"></a><span class="do">## How often to sample the MCM</span></span>
+<span id="cb150-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-3" tabindex="-1"></a>samples_list <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">250</span>, <span class="dv">250</span>)</span>
+<span id="cb150-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-4" tabindex="-1"></a></span>
+<span id="cb150-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-5" tabindex="-1"></a><span class="co"># The number of MCMC steps between each recording sample</span></span>
+<span id="cb150-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-6" tabindex="-1"></a>thin_list <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">10</span>)</span>
+<span id="cb150-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-7" tabindex="-1"></a></span>
+<span id="cb150-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-8" tabindex="-1"></a><span class="co"># The number of MCMC chains ot use</span></span>
+<span id="cb150-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-9" tabindex="-1"></a>nChains <span class="ot">=</span> <span class="dv">4</span></span>
+<span id="cb150-10"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-10" tabindex="-1"></a></span>
+<span id="cb150-11"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-11" tabindex="-1"></a><span class="co"># Load only the unfitted models</span></span>
+<span id="cb150-12"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-12" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">file.path</span>(ModelDir,<span class="st">&quot;unfitted_model.Rdata&quot;</span>))</span>
+<span id="cb150-13"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-13" tabindex="-1"></a></span>
+<span id="cb150-14"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb150-14" tabindex="-1"></a>unf_model <span class="ot">&lt;-</span> m</span></code></pre></div>
 </div>
 </div>
 <div id="fit-model-1" class="section level2 hasAnchor" number="12.3">
 <h2><span class="header-section-number">12.3</span> Fit model<a href="bacteria-vs-chicken-bw-hmsc-setup.html#fit-model-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb140"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb140-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb140-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-2" tabindex="-1"></a></span>
-<span id="cb140-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-3" tabindex="-1"></a><span class="cf">for</span> (Lst <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(samples_list)) {</span>
-<span id="cb140-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-4" tabindex="-1"></a>  thin <span class="ot">=</span> thin_list[Lst]</span>
-<span id="cb140-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-5" tabindex="-1"></a>  samples <span class="ot">=</span> samples_list[Lst]</span>
-<span id="cb140-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-6" tabindex="-1"></a>  <span class="co"># fit the model</span></span>
-<span id="cb140-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-7" tabindex="-1"></a>  m <span class="ot">=</span> <span class="fu">sampleMcmc</span>(unf_model,</span>
-<span id="cb140-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-8" tabindex="-1"></a>                 <span class="at">samples =</span> samples,</span>
-<span id="cb140-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-9" tabindex="-1"></a>                 <span class="at">thin =</span> thin,</span>
-<span id="cb140-10"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-10" tabindex="-1"></a>                 <span class="at">adaptNf =</span> <span class="fu">rep</span>(<span class="fu">ceiling</span>(<span class="fl">0.4</span><span class="sc">*</span>samples<span class="sc">*</span>thin), unf_model<span class="sc">$</span>nr),</span>
-<span id="cb140-11"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-11" tabindex="-1"></a>                 <span class="at">transient =</span> <span class="fu">ceiling</span>(<span class="fl">0.5</span><span class="sc">*</span>samples<span class="sc">*</span>thin),</span>
-<span id="cb140-12"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-12" tabindex="-1"></a>                 <span class="at">nChains =</span> nChains,</span>
-<span id="cb140-13"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-13" tabindex="-1"></a>                 <span class="at">nParallel =</span> nChains)</span>
-<span id="cb140-14"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-14" tabindex="-1"></a>  <span class="co"># create file name</span></span>
-<span id="cb140-15"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-15" tabindex="-1"></a>  filename <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">&quot;bw_model&quot;</span>,</span>
-<span id="cb140-16"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-16" tabindex="-1"></a>                   <span class="st">&quot;_thin_&quot;</span>, <span class="fu">as.character</span>(thin),</span>
-<span id="cb140-17"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-17" tabindex="-1"></a>                   <span class="st">&quot;_samples_&quot;</span>, <span class="fu">as.character</span>(samples),</span>
-<span id="cb140-18"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-18" tabindex="-1"></a>                   <span class="st">&quot;_chains_&quot;</span>, <span class="fu">as.character</span>(nChains),</span>
-<span id="cb140-19"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-19" tabindex="-1"></a>                   <span class="st">&quot;.Rdata&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb140-20"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-20" tabindex="-1"></a>  <span class="co"># save file</span></span>
-<span id="cb140-21"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-21" tabindex="-1"></a>  <span class="fu">save</span>(model, <span class="at">file =</span> <span class="fu">file.path</span>(ModelDir,filename)) </span>
-<span id="cb140-22"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb140-22" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb141"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb141-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb141-1" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb151-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb151-2"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-2" tabindex="-1"></a></span>
+<span id="cb151-3"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-3" tabindex="-1"></a><span class="cf">for</span> (Lst <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(samples_list)) {</span>
+<span id="cb151-4"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-4" tabindex="-1"></a>  thin <span class="ot">=</span> thin_list[Lst]</span>
+<span id="cb151-5"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-5" tabindex="-1"></a>  samples <span class="ot">=</span> samples_list[Lst]</span>
+<span id="cb151-6"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-6" tabindex="-1"></a>  <span class="co"># fit the model</span></span>
+<span id="cb151-7"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-7" tabindex="-1"></a>  m <span class="ot">=</span> <span class="fu">sampleMcmc</span>(unf_model,</span>
+<span id="cb151-8"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-8" tabindex="-1"></a>                 <span class="at">samples =</span> samples,</span>
+<span id="cb151-9"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-9" tabindex="-1"></a>                 <span class="at">thin =</span> thin,</span>
+<span id="cb151-10"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-10" tabindex="-1"></a>                 <span class="at">adaptNf =</span> <span class="fu">rep</span>(<span class="fu">ceiling</span>(<span class="fl">0.4</span><span class="sc">*</span>samples<span class="sc">*</span>thin), unf_model<span class="sc">$</span>nr),</span>
+<span id="cb151-11"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-11" tabindex="-1"></a>                 <span class="at">transient =</span> <span class="fu">ceiling</span>(<span class="fl">0.5</span><span class="sc">*</span>samples<span class="sc">*</span>thin),</span>
+<span id="cb151-12"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-12" tabindex="-1"></a>                 <span class="at">nChains =</span> nChains,</span>
+<span id="cb151-13"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-13" tabindex="-1"></a>                 <span class="at">nParallel =</span> nChains)</span>
+<span id="cb151-14"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-14" tabindex="-1"></a>  <span class="co"># create file name</span></span>
+<span id="cb151-15"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-15" tabindex="-1"></a>  filename <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">&quot;bw_model&quot;</span>,</span>
+<span id="cb151-16"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-16" tabindex="-1"></a>                   <span class="st">&quot;_thin_&quot;</span>, <span class="fu">as.character</span>(thin),</span>
+<span id="cb151-17"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-17" tabindex="-1"></a>                   <span class="st">&quot;_samples_&quot;</span>, <span class="fu">as.character</span>(samples),</span>
+<span id="cb151-18"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-18" tabindex="-1"></a>                   <span class="st">&quot;_chains_&quot;</span>, <span class="fu">as.character</span>(nChains),</span>
+<span id="cb151-19"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-19" tabindex="-1"></a>                   <span class="st">&quot;.Rdata&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb151-20"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-20" tabindex="-1"></a>  <span class="co"># save file</span></span>
+<span id="cb151-21"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-21" tabindex="-1"></a>  <span class="fu">save</span>(model, <span class="at">file =</span> <span class="fu">file.path</span>(ModelDir,filename)) </span>
+<span id="cb151-22"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb151-22" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb152-1"><a href="bacteria-vs-chicken-bw-hmsc-setup.html#cb152-1" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span></code></pre></div>
 
 </div>
 </div>

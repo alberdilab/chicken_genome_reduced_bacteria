@@ -156,8 +156,29 @@ The resulting tables correspond to Supplementary Table S2.
 ### Neutral
 
 ```{r m_div_n, , comment = "", message = FALSE, warning = FALSE}
+# Assuming each variables has an independent effect on diversity																									
 m_div_n <-
-  lme(neutral ~ seq_depth + sex + breed + treatment + trial * age,
+  lme(neutral ~ seq_depth + sex + breed + treatment + trial + age,
+      random = ~1|pen,
+      data = alpha_div)
+
+anova(m_div_n)
+
+# Assuming each variable interacts with age																									
+m_div_n <-
+  lme(neutral ~ seq_depth + 
+        sex * age + 
+        breed * age + 
+        treatment * age + 
+        trial * age,
+      random = ~1|pen,
+      data = alpha_div)
+
+anova(m_div_n)
+
+# Best fitted model considered for the manuscript																								
+m_div_n <-
+  lme(neutral ~ seq_depth + sex + breed + treatment + trial + age + trial*age,
       random = ~1|pen,
       data = alpha_div)
 
@@ -167,8 +188,29 @@ anova(m_div_n)
 ### Phylogenetic
 
 ```{r m_div_p, comment = "", message = FALSE, warning = FALSE}
+# Assuming each variables has an independent effect on diversity																									
 m_div_p <-
-  lme(phylogenetic ~ seq_depth + sex + breed + treatment + trial * age,
+  lme(phylogenetic ~ seq_depth + sex + breed + treatment + trial + age,
+      random = ~ 1|pen,
+      data = alpha_div)
+
+anova(m_div_p)
+
+# Assuming each variable interacts with age																									
+m_div_p <-
+  lme(phylogenetic ~ seq_depth +
+        sex * age +
+        breed * age +
+        treatment * age +
+        trial * age,
+      random = ~ 1|pen,
+      data = alpha_div)
+
+anova(m_div_p)
+
+# Best fitted model considered for the manuscript																								
+m_div_p <-
+  lme(phylogenetic ~ seq_depth + sex + breed + treatment + trial + age + trial*age,
       random = ~ 1|pen,
       data = alpha_div)
 
@@ -178,8 +220,30 @@ anova(m_div_p)
 ### Functional KEGG
 
 ```{r m_div_f_kegg, comment = "", message = FALSE, warning = FALSE}
+# Assuming each variables has an independent effect on diversity																									
 m_div_f_kegg <-
-  lme(functional_kegg ~ seq_depth + sex + breed + treatment + trial * age,
+  lme(functional_kegg ~ seq_depth + sex + breed + treatment + trial + age,
+      random = ~ 1|pen,
+      data = alpha_div)
+
+anova(m_div_f_kegg)
+
+# Assuming each variable interacts with age																									
+m_div_f_kegg <-
+  lme(functional_kegg ~ seq_depth +
+        sex * age + 
+        breed * age + 
+        treatment * age + 
+        trial * age,
+      random = ~ 1|pen,
+      data = alpha_div)
+
+anova(m_div_f_kegg)
+
+
+# Best fitted model considered for the manuscript																								
+m_div_f_kegg <-
+  lme(functional_kegg ~ seq_depth + sex + breed + treatment + trial + age + trial*age,
       random = ~ 1|pen,
       data = alpha_div)
 

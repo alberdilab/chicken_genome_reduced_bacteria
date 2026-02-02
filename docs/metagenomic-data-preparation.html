@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 Metagenomic data preparation | AlberdiLab | Marcos et al. 2025</title>
+  <title>Chapter 2 Metagenomic data preparation | AlberdiLab | Marcos et al. 2026</title>
   <meta name="description" content="&lt;p&gt;Data analysis code developed to study early-life caecal microbiome development and its association with chicken body weight&lt;/p&gt;" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 Metagenomic data preparation | AlberdiLab | Marcos et al. 2025" />
+  <meta property="og:title" content="Chapter 2 Metagenomic data preparation | AlberdiLab | Marcos et al. 2026" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="&lt;p&gt;Data analysis code developed to study early-life caecal microbiome development and its association with chicken body weight&lt;/p&gt;" />
   <meta name="github-repo" content="alberdilab/chicken_genome_reduced_bacteria" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 Metagenomic data preparation | AlberdiLab | Marcos et al. 2025" />
+  <meta name="twitter:title" content="Chapter 2 Metagenomic data preparation | AlberdiLab | Marcos et al. 2026" />
   
   <meta name="twitter:description" content="&lt;p&gt;Data analysis code developed to study early-life caecal microbiome development and its association with chicken body weight&lt;/p&gt;" />
   
@@ -2004,7 +2004,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 <li class="chapter" data-level="2.2" data-path="metagenomic-data-preparation.html"><a href="metagenomic-data-preparation.html#distilling-genome-inferred-functional-traits-gifts"><i class="fa fa-check"></i><b>2.2</b> Distilling Genome Inferred Functional Traits (GIFTs)</a>
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="metagenomic-data-preparation.html"><a href="metagenomic-data-preparation.html#distilling-dram-annotations"><i class="fa fa-check"></i><b>2.2.1</b> Distilling DRAM annotations</a></li>
-<li class="chapter" data-level="2.2.2" data-path="metagenomic-data-preparation.html"><a href="metagenomic-data-preparation.html#perform-completeness-correction-for-gifts"><i class="fa fa-check"></i><b>2.2.2</b> Perform completeness correction for GIFTs</a></li>
+<li class="chapter" data-level="2.2.2" data-path="metagenomic-data-preparation.html"><a href="metagenomic-data-preparation.html#aggregate-gifts"><i class="fa fa-check"></i><b>2.2.2</b> Aggregate GIFTs</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="metagenomic-data-preparation.html"><a href="metagenomic-data-preparation.html#create-working-objects"><i class="fa fa-check"></i><b>2.3</b> Create working objects</a>
 <ul>
@@ -2029,21 +2029,15 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 <li class="chapter" data-level="4" data-path="catalogue-richness.html"><a href="catalogue-richness.html"><i class="fa fa-check"></i><b>4</b> Catalogue richness</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="catalogue-richness.html"><a href="catalogue-richness.html#load-mg-data"><i class="fa fa-check"></i><b>4.1</b> Load MG data</a></li>
-<li class="chapter" data-level="4.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#densities-of-overall-relative-abundances-by-phylum"><i class="fa fa-check"></i><b>4.2</b> Densities of overall relative abundances by phylum</a>
+<li class="chapter" data-level="4.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#functional-ordination"><i class="fa fa-check"></i><b>4.2</b> Functional ordination</a>
 <ul>
-<li class="chapter" data-level="4.2.1" data-path="catalogue-richness.html"><a href="catalogue-richness.html#calculate-densities"><i class="fa fa-check"></i><b>4.2.1</b> Calculate densities</a></li>
-<li class="chapter" data-level="4.2.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#filter-rare-phylums"><i class="fa fa-check"></i><b>4.2.2</b> Filter rare phylums</a></li>
-<li class="chapter" data-level="4.2.3" data-path="catalogue-richness.html"><a href="catalogue-richness.html#plot-curves"><i class="fa fa-check"></i><b>4.2.3</b> Plot curves</a></li>
+<li class="chapter" data-level="4.2.1" data-path="catalogue-richness.html"><a href="catalogue-richness.html#plot-genome-length-and-average-mci-gradients"><i class="fa fa-check"></i><b>4.2.1</b> Plot genome length and average MCI gradients</a></li>
+<li class="chapter" data-level="4.2.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#plot-scfa-and-vitamin-biosynthesis-gradients"><i class="fa fa-check"></i><b>4.2.2</b> Plot SCFA and vitamin biosynthesis gradients</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="catalogue-richness.html"><a href="catalogue-richness.html#functional-ordination"><i class="fa fa-check"></i><b>4.3</b> Functional ordination</a>
+<li class="chapter" data-level="4.3" data-path="catalogue-richness.html"><a href="catalogue-richness.html#compare-mci-and-genome-length-between-taxonomic-groups"><i class="fa fa-check"></i><b>4.3</b> Compare MCI and genome length between taxonomic groups</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="catalogue-richness.html"><a href="catalogue-richness.html#plot-genome-length-and-average-mci-gradients"><i class="fa fa-check"></i><b>4.3.1</b> Plot genome length and average MCI gradients</a></li>
-<li class="chapter" data-level="4.3.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#plot-scfa-and-vitamin-biosynthesis-gradients"><i class="fa fa-check"></i><b>4.3.2</b> Plot SCFA and vitamin biosynthesis gradients</a></li>
-</ul></li>
-<li class="chapter" data-level="4.4" data-path="catalogue-richness.html"><a href="catalogue-richness.html#compare-mci-and-genome-length-between-taxonomic-groups"><i class="fa fa-check"></i><b>4.4</b> Compare MCI and genome length between taxonomic groups</a>
-<ul>
-<li class="chapter" data-level="4.4.1" data-path="catalogue-richness.html"><a href="catalogue-richness.html#average-mci-by-taxonomic-phylum-and-order"><i class="fa fa-check"></i><b>4.4.1</b> Average MCI by taxonomic phylum and order</a></li>
-<li class="chapter" data-level="4.4.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#genome-length-by-taxonomic-phylum-and-order"><i class="fa fa-check"></i><b>4.4.2</b> Genome length by taxonomic phylum and order</a></li>
+<li class="chapter" data-level="4.3.1" data-path="catalogue-richness.html"><a href="catalogue-richness.html#average-mci-by-taxonomic-phylum-and-order"><i class="fa fa-check"></i><b>4.3.1</b> Average MCI by taxonomic phylum and order</a></li>
+<li class="chapter" data-level="4.3.2" data-path="catalogue-richness.html"><a href="catalogue-richness.html#genome-length-by-taxonomic-phylum-and-order"><i class="fa fa-check"></i><b>4.3.2</b> Genome length by taxonomic phylum and order</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="alpha-diversity.html"><a href="alpha-diversity.html"><i class="fa fa-check"></i><b>5</b> Alpha diversity</a>
@@ -2238,7 +2232,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">AlberdiLab | Marcos et al. 2025</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">AlberdiLab | Marcos et al. 2026</a>
           </h1>
         </div>
 
@@ -2261,7 +2255,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 <div id="taxonomy-of-metagenome-assembled-genomes" class="section level3 hasAnchor" number="2.1.2">
 <h3><span class="header-section-number">2.1.2</span> Taxonomy of metagenome-assembled genomes<a href="metagenomic-data-preparation.html#taxonomy-of-metagenome-assembled-genomes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb4-1"><a href="metagenomic-data-preparation.html#cb4-1" tabindex="-1"></a>genome_taxonomy <span class="ot">&lt;-</span> </span>
-<span id="cb4-2"><a href="metagenomic-data-preparation.html#cb4-2" tabindex="-1"></a>  <span class="fu">read_tsv</span>(<span class="st">&quot;data/taxonomy.tsv&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="metagenomic-data-preparation.html#cb4-2" tabindex="-1"></a>  <span class="fu">read_tsv</span>(<span class="st">&quot;data/taxonomy_v2.tsv&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb4-3"><a href="metagenomic-data-preparation.html#cb4-3" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">genome =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb4-4"><a href="metagenomic-data-preparation.html#cb4-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">phylum =</span> <span class="fu">case_when</span>(</span>
 <span id="cb4-5"><a href="metagenomic-data-preparation.html#cb4-5" tabindex="-1"></a>        phylum <span class="sc">==</span> <span class="st">&quot;Actinobacteriota&quot;</span> <span class="sc">~</span> <span class="st">&quot;Actinomycetota&quot;</span>,</span>
@@ -2337,8 +2331,8 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 <span id="cb10-17"><a href="metagenomic-data-preparation.html#cb10-17" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&#39;mag_id&#39;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb10-18"><a href="metagenomic-data-preparation.html#cb10-18" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span></code></pre></div>
 </div>
-<div id="perform-completeness-correction-for-gifts" class="section level3 hasAnchor" number="2.2.2">
-<h3><span class="header-section-number">2.2.2</span> Perform completeness correction for GIFTs<a href="metagenomic-data-preparation.html#perform-completeness-correction-for-gifts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="aggregate-gifts" class="section level3 hasAnchor" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Aggregate GIFTs<a href="metagenomic-data-preparation.html#aggregate-gifts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r script-source"><code class="sourceCode r"><span id="cb11-1"><a href="metagenomic-data-preparation.html#cb11-1" tabindex="-1"></a><span class="co"># Aggregate into compound level</span></span>
 <span id="cb11-2"><a href="metagenomic-data-preparation.html#cb11-2" tabindex="-1"></a>gifts_elements <span class="ot">&lt;-</span> <span class="fu">to.elements</span>(gifts_matrix, GIFT_db2)</span>
 <span id="cb11-3"><a href="metagenomic-data-preparation.html#cb11-3" tabindex="-1"></a></span>

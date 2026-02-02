@@ -1,5 +1,5 @@
 ---
-title: "AlberdiLab | Marcos et al. 2025"
+title: "AlberdiLab | Marcos et al. 2026"
 subtitle: "Bacteria with reduced genomes positively associate with chicken body weight"
 author:
   - Sofia Marcos, Iñaki Odriozola, Ostaizka Aizpurua, Raphael Eisenhofer, Sarah Siu Tze Mak, Garazi Martin, Varsha Kale, Germana Baldi, Robert D Finn, Joan Tarradas, Andone Estonba, M Thomas P Gilbert, Antton Alberdi^[University of Copenhagen, antton.alberdi@sund.ku.dk]

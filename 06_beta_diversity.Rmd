@@ -186,7 +186,10 @@ b1n_dis_table <-
   mutate(across(everything(), ~replace(., is.na(.), 0))) %>% 
   as.dist()
 
-adonis2(b1n_dis_table ~ trial + sex + breed + treatment + trial + trial * age,
+adonis2(b1n_dis_table ~ sex * age + 
+                        breed * age + 
+                        treatment * age + 
+                        trial * age,
         permutations = perm,
         data = chicken_metadata,
         by = "term")
@@ -202,7 +205,10 @@ b1p_dis_table <-
   mutate(across(everything(), ~replace(., is.na(.), 0))) %>% 
   as.dist()
 
-adonis2(b1p_dis_table ~ trial + sex + breed + treatment + trial + trial * age,
+adonis2(b1p_dis_table ~ sex * age + 
+                        breed * age + 
+                        treatment * age + 
+                        trial * age,
         permutations = perm,
         data = chicken_metadata,
         by = "term")
@@ -218,7 +224,10 @@ b1f_dis_table_kegg <-
   mutate(across(everything(), ~replace(., is.na(.), 0))) %>%
   as.dist()
 
-adonis2(b1f_dis_table_kegg ~ trial + sex + breed + treatment + trial + trial * age,
+adonis2(b1f_dis_table_kegg ~ sex * age + 
+                             breed * age + 
+                             treatment * age + 
+                             trial * age,
         permutations = perm,
         data = chicken_metadata,
         by = "term")
@@ -235,15 +244,16 @@ t_hel <-
   t() %>% 
   as.data.frame()
   
-adonis2(t_hel ~ trial * sampling_time + 
-              breed * sampling_time +
-              sex * sampling_time +
-              treatment * sampling_time,
+adonis2(t_hel ~ breed * sampling_time +
+                sex * sampling_time +
+                treatment * sampling_time +
+                trial * sampling_time,
         permutations = perm,
         data = chicken_metadata,
         by = "term")
 
-adonis2(t_hel ~ trial * sampling_time + breed + sex + treatment,
+# Best fitted model considered for the manuscript																									
+adonis2(t_hel ~ breed + sex + treatment + trial * sampling_time,
         permutations = perm,
         data = chicken_metadata,
         by = "term")

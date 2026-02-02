@@ -13,7 +13,7 @@ dram-functional-annotations
 metagenomic-read-counts
 distilling-genome-inferred-functional-traits-gifts
 distilling-dram-annotations
-perform-completeness-correction-for-gifts
+aggregate-gifts
 create-working-objects
 transform-reads-into-genome-counts
 calculate-relative-abundances
@@ -29,10 +29,6 @@ metadata-of-chickens-sequenced-for-mt
 save-working-objects
 catalogue-richness
 load-mg-data
-densities-of-overall-relative-abundances-by-phylum
-calculate-densities
-filter-rare-phylums
-plot-curves
 functional-ordination
 plot-genome-length-and-average-mci-gradients
 plot-scfa-and-vitamin-biosynthesis-gradients

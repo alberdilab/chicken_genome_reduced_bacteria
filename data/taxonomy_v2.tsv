@@ -1,0 +1,823 @@
+genome	domain	phylum	class	order	family	genus	species
+cmag_001	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	RUG14156	Galligastranaerophilus_A	Galligastranaerophilus_A intestinigallinarum
+cmag_002	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Negativibacillus	Negativibacillus faecipullorum
+cmag_003	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	UMGS1781	
+cmag_004	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Faecisoma	
+cmag_005	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	UMGS2069	UMGS2069 sp900557695
+cmag_006	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Agathobaculum	Agathobaculum intestinipullorum
+cmag_007	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Avoscillospira	Avoscillospira stercoripullorum
+cmag_008	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	UBA932	Coprenecus	Coprenecus stercorigallinarum
+cmag_009	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	UBA1417	UBA1417 sp900552925
+cmag_010	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Anaerotignaceae	Coprocola	Coprocola pullicola
+cmag_011	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_012	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	CAG-274	JAHALF01	
+cmag_013	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Aphodocola	
+cmag_014	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Onthoplasma	
+cmag_015	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	RGIG1681	
+cmag_016	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_017	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Bacteroides	Bacteroides uniformis
+cmag_018	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-465	RGIG5622	
+cmag_019	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-314	Fimimonas	Fimimonas gallinarum
+cmag_020	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Faecalibacterium	Faecalibacterium avium
+cmag_021	Bacteria	Firmicutes	Bacilli	Lactobacillales	Enterococcaceae	Enterococcus_E	
+cmag_022	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_023	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Butyricicoccus	Butyricicoccus pullicaecorum
+cmag_024	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter faecigallinarum
+cmag_025	Bacteria	Proteobacteria	Gammaproteobacteria	Enterobacterales	Enterobacteriaceae	Proteus	Proteus mirabilis
+cmag_026	Bacteria	Firmicutes	Bacilli	Lactobacillales	Enterococcaceae	Enterococcus_D	Enterococcus_D gallinarum
+cmag_027	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-314	CAG-314	CAG-314 sp000437915
+cmag_028	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Alistipes	Alistipes excrementavium
+cmag_029	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	UMGS687	
+cmag_030	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Faecousia	Faecousia gallistercoris
+cmag_031	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Egerieicola	
+cmag_032	Bacteria	Firmicutes_A	Clostridia	Clostridiales	Clostridiaceae	Dwaynesavagella	Dwaynesavagella gallinarum
+cmag_033	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_034	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Intestinimonas	Intestinimonas pullistercoris
+cmag_035	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter gallistercoris
+cmag_036	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Lachnoclostridium_A	Lachnoclostridium_A avicola
+cmag_037	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	
+cmag_038	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Lawsonibacter	Lawsonibacter sp900545895
+cmag_039	Bacteria	Firmicutes_A	Clostridia	UBA1381	UBA1381	Ornithomonoglobus	Ornithomonoglobus merdipullorum
+cmag_040	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Heritagella	
+cmag_041	Bacteria	Firmicutes_A	Clostridia	Christensenellales	DTU072	CAG-1782	
+cmag_042	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Faecousia	Faecousia faecavium
+cmag_043	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Lawsonibacter	
+cmag_044	Bacteria	Desulfobacterota_I	Desulfovibrionia	Desulfovibrionales	Desulfovibrionaceae	Desulfovibrio	
+cmag_045	Bacteria	Firmicutes_C	Negativicutes	Selenomonadales	Selenomonadaceae	Megamonas	Megamonas funiformis
+cmag_046	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae		
+cmag_047	Bacteria	Firmicutes_A	Clostridia	Christensenellales	DTU072	Stercoripulliclostridium_A	Stercoripulliclostridium_A merdigallinarum
+cmag_048	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Acutalibacter	Acutalibacter sp904374805
+cmag_049	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	Gallimonas intestinalis
+cmag_050	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter intestinigallinarum
+cmag_051	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Limosilactobacillus	
+cmag_052	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_053	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	RUG14156	Galligastranaerophilus	
+cmag_054	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	UMGS1781	
+cmag_055	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_056	Bacteria	Firmicutes	Bacilli	RF39	UBA660	UMGS2016	
+cmag_057	Bacteria	Firmicutes	Bacilli	ML615J-28	CAG-313	CAG-313	CAG-313 sp900539265
+cmag_058	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-552	Protoclostridium	
+cmag_059	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Heritagella	Heritagella gallinarum
+cmag_060	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Scatavimonas	Scatavimonas merdigallinarum
+cmag_061	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_062	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	RUG14156	Galligastranaerophilus	Galligastranaerophilus faecipullorum
+cmag_063	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Lachnoclostridium_B	Lachnoclostridium_B phocaeense
+cmag_064	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Caccovicinus	Caccovicinus excrementipullorum
+cmag_065	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia	Blautia stercoripullorum
+cmag_066	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter excrementipullorum
+cmag_067	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Alistipes_A	Alistipes_A ihumii
+cmag_068	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Ventrenecus	
+cmag_069	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Caccenecus	Caccenecus sp900758895
+cmag_070	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Faecisoma	
+cmag_071	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	UMGS1370	UMGS1370 sp904395885
+cmag_072	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_073	Bacteria	Verrucomicrobiota	Lentisphaeria	Victivallales	UBA1829	UBA1829	UBA1829 sp002338895
+cmag_074	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA3700	Ornithoclostridium	
+cmag_075	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Avoscillospira	Avoscillospira avicola
+cmag_076	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter norwichensis
+cmag_077	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Marinifilaceae	Butyricimonas	Butyricimonas paravirosa
+cmag_078	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Avoscillospira_A	
+cmag_079	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Dysosmobacter	Dysosmobacter pullicola
+cmag_080	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Lachnoclostridium_A	Lachnoclostridium_A stercorigallinarum
+cmag_081	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Anaeromassilibacillus	Anaeromassilibacillus stercoravium
+cmag_082	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Agathobaculum	Agathobaculum intestinigallinarum
+cmag_083	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	RUG14156	Galligastranaerophilus	Galligastranaerophilus intestinavium
+cmag_084	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Limousia	Limousia pullorum
+cmag_085	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Onthoplasma	
+cmag_086	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	CAG-274	JAHALF01	
+cmag_087	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Flavonifractor	Flavonifractor plautii
+cmag_088	Bacteria	Firmicutes_A	Clostridia	Peptostreptococcales	Peptostreptococcaceae	JAGHEK01	JAGHEK01 sp017889265
+cmag_089	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Ruthenibacterium	Ruthenibacterium merdavium
+cmag_090	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Faecisoma	
+cmag_091	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Eubacterium_R	Eubacterium_R faecavium
+cmag_092	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia excrementavium
+cmag_093	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_094	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Anaerobutyricum	Anaerobutyricum stercoris
+cmag_095	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	UBA1390		
+cmag_096	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Acutalibacter	Acutalibacter stercoravium
+cmag_097	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Egerieimonas_A	Egerieimonas_A faecigallinarum
+cmag_098	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Limivivens	Limivivens intestinipullorum
+cmag_099	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Merdisoma	Merdisoma merdipullorum
+cmag_100	Bacteria	Firmicutes	Bacilli	Erysipelotrichales	Erysipelotrichaceae	Merdibacter	Merdibacter merdipullorum
+cmag_101	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter caccogallinarum
+cmag_102	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Choladocola	Choladocola avistercoris
+cmag_103	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_104	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Alistipes	Alistipes finegoldii
+cmag_105	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Acetatifactor	Acetatifactor stercoripullorum
+cmag_106	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	Onthousia faecipullorum
+cmag_107	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Onthoplasma	Onthoplasma faecigallinarum
+cmag_108	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA3700	Caccalectryoclostridium	Caccalectryoclostridium excrementigallinarum
+cmag_109	Bacteria	Firmicutes	Bacilli	RF39	UBA660	RUG13868	
+cmag_110	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Alistipes	Alistipes faecigallinarum
+cmag_111	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-138	Pelethousia	Pelethousia gallinarum
+cmag_112	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Fimimorpha	Fimimorpha faecalis
+cmag_113	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae		
+cmag_114	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	UBA932	Cryptobacteroides	Cryptobacteroides faecigallinarum
+cmag_115	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Fimousia	Fimousia stercorigallinarum
+cmag_116	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae		
+cmag_117	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Barnesiellaceae	Barnesiella	Barnesiella viscericola
+cmag_118	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	UBA644		
+cmag_119	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_120	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Sellimonas	Sellimonas avistercoris
+cmag_121	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Avimicrobium	Avimicrobium caecorum
+cmag_122	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Fimimorpha	Fimimorpha excrementavium
+cmag_123	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Lachnoclostridium_B	Lachnoclostridium_B stercoravium
+cmag_124	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_125	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae		
+cmag_126	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Limivivens	Limivivens merdigallinarum
+cmag_127	Bacteria	Firmicutes_A	Clostridia	Clostridiales	Clostridiaceae	Clostridium	Clostridium cuniculi
+cmag_128	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Ruminococcus_G	
+cmag_129	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia_A	
+cmag_130	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter merdigallinarum
+cmag_131	Bacteria	Firmicutes	Bacilli	RF39	UBA660	HGM10818	
+cmag_132	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-465	RGIG5622	
+cmag_133	Bacteria	Firmicutes	Bacilli	Lactobacillales	Streptococcaceae	Streptococcus	Streptococcus alactolyticus
+cmag_134	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	CAJFPI01	
+cmag_135	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	RUG14156	Galligastranaerophilus_A	Galligastranaerophilus_A gallistercoris
+cmag_136	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Ligilactobacillus	Ligilactobacillus salivarius
+cmag_137	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Merdiplasma	Merdiplasma excrementigallinarum
+cmag_138	Bacteria	Firmicutes_A	Clostridia	UBA1381	UBA1381	Ornithomonoglobus	Ornithomonoglobus sp904420525
+cmag_139	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Scatenecus	Scatenecus sp900554095
+cmag_140	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	Gallimonas sp900548845
+cmag_141	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	Caccovivens sp900557645
+cmag_142	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Fimivivens	Fimivivens faecavium
+cmag_143	Bacteria	Firmicutes_A	Clostridia	Peptostreptococcales	Anaerovoracaceae	Fimisoma	Fimisoma avicola
+cmag_144	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_145	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-552	Protoclostridium	Protoclostridium sp019113265
+cmag_146	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Limosilactobacillus	Limosilactobacillus intestinipullorum
+cmag_147	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia	Blautia avicola
+cmag_148	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	Gallimonas merdae
+cmag_149	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	Onthousia faecigallinarum
+cmag_150	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_151	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508		
+cmag_152	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Heritagella	
+cmag_153	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia_A	Blautia_A intestinipullorum
+cmag_154	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Lactobacillus	Lactobacillus pullistercoris
+cmag_155	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Rikenella	Rikenella massiliensis
+cmag_156	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1750	Spyradocola	Spyradocola merdavium
+cmag_157	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Caccenecus	
+cmag_158	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_159	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Enterocloster	
+cmag_160	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Eubacterium_I	
+cmag_161	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	RGIG4074	
+cmag_162	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia_A	Blautia_A faecavium
+cmag_163	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_164	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthocola_B	
+cmag_165	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-465	CAG-465	
+cmag_166	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Egerieicola	Egerieicola faecale
+cmag_167	Bacteria	Proteobacteria	Gammaproteobacteria	Enterobacterales	Enterobacteriaceae	Klebsiella	Klebsiella pneumoniae
+cmag_168	Bacteria	Firmicutes_A	Clostridia	UBA1381	UBA1381	UBA4716	UBA4716 sp905215805
+cmag_169	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Ventrenecus	
+cmag_170	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	An181	An181 sp002160325
+cmag_171	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508		
+cmag_172	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Ruminococcus_D	Ruminococcus_D sp900752625
+cmag_173	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Fimimorpha	Fimimorpha sp904420225
+cmag_174	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Limosilactobacillus	
+cmag_175	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Caccovicinus	Caccovicinus merdipullorum
+cmag_176	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Dysosmobacter	Dysosmobacter avistercoris
+cmag_177	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Gemmiger	
+cmag_178	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Gemmiger	Gemmiger faecavium
+cmag_179	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Pararuminococcus	Pararuminococcus gallinarum
+cmag_180	Bacteria	Firmicutes	Bacilli	Erysipelotrichales	Erysipelotrichaceae	Merdibacter	Merdibacter merdavium
+cmag_181	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Acutalibacter	Acutalibacter ornithocaccae
+cmag_182	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	UBA866	UBA866 sp904384225
+cmag_183	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508		
+cmag_184	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	JAGZMM01	
+cmag_185	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Pullilachnospira	Pullilachnospira stercoravium
+cmag_186	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia_A	Blautia_A intestinigallinarum
+cmag_187	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae		
+cmag_188	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Onthoplasma	
+cmag_189	Bacteria	Firmicutes	Bacilli	RF39	UBA660		
+cmag_190	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Scatomorpha	Scatomorpha gallistercoris
+cmag_191	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_192	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Pelethosoma	
+cmag_193	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	CAG-272	CAG-448	
+cmag_194	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	CAG-382	Woodwardibium	Woodwardibium gallinarum
+cmag_195	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	BX7	Galloscillospira_B	Galloscillospira_B excrementipullorum
+cmag_196	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	RUG14156	Galligastranaerophilus	
+cmag_197	Bacteria	Deferribacterota	Deferribacteres	Deferribacterales	Mucispirillaceae	Mucispirillum	
+cmag_198	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Acetatifactor	
+cmag_199	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_200	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-138	UMGS946	UMGS946 sp900544965
+cmag_201	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Heritagella	
+cmag_202	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Fusicatenibacter	Fusicatenibacter intestinigallinarum
+cmag_203	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-74	Onthenecus	Onthenecus intestinigallinarum
+cmag_204	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Scatomorpha	Scatomorpha stercoravium
+cmag_205	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	CAG-272	QALR01	
+cmag_206	Bacteria	Proteobacteria	Alphaproteobacteria	RF32	CAG-239		
+cmag_207	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Anaerobutyricum	Anaerobutyricum avicola
+cmag_208	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Ventrousia	Ventrousia excrementavium
+cmag_209	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	QAMM01	QAMM01 sp900552945
+cmag_210	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508		
+cmag_211	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Ventrimonas	Ventrimonas merdavium
+cmag_212	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Dysosmobacter	
+cmag_213	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-465	CAG-465	
+cmag_214	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	UBA866	UBA866 sp016901855
+cmag_215	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Onthoplasma	
+cmag_216	Bacteria	Desulfobacterota_I	Desulfovibrionia	Desulfovibrionales	Desulfovibrionaceae	Mailhella	Mailhella merdigallinarum
+cmag_217	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_218	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Eisenbergiella	Eisenbergiella pullicola
+cmag_219	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	
+cmag_220	Bacteria	Desulfobacterota_I	Desulfovibrionia	Desulfovibrionales	Desulfovibrionaceae	Mailhella	Mailhella merdavium
+cmag_221	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	DSM-108975	DSM-108975 sp014982715
+cmag_222	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Coproplasma	
+cmag_223	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	CHK158-818	Gallibacteroides	Gallibacteroides avistercoris
+cmag_224	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Anaerotignaceae	Metalachnospira	Metalachnospira gallinarum
+cmag_225	Bacteria	Proteobacteria	Gammaproteobacteria	Burkholderiales	Burkholderiaceae	Duodenibacillus	
+cmag_226	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	UMGS1591	UMGS1591 sp905198295
+cmag_227	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Merdimonas	Merdimonas faecis
+cmag_228	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia	Blautia pullicola
+cmag_229	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Lachnospira	
+cmag_230	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Faecimonas	
+cmag_231	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Limosilactobacillus	Limosilactobacillus reuteri_E
+cmag_232	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	UMGS1591	UMGS1591 sp900553255
+cmag_233	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Anaerotignaceae	Metalachnospira	
+cmag_234	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_235	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Anaerobutyricum	Anaerobutyricum faecale
+cmag_236	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae		
+cmag_237	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Faecivivens	Faecivivens stercoravium
+cmag_238	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Anaerostipes	Anaerostipes butyraticus
+cmag_239	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Pseudoscilispira	Pseudoscilispira faecavium
+cmag_240	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Eubacterium_R	Eubacterium_R faecale
+cmag_241	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Anaerotignaceae	Neoanaerotignum_B	Neoanaerotignum_B galli
+cmag_242	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-793	
+cmag_243	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Alistipes	Alistipes excrementipullorum
+cmag_244	Bacteria	Verrucomicrobiota	Verrucomicrobiae	Opitutales	CAG-312	Merdousia	Merdousia sp001917305
+cmag_245	Bacteria	Firmicutes_C	Negativicutes	Acidaminococcales	Acidaminococcaceae	CAG-266	CAG-266 sp000436095
+cmag_246	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	
+cmag_247	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Gemmiger	Gemmiger excrementavium
+cmag_248	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Tannerellaceae	Parabacteroides	Parabacteroides merdae
+cmag_249	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_250	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-138	UBA1685	
+cmag_251	Bacteria	Desulfobacterota_I	Desulfovibrionia	Desulfovibrionales	Desulfovibrionaceae	Bilophila	
+cmag_252	Bacteria	Proteobacteria	Gammaproteobacteria	Burkholderiales	Burkholderiaceae	Parasutterella	Parasutterella excrementihominis
+cmag_253	Bacteria	Firmicutes_C	Negativicutes	Veillonellales	Megasphaeraceae	Megasphaera	Megasphaera elsdenii
+cmag_254	Bacteria	Verrucomicrobiota	Lentisphaeria	Victivallales	Victivallaceae	Victivallis	Victivallis lenta
+cmag_255	Bacteria	Verrucomicrobiota	Lentisphaeria	Victivallales	Victivallaceae		
+cmag_256	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Coproplasma	Coproplasma stercorigallinarum
+cmag_257	Bacteria	Desulfobacterota_I	Desulfovibrionia	Desulfovibrionales	Desulfovibrionaceae	Bilophila	Bilophila sp900550745
+cmag_258	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Caccousia	Caccousia avistercoris
+cmag_259	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Caccomorpha	Caccomorpha excrementavium
+cmag_260	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Pelethomonas	Pelethomonas sp017887695
+cmag_261	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_262	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Onthocola_A	Onthocola_A gallistercoris
+cmag_263	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_264	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthocola_B	
+cmag_265	Bacteria	Firmicutes_A	Clostridia	Peptostreptococcales	Peptostreptococcaceae	Romboutsia	Romboutsia sp904418825
+cmag_266	Bacteria	Desulfobacterota_I	Desulfovibrionia	Desulfovibrionales	Desulfovibrionaceae	Desulfovibrio	Desulfovibrio sp900556755
+cmag_267	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Ligilactobacillus	Ligilactobacillus agilis
+cmag_268	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Lachnoclostridium_A	Lachnoclostridium_A stercoripullorum
+cmag_269	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Bariatricus	Bariatricus faecipullorum
+cmag_270	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_271	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Phocaeicola	Phocaeicola barnesiae
+cmag_272	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_273	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	UBA3402	
+cmag_275	Bacteria	Firmicutes	Bacilli	Erysipelotrichales	Erysipelotrichaceae	Holdemania	Holdemania sp904395815
+cmag_276	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccopulliclostridium	
+cmag_277	Bacteria	Desulfobacterota_I	Desulfovibrionia	Desulfovibrionales	Desulfovibrionaceae	Mailhella	Mailhella sp900555975
+cmag_278	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Choladousia	Choladousia intestinavium
+cmag_279	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-74	Limiplasma	Limiplasma merdipullorum
+cmag_280	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_281	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia avistercoris
+cmag_282	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	Gallimonas faecium
+cmag_283	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	
+cmag_284	Bacteria	Firmicutes	Bacilli	RF39	UBA660	UMGS1572	UMGS1572 sp900553045
+cmag_285	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Scatomorpha	Scatomorpha intestinavium
+cmag_286	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	
+cmag_287	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_288	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Caproicibacterium	
+cmag_289	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Faecousia	Faecousia excrementipullorum
+cmag_290	Bacteria	Firmicutes	Bacilli	RF39	UBA660		
+cmag_291	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	CAJFUH01	CAJFUH01 sp904420155
+cmag_292	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	CAG-269 sp904419495
+cmag_293	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA3700	Alloclostridium	Alloclostridium intestinigallinarum
+cmag_294	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242		
+cmag_295	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	
+cmag_296	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	Merdicola	Merdicola sp001915925
+cmag_297	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Coproplasma	
+cmag_298	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Merdisoma	Merdisoma faecalis
+cmag_299	Bacteria	Firmicutes	Bacilli	Erysipelotrichales	Erysipelotrichaceae	Massilicoli	Massilicoli timonensis
+cmag_300	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Pelethomonas	Pelethomonas intestinigallinarum
+cmag_301	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Faecisoma	Faecisoma sp900753645
+cmag_302	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_303	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Onthoplasma	
+cmag_304	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Agathobaculum	Agathobaculum merdavium
+cmag_305	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	UBA6345	
+cmag_306	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Galloscillospira_A	Galloscillospira_A stercoripullorum
+cmag_307	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Faecisoma	Faecisoma sp017887425
+cmag_308	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Anaerotignaceae	Coprocola	Coprocola sp017888185
+cmag_309	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Flavonifractor	
+cmag_310	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Butyricicoccus	
+cmag_311	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Faecisoma	Faecisoma merdavium
+cmag_312	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Stercorousia	Stercorousia faecigallinarum
+cmag_313	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	Scatovivens	Scatovivens faecipullorum
+cmag_314	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Bacteroides	Bacteroides congonensis
+cmag_315	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia_A	Blautia_A faecipullorum
+cmag_316	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_317	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_318	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_319	Bacteria	Firmicutes	Bacilli	RF39	UBA660	HGM10818	
+cmag_320	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Phocaeicola	Phocaeicola dorei
+cmag_321	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	
+cmag_322	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Acutalibacter	Acutalibacter sp904419785
+cmag_323	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_324	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter merdavium
+cmag_325	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Butyricicoccus	Butyricicoccus sp900604335
+cmag_326	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Enterocloster	Enterocloster excrementipullorum
+cmag_327	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Lactobacillus	
+cmag_328	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Scatomorpha	Scatomorpha stercorigallinarum
+cmag_329	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Merdivicinus	Merdivicinus intestinigallinarum
+cmag_330	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia excrementipullorum
+cmag_331	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Scatenecus	
+cmag_332	Bacteria	Campylobacterota	Campylobacteria	Campylobacterales	Helicobacteraceae	Helicobacter_D	Helicobacter_D pullorum
+cmag_333	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Scatousia	
+cmag_334	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_335	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Faecalibacterium	Faecalibacterium sp002160895
+cmag_336	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	CAJFVJ01	Adamsella	
+cmag_337	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter stercorigallinarum
+cmag_338	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Agathobaculum	Agathobaculum stercoravium
+cmag_339	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia sp904373255
+cmag_340	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_341	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia	
+cmag_342	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia sp017886895
+cmag_343	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Egerieicola	
+cmag_344	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae		
+cmag_345	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Eisenbergiella	Eisenbergiella merdigallinarum
+cmag_346	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Coproplasma	Coproplasma stercoravium
+cmag_347	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Dysosmobacter	Dysosmobacter excrementavium
+cmag_348	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Faecenecus	Faecenecus gallistercoris
+cmag_349	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter excrementigallinarum_A
+cmag_350	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_351	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-74	Egerieenecus	Egerieenecus merdigallinarum
+cmag_352	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Faecivivens	Faecivivens stercorigallinarum
+cmag_353	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Coprosoma	Coprosoma intestinipullorum
+cmag_354	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia faecipullorum
+cmag_355	Bacteria	Firmicutes	Bacilli	Erysipelotrichales	Coprobacillaceae	Massiliomicrobiota	Massiliomicrobiota sp002160865
+cmag_356	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_357	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthocola_B	Onthocola_B stercoravium
+cmag_358	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_359	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	Gallimonas sp017887095
+cmag_360	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_361	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter faecavium
+cmag_362	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Faecenecus	
+cmag_363	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	SIG32	
+cmag_364	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Caccousia	Caccousia avicola
+cmag_365	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-465	RGIG5622	
+cmag_366	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_367	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	Scatovivens	
+cmag_368	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Alistipes	Alistipes cottocaccae
+cmag_369	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Scatosoma	Scatosoma pullistercoris
+cmag_370	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Merdivicinus	Merdivicinus intestinavium
+cmag_371	Bacteria	Firmicutes	Bacilli	Erysipelotrichales	Erysipelotrichaceae	Merdibacter	Merdibacter merdigallinarum
+cmag_372	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Fimenecus	Fimenecus excrementavium
+cmag_373	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Avoscillospira_A	Avoscillospira_A avistercoris
+cmag_374	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Avimonas	
+cmag_375	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Gemmiger	
+cmag_376	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_377	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_378	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_379	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Faecalibacterium	Faecalibacterium gallistercoris
+cmag_380	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-793	
+cmag_381	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-552	Protoclostridium	Protoclostridium gallicola
+cmag_382	Bacteria	Proteobacteria	Gammaproteobacteria	Burkholderiales	Burkholderiaceae	Parasutterella	Parasutterella gallistercoris
+cmag_383	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	
+cmag_384	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Ventrenecus	Ventrenecus stercoripullorum
+cmag_385	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia faecigallinarum
+cmag_386	Bacteria	Firmicutes_B	Dehalobacteriia	UBA4068	UBA5755	Avidehalobacter	Avidehalobacter gallistercoris
+cmag_387	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508		
+cmag_388	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Onthoplasma	
+cmag_389	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_390	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	Scatovivens	
+cmag_391	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Alistipes	Alistipes merdavium
+cmag_392	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Alistipes	Alistipes avicola
+cmag_393	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Bacteroides	Bacteroides eggerthii
+cmag_394	Bacteria	Proteobacteria	Gammaproteobacteria	Burkholderiales	Burkholderiaceae	Aphodousia	
+cmag_395	Bacteria	Campylobacterota	Campylobacteria	Campylobacterales	Campylobacteraceae	Campylobacter_D	Campylobacter_D jejuni
+cmag_396	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_397	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Scatosoma	Scatosoma pullicola
+cmag_398	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Ventrenecus	
+cmag_399	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	CAG-269 sp904384205
+cmag_400	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter excrementavium
+cmag_401	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Faecimonas	Faecimonas intestinavium
+cmag_402	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Limenecus	
+cmag_403	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Anaerotruncus	Anaerotruncus colihominis
+cmag_404	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_405	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Negativibacillus	Negativibacillus massiliensis
+cmag_406	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Enterenecus	Enterenecus sp905210385
+cmag_407	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Scatomorpha	Scatomorpha pullicola
+cmag_408	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Heteroscilispira	Heteroscilispira lomanii
+cmag_409	Bacteria	Firmicutes	Bacilli	Erysipelotrichales	Coprobacillaceae	Massiliomicrobiota	Massiliomicrobiota merdigallinarum
+cmag_410	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Faecivivens	
+cmag_411	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Ruthenibacterium	
+cmag_412	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	UBA737	
+cmag_413	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_414	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_415	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Bacteroides	Bacteroides togonis
+cmag_416	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Phocaeicola	Phocaeicola sp900540105
+cmag_417	Bacteria	Proteobacteria	Gammaproteobacteria	Burkholderiales	Burkholderiaceae	Aphodousia	Aphodousia sp900544345
+cmag_418	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia	Blautia pullistercoris
+cmag_419	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Lachnoclostridium_B	Lachnoclostridium_B sp000765215
+cmag_420	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Barnesiellaceae	Barnesiella	Barnesiella merdigallinarum
+cmag_421	Bacteria	Desulfobacterota_I	Desulfovibrionia	Desulfovibrionales	Desulfovibrionaceae	Mailhella	Mailhella excrementigallinarum
+cmag_422	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Bacteroides	Bacteroides clarus
+cmag_423	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Coprobacteraceae	Coprobacter	Coprobacter secundus
+cmag_424	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Marinifilaceae	Butyricimonas	Butyricimonas faecavium
+cmag_425	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_426	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Eisenbergiella	Eisenbergiella sp904392525
+cmag_427	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter sp900761655
+cmag_428	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Coprosoma	Coprosoma sp000432855
+cmag_429	Bacteria	Actinobacteriota	Coriobacteriia	Coriobacteriales	Atopobiaceae	Thermophilibacter	Thermophilibacter excrementavium
+cmag_431	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia avicola
+cmag_432	Bacteria	Actinobacteriota	Coriobacteriia	Coriobacteriales	Atopobiaceae	Thermophilibacter	
+cmag_433	Bacteria	Actinobacteriota	Coriobacteriia	Coriobacteriales	Coriobacteriaceae	Enorma	Enorma massiliensis
+cmag_434	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-74	Pullichristensenella	Pullichristensenella excrementipullorum
+cmag_435	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthocola_B	Onthocola_B sp900546715
+cmag_436	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-552	UMGS1795	UMGS1795 sp900553555
+cmag_437	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Barnesiellaceae	Barnesiella_A	Barnesiella_A sp900538705
+cmag_438	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-552	UBA10677	UBA10677 sp900543755
+cmag_439	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Alistipes	Alistipes merdipullorum
+cmag_440	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Scatousia	Scatousia sp000431315
+cmag_441	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	HGM13222	
+cmag_442	Bacteria	Actinobacteriota	Coriobacteriia	Coriobacteriales	Coriobacteriaceae	Limicola	Limicola stercorigallinarum
+cmag_443	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	UMGS1864	
+cmag_444	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-552	Protoclostridium	Protoclostridium sp900761765
+cmag_445	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Phocaeicola	Phocaeicola excrementipullorum
+cmag_446	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Faecivivens	
+cmag_447	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Pelethomonas	Pelethomonas sp900549475
+cmag_448	Bacteria	Firmicutes	Bacilli	Acholeplasmatales	Anaeroplasmataceae	Pelethenecus	Pelethenecus faecipullorum
+cmag_449	Bacteria	Firmicutes	Bacilli	RF39	UBA660	CAG-302	CAG-302 sp017887885
+cmag_450	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Aphodocola	
+cmag_451	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia excrementigallinarum
+cmag_452	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Merdivicinus	Merdivicinus excrementipullorum
+cmag_453	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Flavonifractor	Flavonifractor avistercoris
+cmag_454	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Tidjanibacter	Tidjanibacter inops_A
+cmag_455	Bacteria	Proteobacteria	Gammaproteobacteria	Burkholderiales	Burkholderiaceae	Sutterella	Sutterella sp905213905
+cmag_456	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-917	Limadaptatus	Limadaptatus stercoravium
+cmag_457	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	RUG14156	Galligastranaerophilus	
+cmag_458	Bacteria	Proteobacteria	Alphaproteobacteria	RF32	CAG-239	Scatacola_A	
+cmag_459	Bacteria	Proteobacteria	Alphaproteobacteria	RF32	CAG-239	CAG-267	CAG-267 sp001917135
+cmag_460	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Frisingicoccus	Frisingicoccus sp900753685
+cmag_461	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	Gallimonas merdigallinarum
+cmag_462	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Phocaeicola	Phocaeicola plebeius_A
+cmag_463	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Flavonifractor	Flavonifractor avicola
+cmag_464	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Lactobacillus	Lactobacillus gallinarum
+cmag_465	Bacteria	Bacteroidota	Bacteroidia	Flavobacteriales	UBA1820	Merdimorpha	Merdimorpha sp002314265
+cmag_466	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	UBA7067	
+cmag_467	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	RUG14156	Galligastranaerophilus_A	
+cmag_468	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_469	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Eisenbergiella	Eisenbergiella merdavium
+cmag_470	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Dysosmobacter	Dysosmobacter excrementigallinarum
+cmag_471	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA3700	Ornithoclostridium	Ornithoclostridium excrementipullorum
+cmag_472	Bacteria	Firmicutes	Bacilli	Erysipelotrichales	Coprobacillaceae	Erysipelatoclostridium	Erysipelatoclostridium ramosum
+cmag_473	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	UBA11471	UBA11471	UBA11471 sp900542765
+cmag_474	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Onthoplasma	
+cmag_475	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Scybalousia	Scybalousia sp900543675
+cmag_476	Bacteria	Firmicutes	Bacilli	CAJFEE01	CAJFEE01	Harrysmithimonas	Harrysmithimonas galli
+cmag_477	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter tabaqchaliae
+cmag_478	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	UBA3818	UBA3818 sp904397845
+cmag_479	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	Gallimonas intestinigallinarum
+cmag_480	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Onthovicinus	Onthovicinus excrementipullorum
+cmag_481	Bacteria	Verrucomicrobiota	Lentisphaeria	Victivallales	Victivallaceae	Victivallis	Victivallis sp900551245
+cmag_482	Bacteria	Proteobacteria	Alphaproteobacteria	RF32	CAG-977	CAG-977	
+cmag_483	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Scatomorpha	Scatomorpha sp900759385
+cmag_484	Bacteria	Verrucomicrobiota	Verrucomicrobiae	Opitutales	CAG-312	Merdousia	Merdousia gallistercoris
+cmag_485	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_486	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Muribaculaceae	Limisoma	Limisoma sp900544305
+cmag_487	Bacteria	Proteobacteria	Gammaproteobacteria	Burkholderiales	Burkholderiaceae	Aphodousia	Aphodousia sp002329575
+cmag_488	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Clostridium_Q	Clostridium_Q saccharolyticum_A
+cmag_489	Bacteria	Proteobacteria	Gammaproteobacteria	Burkholderiales	Burkholderiaceae	Sutterella	Sutterella merdavium
+cmag_490	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Pseudoflavonifractor	Pseudoflavonifractor sp904419835
+cmag_491	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Tidjanibacter	Tidjanibacter faecipullorum
+cmag_492	Bacteria	Actinobacteriota	Actinomycetia	Actinomycetales	Bifidobacteriaceae	Bifidobacterium	Bifidobacterium pullorum_B
+cmag_493	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Limosilactobacillus	Limosilactobacillus oris
+cmag_494	Bacteria	Firmicutes	Bacilli	Lactobacillales	Enterococcaceae	Enterococcus_B	Enterococcus_B hirae
+cmag_495	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_496	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Lachnoclostridium_A	Lachnoclostridium_A stercoravium
+cmag_497	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	Caccovivens sp905207515
+cmag_498	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Coproplasma	Coproplasma avistercoris
+cmag_499	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Caccousia	
+cmag_500	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Gemmiger	Gemmiger stercoravium
+cmag_501	Bacteria	Proteobacteria	Gammaproteobacteria	Burkholderiales	Burkholderiaceae	Duodenibacillus	Duodenibacillus intestinavium
+cmag_502	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Copromonas	Copromonas sp900541255
+cmag_503	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Avirikenella	Avirikenella pullistercoris
+cmag_504	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter stercoravium
+cmag_505	Bacteria	Proteobacteria	Alphaproteobacteria	RF32	CAG-239	Scatacola_A	Scatacola_A faecigallinarum
+cmag_506	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Scatousia	
+cmag_507	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Coproplasma	Coproplasma avicola
+cmag_508	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Limosilactobacillus	Limosilactobacillus ingluviei
+cmag_509	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Limosilactobacillus	Limosilactobacillus excrementigallinarum
+cmag_510	Bacteria	Proteobacteria	Gammaproteobacteria	Enterobacterales	Enterobacteriaceae	Escherichia	Escherichia coli
+cmag_511	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Barnesiellaceae	Barnesiella	Barnesiella intestinihominis
+cmag_512	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_513	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	RGIG8482	RGIG8482 sp904381285
+cmag_514	Bacteria	Verrucomicrobiota	Lentisphaeria	Victivallales	Victivallaceae	Victivallis	Victivallis sp900768515
+cmag_515	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia sp904374385
+cmag_516	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	WRFS01	
+cmag_517	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-917	Limadaptatus	Limadaptatus sp900754695
+cmag_518	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Ventrenecus	Ventrenecus avicola
+cmag_519	Bacteria	Campylobacterota	Campylobacteria	Campylobacterales	Campylobacteraceae	Campylobacter_D	Campylobacter_D coli
+cmag_520	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Caccenecus	
+cmag_521	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthocola_B	
+cmag_522	Bacteria	Firmicutes	Bacilli	RF39	UBA660		
+cmag_523	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	Gallimonas caecicola
+cmag_524	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-74	Limiplasma	Limiplasma pullistercoris
+cmag_525	Bacteria	Deferribacterota	Deferribacteres	Deferribacterales	Mucispirillaceae	Mucispirillum	
+cmag_526	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Avigastranaerophilus	
+cmag_527	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	CAG-273 sp017886645
+cmag_528	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae		
+cmag_529	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-74	Pullichristensenella	
+cmag_530	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Phocaeicola	Phocaeicola caecigallinarum_A
+cmag_531	Bacteria	Proteobacteria	Alphaproteobacteria	RF32	UBA3637		
+cmag_532	Bacteria	Patescibacteria	Saccharimonadia	Saccharimonadales	Nanosyncoccaceae	Nanosyncoccus	
+cmag_533	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-314	UMGS929	UMGS929 sp900546875
+cmag_534	Bacteria	Firmicutes	Bacilli	RF39	UBA660	HGM10818	
+cmag_535	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Phocaeicola	Phocaeicola merdavium
+cmag_536	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	RUG14156	Galligastranaerophilus_A	
+cmag_537	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter avicola
+cmag_538	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Faecalibacterium	Faecalibacterium intestinipullorum
+cmag_539	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	RUG14156	RUG14156	
+cmag_540	Bacteria	Proteobacteria	Gammaproteobacteria	Burkholderiales	Burkholderiaceae	Aphodousia	Aphodousia faecalis
+cmag_541	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Bacteroides	Bacteroides merdavium
+cmag_542	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter sp904418845
+cmag_543	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Phocaeicola	Phocaeicola sp900066445
+cmag_544	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	CAG-269 sp904384245
+cmag_545	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter pullicola
+cmag_546	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Faecivivens	Faecivivens stercoripullorum
+cmag_547	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_548	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Stercorousia	Stercorousia sp000437435
+cmag_549	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Coprosoma	
+cmag_550	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	
+cmag_551	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Fimenecus	Fimenecus stercoravium
+cmag_552	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-793	
+cmag_553	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Stercorousia	
+cmag_555	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_556	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_557	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Avigastranaerophilus	
+cmag_558	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Bacteroides	Bacteroides fragilis_A
+cmag_559	Bacteria	Verrucomicrobiota	Verrucomicrobiae	Verrucomicrobiales	Akkermansiaceae	Akkermansia	Akkermansia muciniphila
+cmag_560	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Anaerotignaceae	Anaerotignum	Anaerotignum lactatifermentans
+cmag_561	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthocola_B	
+cmag_562	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Prevotella	Prevotella stercoripullorum
+cmag_563	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Prevotella	Prevotella sp000433175
+cmag_564	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Agathobaculum	Agathobaculum pullistercoris
+cmag_565	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Heritagella	Heritagella sp905215105
+cmag_566	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Limosilactobacillus	Limosilactobacillus vaginalis
+cmag_567	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Anaerotignaceae	Anaerotignum	Anaerotignum merdipullorum
+cmag_568	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter faecipullorum
+cmag_569	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Agathobaculum	Agathobaculum sp900557315
+cmag_570	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Eisenbergiella	Eisenbergiella intestinigallinarum
+cmag_571	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Choladocola	
+cmag_572	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Intestinimonas	Intestinimonas merdavium
+cmag_573	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia	Blautia merdigallinarum
+cmag_574	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_575	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	Onthousia faecavium
+cmag_576	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Intestinimonas	Intestinimonas stercoravium
+cmag_577	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia_A	Blautia_A excrementipullorum
+cmag_578	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia faecavium
+cmag_579	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Caccenecus	
+cmag_580	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_581	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia sp904419945
+cmag_582	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Caccenecus	
+cmag_583	Bacteria	Firmicutes	Bacilli	Erysipelotrichales	Coprobacillaceae	Erysipelatoclostridium	Erysipelatoclostridium spiroforme
+cmag_584	Bacteria	Firmicutes	Bacilli	Erysipelotrichales	Coprobacillaceae	Fimiplasma	Fimiplasma intestinipullorum
+cmag_585	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-314	Heteroclostridium	Heteroclostridium caecigallinarum
+cmag_586	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	CAJFVJ01	Adamsella	Adamsella avium
+cmag_587	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Anaerotignaceae	Metalachnospira	Metalachnospira sp902406135
+cmag_588	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_589	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	An92	An92 sp019115265
+cmag_590	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Bacteroides	Bacteroides fragilis
+cmag_591	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Fournierella	Fournierella merdavium
+cmag_592	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Copromonas	Copromonas faecavium
+cmag_593	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_594	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	UMGS1370	
+cmag_595	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_596	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Alistipes	Alistipes communis
+cmag_597	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Bacteroides	Bacteroides faecis
+cmag_598	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Coprobacteraceae	Coprobacter	Coprobacter fastidiosus
+cmag_599	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Bacteroides	Bacteroides caccae
+cmag_600	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_601	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Sellimonas	Sellimonas intestinalis
+cmag_602	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Pseudobutyricicoccus	Pseudobutyricicoccus lothianensis
+cmag_603	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Anaerostipes	Anaerostipes excrementavium
+cmag_604	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia	Blautia stercorigallinarum
+cmag_605	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Scatomonas	Scatomonas merdigallinarum
+cmag_606	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Ligilactobacillus	Ligilactobacillus aviarius
+cmag_607	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter surreyensis
+cmag_608	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	CAG-382	UMGS882	UMGS882 sp003343885
+cmag_609	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	UBA932	Coprenecus	Coprenecus pullicola
+cmag_610	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Alistipes_A	Alistipes_A merdigallinarum
+cmag_611	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	UBA644	Geddesella	Geddesella stercoravicola
+cmag_612	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Faecalibacterium	Faecalibacterium faecigallinarum
+cmag_613	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_614	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	UBA644	UBA644	UBA644 sp014872655
+cmag_615	Bacteria	Desulfobacterota_I	Desulfovibrionia	Desulfovibrionales	Desulfovibrionaceae	Nitratidesulfovibrio	Nitratidesulfovibrio vulgaris
+cmag_616	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	
+cmag_617	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508		
+cmag_618	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	CAG-273 sp900752335
+cmag_619	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_620	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_621	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Gallacutalibacter	Gallacutalibacter pullicola
+cmag_622	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Gemmiger	Gemmiger avistercoris
+cmag_623	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Choladousia	Choladousia intestinigallinarum
+cmag_624	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Lactobacillus	Lactobacillus johnsonii
+cmag_625	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter stercoripullorum
+cmag_626	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia sp017886545
+cmag_627	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Fusicatenibacter	Fusicatenibacter sp900543115
+cmag_628	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Enterocloster	Enterocloster excrementigallinarum
+cmag_629	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Ventrisoma	Ventrisoma faecale
+cmag_630	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_631	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_632	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Tannerellaceae	Parabacteroides	Parabacteroides distasonis
+cmag_633	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Faecisoma	
+cmag_634	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Ventrenecus	
+cmag_635	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	UBA932	Merdivivens	Merdivivens pullicola
+cmag_636	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	UBA932	Cryptobacteroides	Cryptobacteroides faecavium
+cmag_637	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Phocaeicola	Phocaeicola coprocola
+cmag_638	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Bacteroidaceae	Prevotella	Prevotella lascolaii
+cmag_639	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Tannerellaceae	Parabacteroides	Parabacteroides intestinipullorum
+cmag_640	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter cottocaccae
+cmag_641	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Heritagella	Heritagella intestinalis
+cmag_642	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	
+cmag_643	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae		
+cmag_644	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Coproplasma	
+cmag_645	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_646	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Coprosoma	
+cmag_647	Bacteria	Firmicutes_A	Clostridia	UBA1381	UBA1381	HGM11525	
+cmag_648	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_649	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	Caccovivens sp905195085
+cmag_650	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Onthoplasma	
+cmag_651	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Alistipes	Alistipes excrementigallinarum
+cmag_652	Bacteria	Firmicutes	Bacilli	RF39	UBA660	HGM10818	
+cmag_653	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Fimihabitans	Fimihabitans intestinipullorum
+cmag_654	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Ventrenecus	
+cmag_655	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Coprosoma	
+cmag_656	Bacteria	Firmicutes	Bacilli	RF39	UBA660	MGBC162581	
+cmag_657	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_658	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	RGIG4074	RGIG4074 sp017886575
+cmag_659	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccopulliclostridium	Caccopulliclostridium gallistercoris
+cmag_660	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	Merdicola	Merdicola faecigallinarum
+cmag_661	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Caccenecus	Caccenecus avistercoris
+cmag_662	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_663	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Faecousia	Faecousia excrementigallinarum
+cmag_664	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_665	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Sellimonas	Sellimonas sp002159995
+cmag_666	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-465		
+cmag_667	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Ruminococcus_G	Ruminococcus_G avistercoris
+cmag_668	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Eubacterium_I	
+cmag_669	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Fusicatenibacter	Fusicatenibacter merdavium
+cmag_670	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Onthoplasma	Onthoplasma faecipullorum
+cmag_671	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthousia	
+cmag_672	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Merdivicinus	Merdivicinus faecavium
+cmag_673	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	CAJFUH01	
+cmag_674	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Acutalibacter	Acutalibacter sp900755895
+cmag_675	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Fusicatenibacter	Fusicatenibacter sp017887445
+cmag_676	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae		
+cmag_677	Bacteria	Firmicutes	Bacilli	Erysipelotrichales	Coprobacillaceae	Erysipelatoclostridium	Erysipelatoclostridium merdavium
+cmag_678	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia stercoripullorum
+cmag_679	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-917	Limadaptatus	Limadaptatus stercoripullorum
+cmag_680	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Scatenecus	Scatenecus faecavium
+cmag_681	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	CAG-272	SIG673	
+cmag_682	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Faeciplasma	Faeciplasma avium
+cmag_683	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Avigastranaerophilus	
+cmag_684	Bacteria	Synergistota	Synergistia	Synergistales	Synergistaceae	Caccocola	Caccocola faecigallinarum
+cmag_685	Bacteria	Verrucomicrobiota	Lentisphaeria	Victivallales	Victivallaceae	Victivallis	
+cmag_686	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-917	Limadaptatus	Limadaptatus sp900554085
+cmag_687	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508		
+cmag_688	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	CAG-272	UMGS1865	
+cmag_689	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_690	Bacteria	Proteobacteria	Gammaproteobacteria	Burkholderiales	Burkholderiaceae	Aphodousia	Aphodousia faecipullorum
+cmag_691	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-74	Onthenecus	
+cmag_692	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Onthoplasma	
+cmag_693	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	CAG-382	Woodwardibium	Woodwardibium sp900754535
+cmag_694	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Avigastranaerophilus	
+cmag_695	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Limivicinus	Limivicinus faecipullorum
+cmag_696	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	
+cmag_697	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	SIG32	
+cmag_698	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Scatosoma	Scatosoma sp904419075
+cmag_699	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter caccavium
+cmag_700	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Anaerotignaceae	Neoanaerotignum_A	Neoanaerotignum_A tabaqchaliae
+cmag_701	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-74	Faecaligallichristensenella	Faecaligallichristensenella faecipullorum
+cmag_702	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Pseudoruminococcus_B	Pseudoruminococcus_B merdavium
+cmag_703	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Anaerofilum	Anaerofilum faecale
+cmag_704	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	UBA1390	Faecimorpha	Faecimorpha stercoravium
+cmag_705	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	AM51-8	AM51-8 sp900761925
+cmag_706	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Catenibacillus	Catenibacillus faecigallinarum
+cmag_707	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Lachnoclostridium_B	Lachnoclostridium_B faecipullorum
+cmag_708	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Gemmiger	Gemmiger stercorigallinarum
+cmag_709	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Scybalocola	Scybalocola faecipullorum
+cmag_710	Bacteria	Firmicutes_A	Clostridia	Monoglobales	Monoglobaceae	Roslinia	
+cmag_711	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Evtepia	Evtepia excrementipullorum
+cmag_712	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Fournierella	Fournierella sp002161595
+cmag_713	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	CAG-274	Gallispira	Gallispira edinburgensis
+cmag_714	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Ruthenibacterium	Ruthenibacterium merdipullorum
+cmag_715	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Merdisoma	
+cmag_716	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Caccenecus	
+cmag_717	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Spyradomonas	Spyradomonas excrementavium
+cmag_718	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Scatomorpha	Scatomorpha merdavium
+cmag_719	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Marinifilaceae	Odoribacter	Odoribacter splanchnicus
+cmag_720	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Coproplasma	Coproplasma excrementipullorum
+cmag_721	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Gemmiger	Gemmiger stercoripullorum
+cmag_722	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Fournierella	Fournierella merdipullorum
+cmag_723	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Anaerotignaceae	Anaerotignum	
+cmag_724	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	UMGS1264	
+cmag_725	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Dysosmobacter	
+cmag_726	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_727	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	SIG471	SIG471 sp905199135
+cmag_728	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	UBA1405	UBA1405 sp002305685
+cmag_729	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Anaerotruncus	
+cmag_730	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Ventrenecus	
+cmag_731	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Lachnoclostridium_A	
+cmag_732	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Clostridium_Q	
+cmag_733	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Rikenella	Rikenella faecigallinarum
+cmag_734	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Avoscillospira	Avoscillospira stercorigallinarum
+cmag_735	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-793	
+cmag_736	Bacteria	Desulfobacterota_I	Desulfovibrionia	Desulfovibrionales	Desulfovibrionaceae	Bilophila	Bilophila faecipullorum
+cmag_737	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia	Blautia merdavium
+cmag_738	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Anaerotignaceae	Fimicola	Fimicola cottocaccae
+cmag_739	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	
+cmag_740	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Angelakisella	Angelakisella massiliensis
+cmag_741	Bacteria	Firmicutes	Bacilli	RF39	UBA660	HGM10766	
+cmag_742	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Merdisoma	Merdisoma sp002160825
+cmag_743	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Borkfalkia	Borkfalkia sp003343765
+cmag_744	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-465	RGIG5622	
+cmag_745	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Anaerofilum	Anaerofilum excrementigallinarum
+cmag_746	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia	Blautia merdipullorum
+cmag_747	Bacteria	Proteobacteria	Alphaproteobacteria	Rs-D84	Rs-D84	Enterousia	Enterousia intestinigallinarum
+cmag_748	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Enterenecus	Enterenecus faecium
+cmag_749	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Intestinimonas	Intestinimonas timonensis
+cmag_750	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Caccovicinus	Caccovicinus sp017889125
+cmag_751	Bacteria	Actinobacteriota	Coriobacteriia	Coriobacteriales	Eggerthellaceae	Rubneribacter	Rubneribacter badeniensis
+cmag_752	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter intestinavium
+cmag_753	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-452	
+cmag_754	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Ruthenibacterium	Ruthenibacterium avium
+cmag_755	Bacteria	Cyanobacteria	Vampirovibrionia	Gastranaerophilales	Gastranaerophilaceae	Limenecus	Limenecus avicola
+cmag_756	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Faecimonas	Faecimonas sp017886705
+cmag_757	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-273	
+cmag_758	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Butyricicoccus	Butyricicoccus sp017886875
+cmag_759	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Scatavimonas	Scatavimonas merdipullorum
+cmag_760	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508		
+cmag_761	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthocola_B	Onthocola_B stercorigallinarum
+cmag_762	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthocola_B	
+cmag_763	Bacteria	Firmicutes	Bacilli	RFN20	CAG-631	Caccosoma	Caccosoma faecigallinarum
+cmag_764	Bacteria	Firmicutes	Bacilli	Lactobacillales	Enterococcaceae	Enterococcus_E	Enterococcus_E cecorum
+cmag_765	Bacteria	Firmicutes	Bacilli	RF39	UBA660		
+cmag_766	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	CAJFPI01	CAJFPI01 sp904419145
+cmag_767	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	UBA5893	
+cmag_768	Bacteria	Verrucomicrobiota	Lentisphaeria	Victivallales	Victivallaceae	Victivallis	Victivallis vadensis
+cmag_769	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Scatomorpha	Scatomorpha intestinigallinarum
+cmag_770	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Acutalibacter	Acutalibacter stercorigallinarum
+cmag_771	Bacteria	Firmicutes_A	Clostridia	Christensenellales	CAG-74	Alectryocaccomicrobium	Alectryocaccomicrobium faecavium
+cmag_772	Bacteria	Firmicutes_A	Clostridia	UBA1212	UBA1255	Egerieisoma	Egerieisoma sp900543695
+cmag_773	Bacteria	Firmicutes_A	Clostridia	Christensenellales	HGM11417	HGM11417	
+cmag_774	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	CAG-272	Flemingibacterium	Flemingibacterium merdigallinarum
+cmag_775	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	CAG-274	JAHALF01	
+cmag_776	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	Merdicola	
+cmag_777	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia_A	Blautia_A intestinavium
+cmag_778	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Anaerostipes	Anaerostipes avistercoris
+cmag_779	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Onthocola_B	
+cmag_780	Bacteria	Bacteroidota	Bacteroidia	Bacteroidales	Rikenellaceae	Alistipes	Alistipes putredinis
+cmag_781	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Aphodocola	Aphodocola excrementigallinarum
+cmag_782	Bacteria	Firmicutes	Bacilli	Lactobacillales	Lactobacillaceae	Lactobacillus	Lactobacillus crispatus
+cmag_783	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Caccousia	Caccousia stercoris
+cmag_784	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Gemmiger	Gemmiger avicola
+cmag_785	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Faeciplasma	Faeciplasma gallinarum
+cmag_786	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	CAG-274	JAHALF01	
+cmag_787	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	Caccovivens sp904397185
+cmag_788	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	An92	An92 sp019114165
+cmag_789	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Lachnoclostridium_A	Lachnoclostridium_A sp002160755
+cmag_790	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Oscillospiraceae	Flavonifractor	Flavonifractor intestinigallinarum
+cmag_791	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia	Blautia ornithocaccae
+cmag_792	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-793	
+cmag_793	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Agathobaculum	Agathobaculum merdipullorum
+cmag_794	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Butyricicoccus	Butyricicoccus avicola
+cmag_795	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Roseburia	
+cmag_796	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_797	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	
+cmag_798	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Gemmiger	Gemmiger excrementigallinarum
+cmag_799	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Egerieicola	Egerieicola pullicola
+cmag_800	Bacteria	Firmicutes	Bacilli	Lactobacillales	Streptococcaceae	Streptococcus	Streptococcus gallolyticus
+cmag_801	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia_A	Blautia_A excrementigallinarum
+cmag_802	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Blautia_A	Blautia_A avistercoris
+cmag_803	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	Gallimonas gallistercoris
+cmag_804	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_805	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Fournierella	Fournierella massiliensis
+cmag_806	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Gallimonas	Gallimonas intestinavium
+cmag_807	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	Caccovivens faecavium
+cmag_808	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_809	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter glycyrrhizinilyticus_A
+cmag_810	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-245	
+cmag_811	Bacteria	Firmicutes_A	Clostridia	Christensenellales	UBA1242	Caccovivens	
+cmag_812	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	Merdicola	
+cmag_813	Bacteria	Firmicutes_A	Clostridia	Christensenellales	Borkfalkiaceae	Coproplasma	Coproplasma stercoripullorum
+cmag_814	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Anaerotignaceae	Fimicola	
+cmag_815	Bacteria	Proteobacteria	Alphaproteobacteria	RF32	CAG-239	Scatocola	Scatocola faecipullorum
+cmag_816	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Butyricicoccaceae	Butyricicoccus	Butyricicoccus avistercoris
+cmag_817	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Ruminococcaceae	Faeciplasma	Faeciplasma pullistercoris
+cmag_818	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Ventrenecus	
+cmag_819	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Aphodocola	
+cmag_820	Bacteria	Firmicutes_A	Clostridia	TANB77	CAG-508	CAG-269	
+cmag_821	Bacteria	Firmicutes	Bacilli	RF39	UBA660	Pelethosoma	Pelethosoma merdigallinarum
+cmag_822	Bacteria	Firmicutes_A	Clostridia	Oscillospirales	Acutalibacteraceae	Gallacutalibacter_A	Gallacutalibacter_A stercoravium
+cmag_823	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Copromonas	Copromonas avistercoris
+cmag_824	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Hungatella	Hungatella pullicola
+cmag_825	Bacteria	Firmicutes_A	Clostridia	Lachnospirales	Lachnospiraceae	Mediterraneibacter	Mediterraneibacter vanvlietii

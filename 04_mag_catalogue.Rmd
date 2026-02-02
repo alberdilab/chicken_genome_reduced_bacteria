@@ -6,66 +6,6 @@
 load("data/data_mg.Rdata")
 ```
 
-## Densities of overall relative abundances by phylum 
-
-### Calculate densities
-
-```{r calculate_density, message = FALSE, warning = FALSE}
-sum_ind <-
-  total %>%
-  rownames_to_column(var = 'genome') %>%
-  left_join(genome_taxonomy %>% select(genome, phylum), by = 'genome') %>%
-  mutate(phylum = factor(phylum, levels = unique(names(phylum_colors)))) %>%
-  pivot_longer(-c(genome, phylum), values_to = 'value', names_to = 'animal_code') %>%
-  group_by(phylum, animal_code) %>%
-  summarise(total_ind = sum(value), mean_ind = mean(value))
-
-sum_phylum <-
-  sum_ind %>%
-  group_by(phylum) %>%
-  summarise(total_phylum = sum(total_ind), mean_phylum = mean(mean_ind))
-```
-
-### Filter rare phylums 
-
-```{r filter_phylums, warning = FALSE, comments = "", message = FALSE}
-count_taxa <-
-  sum_ind %>%
-  filter(phylum %in% c('Bacillota_A',
-                       'Bacillota',
-                       'Bacteroidota',
-                       'Cyanobacteriota',
-                       'Pseudomonadota',
-                       'Actinomycetota',
-                       'Verrucomicrobiota',
-                       'Campylobacterota'))
-```
-
-### Plot curves 
-
-The resulting plot corresponds to Figure 1a
-
-```{r density_histogram_fig_1a, comment = "", message = FALSE, warning = FALSE, fig.height = 5, fig.width = 7, fig.fullwidth = TRUE}
-ggplot(count_taxa, aes(x = total_ind, colour = phylum, fill = phylum)) +
-  geom_density(alpha = 0.5) +
-  scale_fill_manual(values = phylum_colors) +
-  scale_color_manual(values = phylum_colors) +
-  scale_x_log10() +
-  xlab("Relative abundance (log-transformed)") +
-  ylab("Density") +
-  theme_minimal() +
-  theme(
-    panel.grid.major.x = element_blank(),
-    panel.grid.minor.x = element_blank(),
-    panel.grid.minor.y = element_blank(),
-    panel.grid.major.y = element_blank(),
-    axis.text.y = element_blank(),
-    axis.title.x = element_text(size = 8),
-    axis.title.y = element_text(size = 8),
-    axis.text.x = element_text(size = 8),
-    legend.position = "bottom") 
-```
-
 ## Functional ordination 
 
 ``` {r pcoa_ordination, comment = "", message = FALSE, warning = FALSE}
@@ -86,7 +26,8 @@ gift_pcoa_vectors <-
 gift_pcoa_eigenvalues <- gift_pcoa$values$Eigenvalues[c(1,2)]
 
 gift_pcoa_gifts <- 
-  cov(gifts_elements, scale(gift_pcoa_vectors)) %*% diag((gift_pcoa_eigenvalues/(nrow(gifts_elements)-1))^(-0.5)) %>%
+  cov(gifts_elements, scale(gift_pcoa_vectors)) %*%
+  diag((gift_pcoa_eigenvalues/(nrow(gifts_elements)-1))^(-0.5)) %>%
   as.data.frame() %>% 
   rename(Axis.1 = 1, Axis.2 = 2) %>% 
   rownames_to_column(var = "label") %>% 
@@ -98,7 +39,7 @@ gift_pcoa_gifts <-
   filter(!label %in% c("S01","S02","S03"))
 ```
 
-The resulting plot corresponds to Figure 1b.
+The resulting plot corresponds to Figure 1a.
 
 ``` {r pcoa_fig_1b, comment = "", message = FALSE, warning = FALSE, fig.height = 9, fig.width = 10, fig.fullwidth = TRUE}
 scale <- 20 # scale for vector loadings
@@ -218,8 +159,7 @@ The resulting plot corresponds to Supplementary Figure S1
 ```{r tidy_taxonomy_and_colors, comment = "", message = FALSE, warning = FALSE}
 main_phylums <- c("Bacillota_A", "Bacillota", "Bacteroidota",
                   "Cyanobacteriota","Pseudomonadota", "Actinomycetota",
-                  "Verrucomicrobiota", "Campylobacterota"
-                  )
+                  "Verrucomicrobiota", "Campylobacterota")
 
 selected_taxonomy_colors <- 
   taxonomy_colors %>% 
@@ -312,8 +252,7 @@ table_two %>%
   xlab("Taxonomic group") +
   ylab("Genome average metabolic capacity") +
   scale_fill_manual(values = selected_taxonomy_colors$color_order) +
-  theme(legend.position = 'none',
-        ) +
+  theme(legend.position = 'none') +
   coord_flip()
 ```  
 

@@ -17,7 +17,7 @@ chicken_metadata <-
 
 ```{r load_taxonomy, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
 genome_taxonomy <- 
-  read_tsv("data/taxonomy.tsv") %>%
+  read_tsv("data/taxonomy_v2.tsv") %>%
   rename(genome = 1) %>%
   mutate(phylum = case_when(
         phylum == "Actinobacteriota" ~ "Actinomycetota",
@@ -105,9 +105,9 @@ gifts_matrix <-
   as.matrix()
 ```
 
-### Perform completeness correction for GIFTs
+### Aggregate GIFTs
 
-```{r perform_completeness_corretion, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
+```{r aggregate_gifts, warning = FALSE, comments = "", message = FALSE, eval = FALSE}
 # Aggregate into compound level
 gifts_elements <- to.elements(gifts_matrix, GIFT_db2)
 
