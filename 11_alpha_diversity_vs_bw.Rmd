@@ -44,17 +44,18 @@ ggplot(alpha_div, aes(x = functional_kegg, y = chicken_body_weight)) +
 ### Neutral 
 
 ```{r calculate_lms_neutral_21, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
-div_all_day_35 <-
+div_all_day_21 <-
   alpha_div %>%
-  filter(sampling_time == '21') %>%
-  filter(trial != 'CC') 
+  filter(sampling_time == '21')  
 
-N <- lme(chicken_body_weight ~ age + trial + neutral,
+N21 <- lme(chicken_body_weight ~ age + trial + neutral,
          random = ~1|pen,
-         data = div_all_day_35)
-summary(N)
+         data = div_all_day_21)
 
-plot_model(N,
+summary(N21)$tTable
+anova(N21)
+
+plot_model(N21,
            type = 'eff',
            title = 'Neutral diversity',
            terms = 'neutral',
@@ -66,13 +67,14 @@ The resulting plot corresponds to Figure 3a.
 ```{r calculate_lms_neutral, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
 div_all_day_35 <-
   alpha_div %>%
-  filter(sampling_time == '35') %>%
-  filter(trial != 'CC')
+  filter(sampling_time == '35') 
 
 N <- lme(chicken_body_weight ~ age + trial + neutral,
          random = ~1|pen,
          data = div_all_day_35)
-summary(N)
+
+summary(N)$tTable
+anova(N)
 
 plot_model(N,
            type = 'eff',
@@ -87,7 +89,9 @@ plot_model(N,
 P <- lme(chicken_body_weight ~ age + trial + phylogenetic,
          random = ~1|pen,
          data = div_all_day_35)
-summary(P)
+
+summary(P)$tTable
+anova(P)
 
 plot_p <-
   plot_model(P,
@@ -103,7 +107,9 @@ plot_p <-
 Q_kegg <- lme(chicken_body_weight ~ age + trial + functional_kegg,
          random = ~1|pen,
          data = div_all_day_35)
-summary(Q_kegg)
+
+summary(Q_kegg)$tTable
+anova(Q_kegg)
 
 plot_q <-
   plot_model(Q_kegg,
