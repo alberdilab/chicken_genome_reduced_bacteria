@@ -26,9 +26,8 @@ gift_pcoa_vectors <-
   select(Axis.1,Axis.2) # keep the first 2 axes
 
 
-mag_weighted %>%
-  rownames_to_column(var = "genome") %>% 
-  mutate_at(vars(-genome),~./sum(.)) %>%
+total %>%
+  rownames_to_column("genome") %>% 
   pivot_longer(-genome, names_to = "animal_code", values_to = "count") %>%
   left_join(chicken_metadata, by = join_by(animal_code == animal_code)) %>% 
   filter(!is.na(sampling_time)) %>% 

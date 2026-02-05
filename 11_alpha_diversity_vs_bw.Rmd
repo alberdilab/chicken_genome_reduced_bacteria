@@ -43,14 +43,31 @@ ggplot(alpha_div, aes(x = functional_kegg, y = chicken_body_weight)) +
 
 ### Neutral 
 
+```{r calculate_lms_neutral_21, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
+div_all_day_35 <-
+  alpha_div %>%
+  filter(sampling_time == '21') %>%
+  filter(trial != 'CC') 
+
+N <- lme(chicken_body_weight ~ age + trial + neutral,
+         random = ~1|pen,
+         data = div_all_day_35)
+summary(N)
+
+plot_model(N,
+           type = 'eff',
+           title = 'Neutral diversity',
+           terms = 'neutral',
+           show.data = TRUE)
+```
+
 The resulting plot corresponds to Figure 3a.
 
 ```{r calculate_lms_neutral, comment = "", message = FALSE, warning = FALSE, fig.height = 4, fig.width = 5, fig.fullwidth = TRUE}
 div_all_day_35 <-
   alpha_div %>%
   filter(sampling_time == '35') %>%
-  filter(trial != 'CC') #%>% 
-  # filter(!animal_code %in% c("CB12.17", "CA04.16", "CA03.17")) # ¿? double check if we are OK filtering some samples, they show out of place diversity
+  filter(trial != 'CC')
 
 N <- lme(chicken_body_weight ~ age + trial + neutral,
          random = ~1|pen,

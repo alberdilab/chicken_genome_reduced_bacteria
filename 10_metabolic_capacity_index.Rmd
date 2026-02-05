@@ -44,11 +44,11 @@ gifts_elements %>%
 ### Calculate community GIFTs
 
 ```{r community_gifts, comment = "", message = FALSE, warning = FALSE}
-elements_com <- to.community(gifts_elements, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2) 
+elements_com <- to.community(gifts_elements, total, GIFT_db2) 
 
-funcs_com <- to.community(gifts_functions, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2)
+funcs_com <- to.community(gifts_functions, total, GIFT_db2)
 
-domains_com <- to.community(gifts_domains, sweep(hel, 2, colSums(hel), FUN = "/"), GIFT_db2)
+domains_com <- to.community(gifts_domains, total, GIFT_db2)
 ```
 
 ```{r save_gifts, comment = "", message = FALSE, warning = FALSE}
