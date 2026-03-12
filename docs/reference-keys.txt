@@ -146,3 +146,15 @@ genomic-characteristics-of-genome-reduced-mags
 genome-length-of-genome-reduced-magss
 expression-profiles-of-genome-reduced-mags
 activity-heatmap-of-genome-reduced-bacteria
+testing-completeness-correction-before-calculating-distilling-gifts
+load-mg-data-7
+define-function-for-correction
+calculate-corrected-gifts
+save-files-so-you-dont-spend-time-re-generating-them
+compare-mci-values-without-and-with-correction
+spearman-correlation
+comparing-average-mci-with-genome-completeness
+reduced-genomes
+spearman-correlation-1
+illustrating-correlation-between-average-mci-and-completeness
+testing-differences-at-community-weighted-mci

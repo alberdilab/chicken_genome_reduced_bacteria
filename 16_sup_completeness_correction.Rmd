@@ -1,4 +1,4 @@
-# Completeness correction tests
+# Testing completeness correction before calculating distilling GIFTs
 
 ## Load MG data
 
@@ -108,17 +108,35 @@ gifts_correction <- function(MCI_table, genome_completeness, stats = TRUE) {
 ```{r correct_gifts, warning = FALSE, comments = "", message = FALSE}
 gifts_corrected <- gifts_correction(gifts_matrix, genome_completeness)
 
-# calculate GIFTs by element
+# calculate GIFTs by element, function and domain
 gifts_elements_corrected <- to.elements(gifts_corrected, GIFT_db2)
 
 gifts_functions_corrected <- to.functions(gifts_elements_corrected, GIFT_db2)
+
+gifts_domains_corrected <- to.domains(gifts_functions_corrected, GIFT_db2)
 ```
 
-# compare MCI values without and with correction
-```{r mean_mci_by_mag, warning = FALSE, comments = "", message = FALSE}
-# calculate mean MCI by MAG
+## Save files so you don't spend time re-generating them
+```{r save_gift_corr_files, warning = FALSE, comments = "", message = FALSE}
+save(
+  gifts_raw,
+  gifts_corrected,
+  gifts_elements_corrected,
+  gifts_functions_corrected,
+  gifts_domains_corrected,
+  file = "data/correction_files.Rdata")
+```
 
-## a) without correction
+## compare MCI values without and with correction
+
+```{r ave_mci_by_mag, warning = FALSE, comments = "", message = FALSE}
+# Load data
+
+load("data/correction_files.Rdata")
+
+# calculate average MCI by MAG
+
+# a) without correction
 overall_mci <-
   gifts_elements %>%
   as.data.frame() %>%
@@ -130,7 +148,7 @@ overall_mci <-
   mutate(mag_length = mag_length / 1000000) %>%
   left_join(genome_taxonomy, by = "genome")
 
-## b) Applying correction
+# b) Applying correction
 overall_mci_corrected <-
   gifts_elements_corrected %>%
   as.data.frame() %>%
@@ -141,16 +159,24 @@ overall_mci_corrected <-
   left_join(genome_stats, by = "genome") %>%
   mutate(mag_length = mag_length / 1000000) %>%
   left_join(genome_taxonomy, by = "genome")
-  
-# Spearman correlation
+```
+
+## Spearman correlation
+
+```{r corr_mci_1, warning = FALSE, comments = "", message = FALSE}
+# a) without correction
 cor(overall_mci$mean_MCI, overall_mci$completeness_score, method = "spearman")
+```
+
+```{r corr__mci_2, warning = FALSE, comments = "", message = FALSE}
+# b) Applying correction
 cor(overall_mci_corrected$mean_MCI, overall_mci_corrected$completeness_score, method = "spearman")
 ```
 
 ## Comparing average MCI with genome completeness
 
 ```{r ploting_correc_1, warning = FALSE, comments = "", message = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
-## a) Without correction
+# a) Without correction
 overall_mci %>%
   ggplot(aes(x = completeness_score, y = mean_MCI, color = order)) +
   geom_point(size = 2.5) +
@@ -163,7 +189,7 @@ overall_mci %>%
 ```
 
 ```{r ploting_correc_2, warning = FALSE, comments = "", message = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
-## b) Applying correction
+# b) Applying correction
 overall_mci_corrected %>%
   ggplot(aes(x = completeness_score, y = mean_MCI, color = order)) +
   geom_point(size = 2.5) +
@@ -178,22 +204,33 @@ overall_mci_corrected %>%
 ## Reduced genomes
 
 ```{r reduced_genomes_only, warning = FALSE, comments = "", message = FALSE}
-## without correction
+# a) Without correction
 reduced_genomes <-
   overall_mci %>%
   filter(order == "RF39" | family == "UBA1242")
 
-## Applying correction
+# b) Applying correction
 reduced_genomes_corrected <-
   overall_mci_corrected %>%
   filter(order == "RF39" | family == "UBA1242")
+```
 
-# Spearman correlation
+## Spearman correlation
+
+```{r cor_red_1, warning = FALSE, comments = "", message = FALSE}
+# a) Without correction
 cor(reduced_genomes$mean_MCI, reduced_genomes$completeness_score, method = "spearman")
+```
+
+```{r cor_red_2, warning = FALSE, comments = "", message = FALSE}
+# b) Applying correction
 cor(reduced_genomes_corrected$mean_MCI, reduced_genomes_corrected$completeness_score, method = "spearman")
 ```
 
+## Illustrating correlation between average MCI and completeness
+
 ```{r same_plot_but_red_genomes, warning = FALSE, comments = "", message = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
+# a) Without correction
 reduced_genomes %>% 
   ggplot(aes(x = completeness_score, y = mean_MCI, color = order)) +
   geom_point(size = 2.5) +
@@ -206,6 +243,7 @@ reduced_genomes %>%
 ```
 
 ```{r same_plot_but_red_genomes_2, warning = FALSE, comments = "", message = FALSE, fig.height = 4, fig.width = 9, fig.fullwidth = TRUE}
+# b) Applying correction
 reduced_genomes_corrected %>% 
   ggplot(aes(x = completeness_score, y = mean_MCI, color = order)) +
   geom_point(size = 2.5) +
@@ -220,8 +258,7 @@ reduced_genomes_corrected %>%
 ## Testing differences at community-weighted MCI
 
 ```{r ploting_com_1, warning = FALSE, comments = "", message = FALSE, fig.height = 4, fig.width = 6, fig.fullwidth = TRUE}
-
-## Load community-weighted MCI without correction
+# Load community-weighted MCI without correction
 load("data/mci_com.Rdata")
 
 funcs_com %>%
@@ -251,10 +288,8 @@ funcs_com %>%
   ggtitle("Without correction")
 ```
 
-```{r ploting_com_1, warning = FALSE, comments = "", message = FALSE, fig.height = 4, fig.width = 9, fig.fullwidth = TRUE}
-
+```{r ploting_com_2, warning = FALSE, comments = "", message = FALSE, fig.height = 4, fig.width = 9, fig.fullwidth = TRUE}
 # Calculate community-weighted MCI applying correction
-
 funcs_com_corrected <- to.community(gifts_functions_corrected, total, GIFT_db2)
 
 funcs_com_corrected %>%
@@ -282,4 +317,8 @@ funcs_com_corrected %>%
         axis.text.y = element_text(size = 8),
         legend.position = 'none') +
   ggtitle("Applying correction")
+```
+
+```{r clean_16, comment = "", message = FALSE, warning = FALSE}
+rm(list = ls())
 ```
